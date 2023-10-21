@@ -1,2 +1,2 @@
 # browser-plugin
-模拟windows桌面的一款浏览器插件
+模拟windows桌面的一款浏览器插件，想法正在实现中.....
