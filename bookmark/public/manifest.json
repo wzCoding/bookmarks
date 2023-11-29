@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "bookmark",
+    "description": "a simple chrome bookmark extension",
+    "version": "0.0.1",
+    "background": {
+        "service_worker": "./utils/background.js"
+    },
+    "permissions": [
+        "sidePanel",
+        "bookmarks"
+    ],
+    "side_panel": {
+        "default_path": "index.html"
+    }
+}
