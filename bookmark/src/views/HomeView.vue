@@ -19,6 +19,7 @@ const openBookMark = (param) => {
         window.open(param.data, "_blank");
     }else{
         console.log(param)
+        bookmarks.value = param
     }
 }
 const getData = async (result) => {
