@@ -19,7 +19,7 @@ const props = defineProps({
 const emit = defineEmits(['open']);
 const handleClick = () => {
     const openParam = props.bookmark.url ? props.bookmark.url : props.bookmark.children;
-    emit("open", { data: openParam, type: typeof openParam });
+    emit("open", openParam);
 }
 const iconUrl = computed(() => {
     return props.bookmark.url ? `${props.bookmark.url}favicon.ico` : defaultIcon
@@ -28,7 +28,7 @@ const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title : defaultTitle
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .bookmark-item {
     cursor: pointer;
     font-size: .75rem;

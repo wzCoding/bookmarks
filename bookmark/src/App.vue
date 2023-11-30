@@ -1,7 +1,10 @@
 <template>
+  <bookHeader></bookHeader>
   <router-view />
 </template>
-
+<script setup>
+import bookHeader from './components/header.vue';
+</script>
 <style lang="scss">
 body {
   margin: 0;

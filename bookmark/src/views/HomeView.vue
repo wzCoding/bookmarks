@@ -15,7 +15,7 @@ import { ref } from 'vue';
 import bookmark from '@/components/bookmark.vue';
 const bookmarks = ref([]);
 const openBookMark = (param) => {
-    if (param.type == 'string') {
+    if (typeof param == 'string') {
         window.open(param.data, "_blank");
     }else{
         console.log(param)
