@@ -14,12 +14,12 @@
 import { ref } from 'vue';
 import bookmark from '@/components/bookmark.vue';
 const bookmarks = ref([]);
-const openBookMark = (children) => {
-     if(children && children.length){
-        console.log(children)
-     }else{
-        //window.open()
-     }
+const openBookMark = (param) => {
+    if (param.type == 'string') {
+        window.open(param.data, "_blank");
+    }else{
+        console.log(param)
+    }
 }
 const getData = async (result) => {
     if (result) {

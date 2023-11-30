@@ -18,8 +18,8 @@ const props = defineProps({
 });
 const emit = defineEmits(['open']);
 const handleClick = () => {
-    const children = props.bookmark.children;
-    emit("open", children);
+    const openParam = props.bookmark.url ? props.bookmark.url : props.bookmark.children;
+    emit("open", { data: openParam, type: typeof openParam });
 }
 const iconUrl = computed(() => {
     return props.bookmark.url ? `${props.bookmark.url}favicon.ico` : defaultIcon
