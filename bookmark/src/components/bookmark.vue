@@ -7,21 +7,26 @@
     </div>
 </template>
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { computed } from 'vue';
+const defaultIcon = "./icons/folder.png";
+const defaultTitle = "bookMark";
 const props = defineProps({
-    title: {
-        type: String,
-        default: ""
-    },
-    iconUrl: {
-        type: String,
-        default: "./icons/folder.png"
+    bookmark: {
+        type: Object,
+        default: () => { return {} }
     }
 });
 const emit = defineEmits(['open']);
-const handleClick = (e) => {
-    emit("open", e);
+const handleClick = () => {
+    const children = props.bookmark.children;
+    emit("open", children);
 }
+const iconUrl = computed(() => {
+    return props.bookmark.url ? `${props.bookmark.url}favicon.ico` : defaultIcon
+});
+const title = computed(() => {
+    return props.bookmark.title ? props.bookmark.title : defaultTitle
+})
 </script>
 <style lang="scss">
 .bookmark-item {

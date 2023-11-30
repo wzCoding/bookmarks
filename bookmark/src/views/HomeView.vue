@@ -3,7 +3,7 @@
         <div class="bookmark-container">
             <div class="bookmark-header"></div>
             <div class="bookmark-content">
-                <bookmark @open="openBookMark" v-for="bookmark in bookmarks" :key="bookmark.id" :icon-url="bookmark.url" :title="bookmark.title">
+                <bookmark v-for="bookmark in bookmarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
                 </bookmark>
             </div>
         </div>
@@ -14,8 +14,12 @@
 import { ref } from 'vue';
 import bookmark from '@/components/bookmark.vue';
 const bookmarks = ref([]);
-const openBookMark = (e)=>{
-    console.log(e.target)
+const openBookMark = (children) => {
+     if(children && children.length){
+        console.log(children)
+     }else{
+        //window.open()
+     }
 }
 const getData = async (result) => {
     if (result) {
