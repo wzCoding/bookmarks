@@ -1,23 +1,20 @@
 <template>
     <div class="home">
-        <div class="bookmark-container">
-            <div class="bookmark-header"></div>
-            <div class="bookmark-content">
-                <bookmark v-for="bookmark in bookmarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
-                </bookmark>
-            </div>
+        <div class="bookmark-content">
+            <BookMark v-for="bookmark in bookmarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
+            </BookMark>
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import bookmark from '@/components/bookmark.vue';
+import BookMark from '../components/bookmark.vue';
 const bookmarks = ref([]);
 const openBookMark = (param) => {
     if (typeof param == 'string') {
-        window.open(param.data, "_blank");
-    }else{
+        window.open(param, "_blank");
+    } else {
         console.log(param)
         bookmarks.value = param
     }
@@ -40,7 +37,6 @@ getData();
     height: 100%;
     position: relative;
     background-image: var(--background-color);
-
     &::after {
         content: "";
         position: absolute;
@@ -50,32 +46,16 @@ getData();
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 
     }
-
-    .bookmark-container {
-        position: absolute;
-        inset: .5rem;
+    .bookmark-content {
+        flex: 1;
+        width: calc(100% - .5rem);
         display: flex;
-        flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
-
-        .bookmark-header {
-            width: 100%;
-            height: 60px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .bookmark-content {
-            flex: 1;
-            width: calc(100% - .5rem);
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: .5rem;
-            position: relative;
-            padding: .5rem;
-        }
+        flex-wrap: wrap;
+        gap: .5rem;
+        position: relative;
+        padding: .5rem;
     }
 }
 </style>

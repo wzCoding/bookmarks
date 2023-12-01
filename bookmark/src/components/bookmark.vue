@@ -22,7 +22,11 @@ const handleClick = () => {
     emit("open", openParam);
 }
 const iconUrl = computed(() => {
-    return props.bookmark.url ? `${props.bookmark.url}favicon.ico` : defaultIcon
+    let url = defaultIcon;
+    if(props.bookmark.url){
+        url = `https://www.google.com/s2/favicons?sz=64&domain_url=${props.bookmark.url}`
+    }
+    return url;
 });
 const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title : defaultTitle
