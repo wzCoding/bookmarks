@@ -43,7 +43,7 @@ const title = computed(() => {
 })
 const createDate = computed(() => {
     const date = new Date(props.bookmark.dateAdded)
-    return date.toLocaleDateString()
+    return date.toLocaleDateString();
 })
 </script>
 <style lang="scss" scoped>
