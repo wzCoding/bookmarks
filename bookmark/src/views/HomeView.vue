@@ -32,28 +32,24 @@ getData();
 </script>
 <style lang="scss" scoped>
 .home {
-    --background-color: linear-gradient(to top, #f3e7e9 0%, #e3eeff 99%, #e3eeff 100%);
     width: 100%;
     height: 100%;
     position: relative;
-    background-image: var(--background-color);
-    &::after {
-        content: "";
-        position: absolute;
-        inset: .5rem;
-        border-radius: 5px;
-        background-color: transparent;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-
-    }
+    // &::after {
+    //     content: "";
+    //     position: absolute;
+    //     inset: .5rem;
+    //     border-radius: 5px;
+    //     background-color: transparent;
+    //     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    // }
     .bookmark-content {
         flex: 1;
-        width: calc(100% - .5rem);
+        width: calc(100% - 1rem);
         display: flex;
-        justify-content: flex-start;
+        justify-content:flex-start;
         align-items: flex-start;
         flex-wrap: wrap;
-        gap: .5rem;
         position: relative;
         padding: .5rem;
     }
