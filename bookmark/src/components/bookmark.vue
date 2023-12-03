@@ -1,18 +1,32 @@
 <template>
-    <el-tooltip effect="dark" placement="top" :disabled="showTip" :content="title">
-        <div class="bookmark-item" @click="handleClick" @mouseover="handleShowTip">
-            <slot>
-                <img class="bookmark-icon" :src="iconUrl" alt="bookmark-icon">
-                <div class="bookmark-title">
+    <div class="bookmark-card">
+        <div class="bookmark-header">
+            <div class="bookmark-icon">
+                <div v-if="!hasIcon" class="icon-sign">{{ iconSign.toUpperCase() }}</div>
+                <img v-if="hasIcon" :src="iconUrl" @load="loadIcon" alt="bookmark-icon">
+            </div>
+            <el-tooltip placement="top" :disabled="hasTip" :content="title">
+                <div class="bookmark-title" @mouseover="showTitle">
                     <span ref="tip">{{ title }}</span>
                 </div>
-            </slot>
+            </el-tooltip>
         </div>
-    </el-tooltip>
+        <div class="bookmark-content">
+            <div class="bookmark-info">
+                <span>创建日期：</span>
+                <span>{{ createDate }}</span>
+            </div>
+            <div class="bookmark-info">
+                <span>最近打开：</span>
+                <span>{{ createDate }}</span>
+            </div>
+        </div>
+        <el-button type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
+    </div>
 </template>
 <script setup>
-import { computed, ref } from 'vue';
-import { ElTooltip } from 'element-plus'
+import { computed, onMounted, ref } from 'vue';
+import { ElTooltip, ElButton } from 'element-plus'
 const defaultIcon = "./icons/folder.png";
 const defaultTitle = "bookMark";
 const props = defineProps({
@@ -22,15 +36,10 @@ const props = defineProps({
     }
 });
 const emit = defineEmits(['open']);
-const showTip = ref(true);
-const tip = ref()
-const handleShowTip = () => {
-    showTip.value = tip.value.parentNode.offsetWidth >= tip.value.offsetWidth
-}
-const handleClick = () => {
-    const openParam = props.bookmark.url ? props.bookmark.url : props.bookmark.children;
-    emit("open", openParam);
-}
+const hasTip = ref(true);
+const hasIcon = ref(true);
+const tip = ref();
+
 const iconUrl = computed(() => {
     let url = defaultIcon;
     if (props.bookmark.url) {
@@ -39,48 +48,96 @@ const iconUrl = computed(() => {
     return url;
 });
 const title = computed(() => {
-    return props.bookmark.title ? props.bookmark.title : defaultTitle
+    return props.bookmark.title ? props.bookmark.title.trim() : defaultTitle
+});
+const iconSign = computed(() => {
+    const regExp = /[\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/gm;
+    const result = title.value.replace(regExp, '');
+    return result.slice(0, 1);
 })
-const createDate = computed(() => {
-    const date = new Date(props.bookmark.dateAdded)
-    return date.toLocaleDateString();
-})
-</script>
-<style lang="scss" scoped>
-.bookmark-item {
-    cursor: pointer;
-    font-size: .75rem;
-    padding: 0.5rem;
-    position: relative;
-    z-index: 1;
-    border-radius: 5px;
-    transition: all .3s cubic-bezier(.33, -.16, .58, 1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 3rem;
-    .item-header {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    }
-
-    .bookmark-icon {
-        width: 2.5rem;
-        border: 2px solid #1890ff;
-        border-radius: 3px;
-    }
-
-    .bookmark-title {
-        width: 100%;
-        text-align: center;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: inherit;
-        white-space: nowrap;
+const loadIcon = (e) => {
+    if (e.target.naturalWidth === 16) {
+        hasIcon.value = false;
     }
 }
-</style>
+
+const showTitle = () => {
+    hasTip.value = tip.value.parentNode.offsetWidth >= tip.value.offsetWidth
+}
+const handleClick = () => {
+    const openParam = props.bookmark.url ? props.bookmark.url : props.bookmark.children;
+    emit("open", openParam);
+}
+const handleDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleDateString();
+}
+const createDate = handleDate(props.bookmark.dateAdded)
+</script>
+<style lang="scss" scoped>
+.bookmark-card {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: .5rem;
+    width: 130px;
+    margin: 2px;
+
+    .bookmark-header {
+        width: 100%;
+        font-size: .8rem;
+        font-weight: bold;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        margin-bottom: 1rem;
+
+        .bookmark-icon {
+            width: 2rem;
+            height: 2rem;
+
+            .icon-sign {
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                line-height: 2rem;
+                color: #ddd;
+                font-size: 1.5rem;
+                border: 2px solid #ccc;
+                border-radius: 3px;
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                border-radius: 3px;
+            }
+        }
+
+        .bookmark-title {
+            width: calc(100% - 2rem);
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: inherit;
+            white-space: nowrap;
+            padding: .25rem;
+            text-align: left;
+        }
+    }
+
+    .bookmark-content {
+        margin-bottom: 1rem;
+
+        .bookmark-info {
+            font-size: .75rem;
+            color: #999;
+        }
+    }
+
+    .card-button {
+        &:hover {
+            background-color: #1890ff;
+        }
+    }
+}</style>

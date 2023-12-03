@@ -35,14 +35,6 @@ getData();
     width: 100%;
     height: 100%;
     position: relative;
-    // &::after {
-    //     content: "";
-    //     position: absolute;
-    //     inset: .5rem;
-    //     border-radius: 5px;
-    //     background-color: transparent;
-    //     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    // }
     .bookmark-content {
         flex: 1;
         width: calc(100% - 1rem);

@@ -17,7 +17,15 @@ body {
   width: 100vw;
   height: 100vh;
 }
-
+::-webkit-scrollbar{
+  width: 5px;
+  background-color: #ddd;
+}
+::-webkit-scrollbar-thumb{
+  background-color: #409eff;
+  border-radius: 2px;
+  cursor: pointer;
+}
 #app {
   font-family: Avenir,Helvetica,Arial,sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -32,5 +40,6 @@ body {
   .bookmark-container {
     width: 100%;
     flex: 1;
+    overflow-y:scroll ;
   }
 }</style>
