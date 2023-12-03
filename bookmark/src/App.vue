@@ -6,7 +6,7 @@
 </template>
 <script setup>
 import BookHeader from './components/header.vue';
-const headerHeight = "60px";
+const headerHeight = "60px"
 </script>
 <style lang="scss">
 body {
@@ -17,28 +17,32 @@ body {
   width: 100vw;
   height: 100vh;
 }
-::-webkit-scrollbar{
+
+::-webkit-scrollbar {
   width: 5px;
   background-color: #ddd;
+  z-index: 999;
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
   background-color: #409eff;
   border-radius: 2px;
   cursor: pointer;
 }
+
 #app {
-  font-family: Avenir,Helvetica,Arial,sans-serif;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-direction: column;
   overflow-y: scroll;
+
   .book-container {
+    position: relative;
     width: 100%;
-    flex: 1;
+    top: v-bind(headerHeight);
+    height: calc(100% - v-bind(headerHeight));
   }
-}</style>
+}
+</style>
