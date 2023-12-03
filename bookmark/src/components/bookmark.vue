@@ -27,8 +27,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { ElTooltip, ElButton } from 'element-plus'
-const defaultIcon = "./icons/folder.png";
-const defaultTitle = "bookMark";
 const props = defineProps({
     bookmark: {
         type: Object,
@@ -36,6 +34,8 @@ const props = defineProps({
     }
 });
 const emit = defineEmits(['open']);
+const defaultIcon = "./icons/folder.png";
+const defaultTitle = "bookMark";
 const disableTip = ref(true);
 const hasIcon = ref(false);
 const tip = ref();
@@ -47,12 +47,12 @@ const iconSign = computed(() => {
     const regExp = /[\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/gm;
     const result = title.value.replace(regExp, '');
     return result.slice(0, 1);
-})
+});
 
 const showTitle = () => {
     const parentWidth = tip.value.parentNode.offsetWidth;
     const tipWidth = tip.value.offsetWidth;
-    disableTip.value=parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
+    disableTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
 }
 const handleClick = () => {
     const openParam = props.bookmark.url ? props.bookmark.url : props.bookmark.children;
@@ -63,13 +63,27 @@ const handleDate = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleDateString();
 }
-const handleIcon = (url) => {
+const handleIconUrl = (url) => {
     if (!url) return defaultIcon;
     url = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
     return url;
 }
-const iconUrl = handleIcon(props.bookmark.url);
+const iconUrl = handleIconUrl(props.bookmark.url);
 const createDate = handleDate(props.bookmark.dateAdded);
+const loadIcon = () => {
+    const img = new Image();
+    img.src = iconUrl
+    img.onload = () => {
+        if(img.naturalWidth == 16){
+            hasIcon.value = false;
+        }else{
+            hasIcon.value = true;
+        }
+    }
+}
+onMounted(() =>{
+    loadIcon()
+})
 </script>
 <style lang="scss" scoped>
 .bookmark-card {
@@ -91,6 +105,9 @@ const createDate = handleDate(props.bookmark.dateAdded);
         margin-bottom: 1rem;
 
         .bookmark-icon {
+            width:var(--icon-size);
+            height: var(--icon-size);
+            position: relative;
             .icon-sign {
                 width: var(--icon-size);
                 line-height: var(--icon-size);
@@ -102,7 +119,7 @@ const createDate = handleDate(props.bookmark.dateAdded);
             }
 
             img {
-                width:var(--icon-size);
+                width: var(--icon-size);
                 border-radius: 3px;
             }
         }
