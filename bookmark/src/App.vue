@@ -1,6 +1,6 @@
 <template>
   <BookHeader :height="headerHeight"></BookHeader>
-  <div class="bookmark-container">
+  <div class="book-container">
     <RouterView></RouterView>
   </div>
 </template>
@@ -36,10 +36,9 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-   
-  .bookmark-container {
+  overflow-y: scroll;
+  .book-container {
     width: 100%;
     flex: 1;
-    overflow-y:scroll ;
   }
 }</style>

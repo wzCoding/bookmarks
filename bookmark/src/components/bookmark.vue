@@ -4,7 +4,7 @@
             <div class="bookmark-icon">
                 <transition name="fade">
                     <img v-if="hasIcon" :src="iconUrl" alt="bookmark-icon">
-                    <div v-else class="icon-sign">{{ iconSign.toUpperCase() }}</div>
+                    <div v-else class="text-icon">{{ textIcon.toUpperCase() }}</div>
                 </transition>
             </div>
             <el-tooltip placement="top" :disabled="disableTip" :content="title">
@@ -45,7 +45,7 @@ const tip = ref();
 const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title.trim() : defaultTitle
 });
-const iconSign = computed(() => {
+const textIcon = computed(() => {
     const regExp = /[\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/gm;
     const result = title.value.replace(regExp, '');
     return result.slice(0, 1);
@@ -60,19 +60,19 @@ const handleClick = () => {
     const openParam = props.bookmark.url ? props.bookmark.url : props.bookmark.children;
     emit("open", openParam);
 }
-const handleDate = (timestamp) => {
+const getDate = (timestamp) => {
     if (!timestamp) return;
     const date = new Date(timestamp);
     return date.toLocaleDateString();
 }
-const createDate = handleDate(props.bookmark.dateAdded);
-const openDate = handleDate(props.bookmark.dateGroupModified);
-const handleIconUrl = (url) => {
+const createDate = getDate(props.bookmark.dateAdded);
+const openDate = getDate(props.bookmark.dateGroupModified);
+const getIconUrl = (url) => {
     if (!url) return defaultIcon;
     url = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
     return url;
 }
-const iconUrl = handleIconUrl(props.bookmark.url);
+const iconUrl = getIconUrl(props.bookmark.url);
 
 const loadIcon = () => {
     const img = new Image();
@@ -92,6 +92,7 @@ loadIcon();
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: .5rem;
     width: 130px;
+    transform: all 0.3s ease;
     &:hover{
         box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.3);
     }
@@ -124,7 +125,7 @@ loadIcon();
             height: var(--icon-size);
             position: relative;
             overflow: hidden;
-            .icon-sign {
+            .text-icon {
                 width: var(--icon-size);
                 line-height: var(--icon-size);
                 text-align: center;

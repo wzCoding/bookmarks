@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <div class="bookmark-content">
+        <div class="book-content">
             <BookMark v-for="bookmark in bookmarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
             </BookMark>
         </div>
@@ -35,8 +35,7 @@ getData();
     width: 100%;
     height: 100%;
     position: relative;
-    .bookmark-content {
-        flex: 1;
+    .book-content {
         width: calc(100% - 1rem);
         display: flex;
         justify-content:flex-start;
