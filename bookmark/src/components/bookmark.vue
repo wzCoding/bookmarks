@@ -2,8 +2,10 @@
     <div class="bookmark-card">
         <div class="bookmark-header">
             <div class="bookmark-icon">
-                <div v-if="!hasIcon" class="icon-sign">{{ iconSign.toUpperCase() }}</div>
-                <img v-if="hasIcon" :src="iconUrl" alt="bookmark-icon">
+                <transition name="fade">
+                    <img v-if="hasIcon" :src="iconUrl" alt="bookmark-icon">
+                    <div v-else class="icon-sign">{{ iconSign.toUpperCase() }}</div>
+                </transition>
             </div>
             <el-tooltip placement="top" :disabled="disableTip" :content="title">
                 <div class="bookmark-title" @mouseover="showTitle">
@@ -12,20 +14,21 @@
             </el-tooltip>
         </div>
         <div class="bookmark-content">
-            <div class="bookmark-info">
-                <span>创建日期：</span>
+            <div v-if="createDate" class="bookmark-info">
+                <span v-if="props.bookmark.children">创建日期：</span>
+                <span v-else>添加日期：</span>
                 <span>{{ createDate }}</span>
             </div>
-            <div class="bookmark-info">
+            <div v-if="openDate" class="bookmark-info">
                 <span>最近打开：</span>
-                <span>{{ createDate }}</span>
+                <span>{{ openDate }}</span>
             </div>
         </div>
         <el-button type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
     </div>
 </template>
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed,ref } from 'vue';
 import { ElTooltip, ElButton } from 'element-plus'
 const props = defineProps({
     bookmark: {
@@ -39,7 +42,6 @@ const defaultTitle = "bookMark";
 const disableTip = ref(true);
 const hasIcon = ref(false);
 const tip = ref();
-
 const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title.trim() : defaultTitle
 });
@@ -63,27 +65,24 @@ const handleDate = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleDateString();
 }
+const createDate = handleDate(props.bookmark.dateAdded);
+const openDate = handleDate(props.bookmark.dateGroupModified);
 const handleIconUrl = (url) => {
     if (!url) return defaultIcon;
     url = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
     return url;
 }
 const iconUrl = handleIconUrl(props.bookmark.url);
-const createDate = handleDate(props.bookmark.dateAdded);
+
 const loadIcon = () => {
     const img = new Image();
     img.src = iconUrl
     img.onload = () => {
-        if(img.naturalWidth == 16){
-            hasIcon.value = false;
-        }else{
-            hasIcon.value = true;
-        }
+        hasIcon.value = iconUrl == defaultIcon ? true : img.naturalWidth == 16 ? false : true;
     }
 }
-onMounted(() =>{
-    loadIcon()
-})
+loadIcon();
+
 </script>
 <style lang="scss" scoped>
 .bookmark-card {
@@ -93,7 +92,23 @@ onMounted(() =>{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: .5rem;
     width: 130px;
-    margin: 2px;
+    &:hover{
+        box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.3);
+    }
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: all 0.2s linear;
+    }
+
+    .fade-enter-from {
+        opacity: 0;
+        transform: translateX(-var(--icon-size));
+    }
+
+    .fade-leave-to {
+        opacity: 0;
+        transform: translateX(var(--icon-size));
+    }
 
     .bookmark-header {
         width: 100%;
@@ -105,16 +120,17 @@ onMounted(() =>{
         margin-bottom: 1rem;
 
         .bookmark-icon {
-            width:var(--icon-size);
+            width: var(--icon-size);
             height: var(--icon-size);
             position: relative;
+            overflow: hidden;
             .icon-sign {
                 width: var(--icon-size);
                 line-height: var(--icon-size);
                 text-align: center;
                 color: lightgray;
                 font-size: 1.5rem;
-                border: 1px solid #ccc;
+                box-shadow: 0 0 10px 12px rgba(0,0,0,0.3) inset;
                 border-radius: 3px;
             }
 
@@ -125,7 +141,7 @@ onMounted(() =>{
         }
 
         .bookmark-title {
-            width: calc(100% - 2rem);
+            width: calc(100% - var(--icon-size) - 10px);
             text-align: center;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -137,6 +153,7 @@ onMounted(() =>{
     }
 
     .bookmark-content {
+        min-height: var(--icon-size);
         margin-bottom: 1rem;
 
         .bookmark-info {
