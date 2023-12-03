@@ -1,5 +1,5 @@
 <template>
-    <div class="bookmark-header" :style="headerStyle"></div>
+    <div class="bookmark-header" :style="headerStyle">11111</div>
 </template>
 <script setup>
 import { computed } from 'vue';
