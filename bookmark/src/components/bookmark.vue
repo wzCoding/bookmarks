@@ -52,17 +52,7 @@ const iconSign = computed(() => {
 const showTitle = () => {
     const parentWidth = tip.value.parentNode.offsetWidth;
     const tipWidth = tip.value.offsetWidth;
-
-    if (parentWidth > tipWidth) {
-        disableTip.value = false;
-    } else if (parentWidth - tipWidth < 10) {
-        disableTip.value = false;
-        console.log(parentWidth - tipWidth)
-    } else {
-        console.log(parentWidth - tipWidth)
-        disableTip.value = true;
-    }
-    //disableTip.value = parentWidth > tipWidth ? false :  (parentWidth - tipWidth) < 10 ? false : true
+    disableTip.value=parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
 }
 const handleClick = () => {
     const openParam = props.bookmark.url ? props.bookmark.url : props.bookmark.children;
@@ -101,22 +91,18 @@ const createDate = handleDate(props.bookmark.dateAdded);
         margin-bottom: 1rem;
 
         .bookmark-icon {
-            width: var(--icon-size);
-            height: var(--icon-size);
-
             .icon-sign {
-                width: 100%;
-                text-align: center;
+                width: var(--icon-size);
                 line-height: var(--icon-size);
-                color: #ddd;
+                text-align: center;
+                color: lightgray;
                 font-size: 1.5rem;
-                border: 2px solid #ccc;
+                border: 1px solid #ccc;
                 border-radius: 3px;
             }
 
             img {
-                width: 100%;
-                height: 100%;
+                width:var(--icon-size);
                 border-radius: 3px;
             }
         }
@@ -128,7 +114,7 @@ const createDate = handleDate(props.bookmark.dateAdded);
             text-overflow: ellipsis;
             font-size: inherit;
             white-space: nowrap;
-            padding-left: 0.5rem;
+            padding-left: 5px;
             text-align: left;
         }
     }
