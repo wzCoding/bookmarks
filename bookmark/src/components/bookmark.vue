@@ -3,9 +3,9 @@
         <div class="bookmark-header">
             <div class="bookmark-icon">
                 <div v-if="!hasIcon" class="icon-sign">{{ iconSign.toUpperCase() }}</div>
-                <img v-if="hasIcon" :src="iconUrl" @load="loadIcon" alt="bookmark-icon">
+                <img v-if="hasIcon" :src="iconUrl" alt="bookmark-icon">
             </div>
-            <el-tooltip placement="top" :disabled="hasTip" :content="title">
+            <el-tooltip placement="top" :disabled="disableTip" :content="title">
                 <div class="bookmark-title" @mouseover="showTitle">
                     <span ref="tip">{{ title }}</span>
                 </div>
@@ -36,17 +36,10 @@ const props = defineProps({
     }
 });
 const emit = defineEmits(['open']);
-const hasTip = ref(true);
-const hasIcon = ref(true);
+const disableTip = ref(true);
+const hasIcon = ref(false);
 const tip = ref();
 
-const iconUrl = computed(() => {
-    let url = defaultIcon;
-    if (props.bookmark.url) {
-        url = `https://www.google.com/s2/favicons?sz=64&domain_url=${props.bookmark.url}`
-    }
-    return url;
-});
 const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title.trim() : defaultTitle
 });
@@ -55,27 +48,42 @@ const iconSign = computed(() => {
     const result = title.value.replace(regExp, '');
     return result.slice(0, 1);
 })
-const loadIcon = (e) => {
-    if (e.target.naturalWidth === 16) {
-        hasIcon.value = false;
-    }
-}
 
 const showTitle = () => {
-    hasTip.value = tip.value.parentNode.offsetWidth >= tip.value.offsetWidth
+    const parentWidth = tip.value.parentNode.offsetWidth;
+    const tipWidth = tip.value.offsetWidth;
+
+    if (parentWidth > tipWidth) {
+        disableTip.value = false;
+    } else if (parentWidth - tipWidth < 10) {
+        disableTip.value = false;
+        console.log(parentWidth - tipWidth)
+    } else {
+        console.log(parentWidth - tipWidth)
+        disableTip.value = true;
+    }
+    //disableTip.value = parentWidth > tipWidth ? false :  (parentWidth - tipWidth) < 10 ? false : true
 }
 const handleClick = () => {
     const openParam = props.bookmark.url ? props.bookmark.url : props.bookmark.children;
     emit("open", openParam);
 }
 const handleDate = (timestamp) => {
+    if (!timestamp) return;
     const date = new Date(timestamp);
     return date.toLocaleDateString();
 }
-const createDate = handleDate(props.bookmark.dateAdded)
+const handleIcon = (url) => {
+    if (!url) return defaultIcon;
+    url = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
+    return url;
+}
+const iconUrl = handleIcon(props.bookmark.url);
+const createDate = handleDate(props.bookmark.dateAdded);
 </script>
 <style lang="scss" scoped>
 .bookmark-card {
+    --icon-size: 2rem;
     background-color: #f0f0f0;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -93,14 +101,13 @@ const createDate = handleDate(props.bookmark.dateAdded)
         margin-bottom: 1rem;
 
         .bookmark-icon {
-            width: 2rem;
-            height: 2rem;
+            width: var(--icon-size);
+            height: var(--icon-size);
 
             .icon-sign {
                 width: 100%;
-                height: 100%;
                 text-align: center;
-                line-height: 2rem;
+                line-height: var(--icon-size);
                 color: #ddd;
                 font-size: 1.5rem;
                 border: 2px solid #ccc;
@@ -121,7 +128,7 @@ const createDate = handleDate(props.bookmark.dateAdded)
             text-overflow: ellipsis;
             font-size: inherit;
             white-space: nowrap;
-            padding: .25rem;
+            padding-left: 0.5rem;
             text-align: left;
         }
     }
@@ -140,4 +147,5 @@ const createDate = handleDate(props.bookmark.dateAdded)
             background-color: #1890ff;
         }
     }
-}</style>
+}
+</style>
