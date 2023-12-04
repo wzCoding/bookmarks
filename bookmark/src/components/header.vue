@@ -9,7 +9,7 @@
 import { computed } from 'vue';
 import { ElPageHeader } from 'element-plus';
 const props = defineProps({
-    height: { type: Number, default: 60 },
+    height: { type: String, default: '60' },
 });
 const headerStyle = computed(() => {
     return {

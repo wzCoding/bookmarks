@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    background-color: #ddd;
+    z-index: 999;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #409eff;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+// 响应式样式
+@media screen and (max-width: 319px) {
+    .book-content {
+        .bookmark-card {
+            width: 100% !important;
+        }
+    }
+}
+@media screen and (max-width: 568px) and (min-width: 320px) {
+    .book-content {
+        gap: 0.5rem;
+        .bookmark-card {
+            width: 43% !important;
+        }
+    }
+}
+@media screen and (max-width: 767px) and (min-width: 568px) {
+    .book-content {
+        gap: 0.8rem;
+    }
+    .bookmark-card {
+        width: 30%;
+    }
+}

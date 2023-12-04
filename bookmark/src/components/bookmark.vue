@@ -19,9 +19,9 @@
                 <span v-else>添加日期：</span>
                 <span>{{ createDate }}</span>
             </div>
-            <div v-if="openDate" class="bookmark-info">
-                <span>最近打开：</span>
-                <span>{{ openDate }}</span>
+            <div v-if="modifyDate" class="bookmark-info">
+                <span>修改日期：</span>
+                <span>{{ modifyDate }}</span>
             </div>
         </div>
         <el-button type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
@@ -66,7 +66,7 @@ const getDate = (timestamp) => {
     return date.toLocaleDateString();
 }
 const createDate = getDate(props.bookmark.dateAdded);
-const openDate = getDate(props.bookmark.dateGroupModified);
+const modifyDate = getDate(props.bookmark.dateGroupModified);
 const getIconUrl = (url) => {
     if (!url) return defaultIcon;
     url = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
@@ -87,12 +87,12 @@ loadIcon();
 <style lang="scss" scoped>
 .bookmark-card {
     --icon-size: 2rem;
-    background-color: #f0f0f0;
+    background-color: #f9f9f9;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: .5rem;
     width: 130px;
-    transform: all 0.3s ease;
+    transition: all 0.3s ease;
     &:hover{
         box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.3);
     }

@@ -32,8 +32,6 @@ getData();
 </script>
 <style lang="scss" scoped>
 .home {
-    width: 100%;
-    height: 100%;
     position: relative;
     .book-content {
         width: calc(100% - 1rem);
@@ -43,6 +41,7 @@ getData();
         flex-wrap: wrap;
         position: relative;
         padding: .5rem;
+        gap: 0.4rem;
     }
 }
 </style>
