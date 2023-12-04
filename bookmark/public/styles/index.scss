@@ -24,11 +24,6 @@ body {
     --card-width: 130px;
 }
 // 响应式样式
-@media screen and (max-width: 319px) {
-    .book-content {
-        --card-width: 100%;
-    }
-}
 @media screen and (max-width: 376px) and (min-width: 320px) {
     .book-content {
         --content-gap: 0.5rem;
