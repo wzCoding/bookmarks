@@ -40,8 +40,8 @@ getData();
         align-items: flex-start;
         flex-wrap: wrap;
         position: relative;
-        padding: 0.6rem;
-        gap: 0.4rem;
+        padding:var(--content-padding);
+        gap:var(--content-gap);
     }
 }
 </style>

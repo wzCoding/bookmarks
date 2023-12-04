@@ -18,84 +18,70 @@ body {
     border-radius: 2px;
     cursor: pointer;
 }
-
+.book-content {
+    --content-gap: 0.6rem;
+    --content-padding: 0.4rem;
+    --card-width: 130px;
+}
 // 响应式样式
 @media screen and (max-width: 319px) {
     .book-content {
-        .bookmark-card {
-            width: 100% !important;
-        }
+        --card-width: 100%;
     }
 }
 @media screen and (max-width: 376px) and (min-width: 320px) {
     .book-content {
-        padding: 0.75rem !important;
-        gap: 0.5rem !important;
-        .bookmark-card {
-            width: 43% !important;
-        }
+        --content-gap: 0.5rem;
+        --content-padding: 0.75rem;
+        --card-width: 43%;
     }
 }
 @media screen and (max-width: 527px) and (min-width: 377px) {
     .book-content {
-        padding: 0.75rem !important;
-        gap: 0.6rem !important;
-        .bookmark-card {
-            width: 44% !important;
-        }
+        --content-gap: 0.75rem;
+        --content-padding: 0.6rem;
+        --card-width: 44%;
     }
 }
 @media screen and (max-width: 677px) and (min-width: 527px) {
     .book-content {
-        padding: 0.75rem !important;
-        gap: 0.8rem !important;
-        .bookmark-card {
-            width: 45% !important;
-        }
+        --content-gap: 0.75rem;
+        --content-padding: 0.8rem;
+        --card-width: 45%;
     }
 }
 @media screen and (max-width: 827px) and (min-width: 677px) {
     .book-content {
-        padding: 0.8rem !important;
-        gap: 1rem !important;
-        .bookmark-card {
-            width: 29% !important;
-        }
+        --content-gap: 0.8rem;
+        --content-padding: 1rem;
+        --card-width: 29%;
     }
 }
 @media screen and (max-width: 977px) and (min-width: 827px) {
     .book-content {
-        padding: 0.6rem !important;
-        gap: 0.6rem !important;
-        .bookmark-card {
-            width: 22% !important;
-        }
+        --content-gap: 0.6rem;
+        --content-padding: 0.6rem;
+        --card-width: 22%;
     }
 }
 @media screen and (max-width: 1127px) and (min-width: 977px) {
     .book-content {
-        padding: 0.85rem !important;
-        gap: 0.85rem !important;
-        .bookmark-card {
-            width: 17% !important;
-        }
+        --content-gap: 0.85rem;
+        --content-padding: 0.85rem;
+        --card-width: 17%;
     }
 }
 @media screen and (max-width: 1252px) and (min-width: 1127px) {
     .book-content {
-        padding: 0.85rem !important;
-        gap: 0.85rem !important;
-        .bookmark-card {
-            width: 14% !important;
-        }
+        --content-gap: 0.85rem;
+        --content-padding: 0.85rem;
+        --card-width: 14%;
     }
 }
 @media screen and (min-width: 1253px) {
     .book-content {
-        padding: 0.75rem !important;
-        gap: 0.75rem !important;
-        .bookmark-card {
-            width: 14.5% !important;
-        }
+        --content-gap: 0.75rem;
+        --content-padding: 0.75rem;
+        --card-width: 14.5%;
     }
 }

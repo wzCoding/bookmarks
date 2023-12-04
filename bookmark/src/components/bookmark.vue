@@ -89,12 +89,14 @@ loadIcon();
     --icon-size: 2rem;
     background-color: #f9f9f9;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     padding: .5rem;
-    width: 130px;
+    width: var(--card-width);
     transition: all 0.3s ease;
+   
+    cursor: pointer;
     &:hover{
-        box-shadow: 2px 4px 8px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.3);
     }
     .fade-enter-active,
     .fade-leave-active {
@@ -131,7 +133,7 @@ loadIcon();
                 text-align: center;
                 color: lightgray;
                 font-size: 1.5rem;
-                box-shadow: 0 0 10px 12px rgba(0,0,0,0.3) inset;
+                box-shadow: 0 0 10px 12px rgba(0,0,0,0.1) inset;
                 border-radius: 3px;
             }
 
