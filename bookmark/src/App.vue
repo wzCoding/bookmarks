@@ -23,6 +23,7 @@ const headerHeight = "60px"
     top: v-bind(headerHeight);
     height: calc(100% - v-bind(headerHeight));
     overflow-y: scroll;
+    overflow-x: hidden;
   }
 }
 </style>

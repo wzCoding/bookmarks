@@ -40,7 +40,7 @@ getData();
         align-items: flex-start;
         flex-wrap: wrap;
         position: relative;
-        padding: .5rem;
+        padding: 0.6rem;
         gap: 0.4rem;
     }
 }
