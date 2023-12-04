@@ -21,10 +21,10 @@ const openBookMark = (param) => {
 }
 const getData = async (result) => {
     if (result) {
-        bookmarks.value = result[0].children;
+        bookmarks.value = result[0].children[0].children;
     } else {
         const data = await import('../../public/utils/data.json');
-        bookmarks.value = data.default[0].children;
+        bookmarks.value = data.default[0].children[0].children;
     }
 }
 getData();

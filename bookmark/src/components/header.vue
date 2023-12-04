@@ -31,6 +31,9 @@ const goBack = () => {
     :deep(.el-page-header__header) {
         width: 100%;
         height: 100%;
+        .el-page-header__left{
+            padding:0.75rem;
+        }
     }
 }
 </style>
