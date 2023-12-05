@@ -20,8 +20,8 @@ body {
 #app {
     --content-padding: 0.75rem; // 内容区padding
     --content-gap: 0.6rem; // 内容区间隔
-    --card-columns: 1; // 卡片列数
-    --extra-space: 0rem; // 额外空间
+    // --card-columns: 1; // 卡片列数
+    // --extra-space: 0rem; // 额外空间
     --rest-space: calc(100% - (var(--card-columns) - 1) * var(--content-gap) - var(--content-padding) * 2); // 剩余空间
 }
 
