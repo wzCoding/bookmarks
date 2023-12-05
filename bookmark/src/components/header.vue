@@ -8,6 +8,7 @@
 <script setup>
 import { computed } from 'vue';
 import { ElPageHeader } from 'element-plus';
+import { useBookStore } from '@/store/useBookStore';
 const props = defineProps({
     height: { type: String, default: '60' },
 });
@@ -15,9 +16,11 @@ const headerStyle = computed(() => {
     return {
         height: props.height.includes('px') ? props.height : `${props.height}px`
     }
-})
+});
+const bookStore = useBookStore();
 const goBack = () => {
-    console.log("go back");
+    console.log(bookStore.parentId)
+    bookStore.getTargetList(bookStore.parentId)
 }
 </script>
 <style lang="scss" scoped>

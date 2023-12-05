@@ -57,8 +57,12 @@ const showTitle = () => {
     disableTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
 }
 const handleClick = () => {
-    const openParam = props.bookmark.url ? props.bookmark.url : props.bookmark.children;
-    emit("open", openParam);
+    const param = {
+        id: props.bookmark.id,
+        parentId: props.bookmark.parentId ? props.bookmark.parentId : null,
+        url: props.bookmark.url ? props.bookmark.url : null,
+    }
+    emit("open", param);
 }
 const getDate = (timestamp) => {
     if (!timestamp) return;

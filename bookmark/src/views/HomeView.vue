@@ -12,28 +12,17 @@ import { computed, ref } from 'vue';
 import { useBookStore } from '../store/useBookStore';
 import BookMark from '../components/bookmark.vue';
 const bookStore = useBookStore();
-const bookmarks = computed(()=>{
-    return bookStore.bookList;
-})
-
+const bookmarks = computed(() => {
+    return bookStore.currentMarks
+});
 const openBookMark = (param) => {
-    if (typeof param == 'string') {
-        window.open(param, "_blank");
+    if (param.url) {
+        window.open(param.url, "_blank");
     } else {
         console.log(param)
-        bookmarks.value = param
+        bookStore.getTargetList(param.id);
     }
 }
-// const getData = async (result) => {
-//     if (result) {
-//         bookmarks.value = result[0].children[0].children;
-//     } else {
-//         const data = await import('../../public/utils/data.json');
-//         bookmarks.value = data.default[0].children[0].children;
-//     }
-// }
-// getData();
-//chrome.bookmarks.getTree(getData)
 </script>
 <style lang="scss" scoped>
 .book-home {
