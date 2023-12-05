@@ -91,7 +91,7 @@ loadIcon();
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     padding: .5rem;
-    width: var(--card-width);
+    width: calc(var(--rest-space) / var(--card-columns) - var(--extra-space));
     transition: all 0.3s ease;
    
     cursor: pointer;
