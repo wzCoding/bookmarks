@@ -2,10 +2,12 @@
   <BookHeader :height="headerHeight"></BookHeader>
   <div class="book-container">
     <RouterView></RouterView>
+    <BookFooter></BookFooter>
   </div>
 </template>
 <script setup>
 import BookHeader from './components/header.vue';
+import BookFooter from './components/footer.vue';
 const headerHeight = "60px"
 </script>
 <style lang="scss">
@@ -22,7 +24,7 @@ const headerHeight = "60px"
     width: 100%;
     top: v-bind(headerHeight);
     height: calc(100% - v-bind(headerHeight));
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
   }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="book-home">
         <div class="book-content">
             <BookMark v-for="bookmark in bookmarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
             </BookMark>
@@ -31,7 +31,7 @@ getData();
 //chrome.bookmarks.getTree(getData)
 </script>
 <style lang="scss" scoped>
-.home {
+.book-home {
     position: relative;
     .book-content {
         width: calc(100% - 1rem);

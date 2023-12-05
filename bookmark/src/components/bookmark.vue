@@ -28,7 +28,7 @@
     </div>
 </template>
 <script setup>
-import { computed,ref } from 'vue';
+import { computed, ref } from 'vue';
 import { ElTooltip, ElButton } from 'element-plus'
 const props = defineProps({
     bookmark: {
@@ -77,8 +77,10 @@ const iconUrl = getIconUrl(props.bookmark.url);
 const loadIcon = () => {
     const img = new Image();
     img.src = iconUrl
-    img.onload = () => {
-        hasIcon.value = iconUrl == defaultIcon ? true : img.naturalWidth == 16 ? false : true;
+    img.onload = async function(){
+        return Promise.resolve(this).then(res => {
+            hasIcon.value = iconUrl == defaultIcon ? true : res.naturalWidth == 16 ? false : true;
+        });
     }
 }
 loadIcon();
@@ -93,11 +95,13 @@ loadIcon();
     padding: .5rem;
     width: calc(var(--rest-space) / var(--card-columns) - var(--extra-space));
     transition: all 0.3s ease;
-   
+
     cursor: pointer;
-    &:hover{
+
+    &:hover {
         box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.3);
     }
+
     .fade-enter-active,
     .fade-leave-active {
         transition: all 0.2s linear;
@@ -127,13 +131,14 @@ loadIcon();
             height: var(--icon-size);
             position: relative;
             overflow: hidden;
+
             .text-icon {
                 width: var(--icon-size);
                 line-height: var(--icon-size);
                 text-align: center;
                 color: lightgray;
                 font-size: 1.5rem;
-                box-shadow: 0 0 10px 12px rgba(0,0,0,0.1) inset;
+                box-shadow: 0 0 10px 12px rgba(0, 0, 0, 0.1) inset;
                 border-radius: 3px;
             }
 
