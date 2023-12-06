@@ -17,11 +17,11 @@ onMounted(() => {
 const small = true
 const background = true
 const bookStore = useBookStore();
-const handleCurrentChange = (val) => {
-    bookStore.currentPage = val;
+const handleCurrentChange = (currentPage) => {
+    bookStore.currentPage = currentPage;
 }
-const handleSizeChange = (val) => {
-    bookStore.currentSize = val;
+const handleSizeChange = (size) => {
+    bookStore.currentSize = size;
 }
 </script>
 <style lang="scss" scoped>

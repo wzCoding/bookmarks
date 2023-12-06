@@ -41,13 +41,12 @@ export const useBookStore = defineStore("bookmarks", () => {
     //当前分页的书签列表
     const pageMarks = computed(() => {
         const startIndex = (currentPage.value - 1) * currentSize.value;
-        const endIndex = startIndex + currentSize.value * (currentPage.value - 1);
-        console.log(startIndex,endIndex)
+        const endIndex = startIndex + currentSize.value;
         return currentMarks.value.slice(startIndex, endIndex);
     });
     const totalNum = computed(() => {
         return currentMarks.value.length;
-    })
+    });
     function getFolder(id) {
         return allBookMarks.filter(item => item.id == id)[0];
     }
@@ -57,7 +56,7 @@ export const useBookStore = defineStore("bookmarks", () => {
         const folder = getFolder(id);
         parentId.value = folder.parentId;
         currentMarks.value = folder.children;
-        currentTitle.value = folder.title == '' && folder.id == '0' ? defaultTitle : folder.title;
+        currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;
     }
     return {
         currentTitle,
