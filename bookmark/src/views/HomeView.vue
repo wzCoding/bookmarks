@@ -1,19 +1,16 @@
 <template>
     <div class="book-home">
         <div class="book-content">
-            <BookMark v-for="bookmark in bookStore.currentMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
+            <BookMark v-for="bookmark in bookStore.pageMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
             </BookMark>
         </div>
     </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
 import { useBookStore } from '../store/useBookStore';
 import BookMark from '../components/bookmark.vue';
 const bookStore = useBookStore();
-bookStore.getCurrentMarks();
-
 const openBookMark = (param) => {
     if (param.url) {
         window.open(param.url, "_blank");
