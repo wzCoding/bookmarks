@@ -1,22 +1,28 @@
 <template>
     <div class="book-footer">
-        <el-pagination v-model:current-page="bookStore.currentPage" v-model:page-size="bookStore.currentSize"
-            :pager-count="5" :page-sizes="[8, 16, 24, 32]" :small="small" :background="background"
-            layout="prev, pager, next" :total="bookStore.totalNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+        <ElConfigProvider :locale="i18nStore.locale">
+            <el-pagination :hide-on-single-page="true" v-model:current-page="bookStore.currentPage"
+                v-model:page-size="bookStore.currentSize" :pager-count="pagerCount" :page-sizes="pageSizes" :small="true"
+                :background="true" :layout="layout" :total="500" @size-change="handleSizeChange"
+                @current-change="handleCurrentChange" />
+        </ElConfigProvider>
     </div>
 </template>
 <script setup>
 import { onMounted } from 'vue';
-import { ElPagination } from 'element-plus';
-import { useBookStore } from '@/store/useBookStore';
+import { ElConfigProvider, ElPagination } from 'element-plus';
+import { usebookStore } from '@/store/usebookStore';
+import { usei18nStore } from '@/store/usei18nStore';
 onMounted(() => {
     const app = document.querySelector('#app');
     const cardColumns = getComputedStyle(app).getPropertyValue('--card-columns');
     console.log(cardColumns)
 });
-const small = true
-const background = true
-const bookStore = useBookStore();
+const pagerCount = 5
+const pageSizes = [8, 16, 24, 32]
+const layout = "prev, pager, next, jumper, ->, total,slot"
+const bookStore = usebookStore();
+const i18nStore = usei18nStore();
 const handleCurrentChange = (currentPage) => {
     bookStore.currentPage = currentPage;
 }
@@ -27,12 +33,13 @@ const handleSizeChange = (size) => {
 <style lang="scss" scoped>
 .book-footer {
     padding: var(--content-padding);
-    position: relative;
+    position: absolute;
     left: 0;
     bottom: 0;
     width: calc(100% - var(--content-padding) * 2);
     height: 2rem;
-    background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

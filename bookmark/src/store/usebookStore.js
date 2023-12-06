@@ -29,7 +29,7 @@ const defaultShowId = "1";
 const defaultSize = 8;
 const defaultPage = 1;
 
-export const useBookStore = defineStore("bookmarks", () => {
+export const usebookStore = defineStore("bookmarks", () => {
     //书签展示相关
     const parentId = ref(null);
     const currentTitle = ref(defaultShowTitle);

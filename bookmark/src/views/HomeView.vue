@@ -8,9 +8,9 @@
 </template>
 
 <script setup>
-import { useBookStore } from '../store/useBookStore';
+import { usebookStore } from '../store/usebookStore';
 import BookMark from '../components/bookmark.vue';
-const bookStore = useBookStore();
+const bookStore = usebookStore();
 const openBookMark = (param) => {
     if (param.url) {
         window.open(param.url, "_blank");
