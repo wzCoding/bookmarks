@@ -41,7 +41,7 @@ export const useBookStore = defineStore("bookmarks", () => {
     //当前分页的书签列表
     const pageMarks = computed(() => {
         const startIndex = (currentPage.value - 1) * currentSize.value;
-        const endIndex = startIndex + currentSize.value * (currentPage.value - 1) + 1;
+        const endIndex = startIndex + currentSize.value * (currentPage.value - 1);
         console.log(startIndex,endIndex)
         return currentMarks.value.slice(startIndex, endIndex);
     });
