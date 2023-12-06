@@ -4,12 +4,14 @@
             <BookMark v-for="bookmark in bookStore.pageMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
             </BookMark>
         </div>
+        <BookFooter></BookFooter>
     </div>
 </template>
 
 <script setup>
 import { usebookStore } from '../store/usebookStore';
 import BookMark from '../components/bookmark.vue';
+import BookFooter from '../components/footer.vue';
 const bookStore = usebookStore();
 const openBookMark = (param) => {
     if (param.url) {

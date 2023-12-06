@@ -2,12 +2,10 @@
   <BookHeader :height="headerHeight"></BookHeader>
   <div class="book-container">
     <RouterView></RouterView>
-    <BookFooter></BookFooter>
   </div>
 </template>
 <script setup>
 import BookHeader from './components/header.vue';
-import BookFooter from './components/footer.vue';
 const headerHeight = "60px"
 </script>
 <style lang="scss">

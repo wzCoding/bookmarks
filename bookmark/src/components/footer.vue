@@ -20,7 +20,7 @@ onMounted(() => {
 });
 const pagerCount = 5
 const pageSizes = [8, 16, 24, 32]
-const layout = "prev, pager, next, jumper, ->, total,slot"
+const layout = "sizes,prev, pager, next"
 const bookStore = usebookStore();
 const i18nStore = usei18nStore();
 const handleCurrentChange = (currentPage) => {
@@ -33,11 +33,10 @@ const handleSizeChange = (size) => {
 <style lang="scss" scoped>
 .book-footer {
     padding: var(--content-padding);
-    position: absolute;
+    position: relative;
+    top: 1.5rem;
     left: 0;
-    bottom: 0;
     width: calc(100% - var(--content-padding) * 2);
-    height: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
