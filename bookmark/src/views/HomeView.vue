@@ -1,7 +1,7 @@
 <template>
     <div class="book-home">
         <div class="book-content">
-            <BookMark v-for="bookmark in bookmarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
+            <BookMark v-for="bookmark in bookStore.currentMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
             </BookMark>
         </div>
     </div>
@@ -12,22 +12,20 @@ import { computed, ref } from 'vue';
 import { useBookStore } from '../store/useBookStore';
 import BookMark from '../components/bookmark.vue';
 const bookStore = useBookStore();
-const bookmarks = computed(() => {
-    return bookStore.currentMarks
-});
+bookStore.getCurrentMarks();
+
 const openBookMark = (param) => {
     if (param.url) {
         window.open(param.url, "_blank");
     } else {
         console.log(param)
-        bookStore.getTargetList(param.id);
+        bookStore.getCurrentMarks(param.id);
     }
 }
 </script>
 <style lang="scss" scoped>
 .book-home {
     position: relative;
-
     .book-content {
         width: calc(100% - 1rem);
         display: flex;

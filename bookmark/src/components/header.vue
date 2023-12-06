@@ -1,7 +1,7 @@
 <template>
     <el-page-header class="book-header" :style="headerStyle" @back="goBack">
         <template #content>
-            <span class="text-large font-600 mr-3"> Title </span>
+            <span> {{ bookStore.currentTitle }} </span>
         </template>
     </el-page-header>
 </template>
@@ -20,7 +20,7 @@ const headerStyle = computed(() => {
 const bookStore = useBookStore();
 const goBack = () => {
     console.log(bookStore.parentId)
-    bookStore.getTargetList(bookStore.parentId)
+    bookStore.getCurrentMarks(bookStore.parentId)
 }
 </script>
 <style lang="scss" scoped>
