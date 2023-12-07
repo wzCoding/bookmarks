@@ -17,7 +17,7 @@ function getTree(result) {
     if (result) {
         allBookMarks = expandTree(result);
     } else {
-        const data = require('../../public/utils/data.json');
+        const data = require('../../public/background/data.json');
         allBookMarks = expandTree(data);
     }
 }

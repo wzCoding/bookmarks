@@ -4,7 +4,7 @@
     "description": "a simple chrome bookmark extension",
     "version": "0.0.1",
     "background": {
-        "service_worker": "./utils/background.js"
+        "service_worker": "./background/background.js"
     },
     "permissions": [
         "sidePanel",

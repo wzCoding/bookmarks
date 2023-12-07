@@ -12,10 +12,12 @@
 
 <script setup>
 import { ref } from 'vue';
-import { usebookStore } from '../store/usebookStore';
+import { debounce } from '@/assets/index';
+import { usebookStore } from '@/store/usebookStore';
 import { usei18nStore } from '@/store/usei18nStore';
-import BookMark from '../components/bookmark.vue';
-import BookFooter from '../components/footer.vue';
+import BookMark from '@/components/bookmark.vue';
+import BookFooter from '@/components/footer.vue';
+
 const pagerCount = 5;
 const pageSizes = [8, 16, 24, 32];
 const layout = ref("sizes, prev, pager, next, jumper");
@@ -37,6 +39,10 @@ const openBookMark = (param) => {
         bookStore.getCurrentMarks(param.id);
     }
 }
+const resizeFn = debounce(function (e) {
+    console.log(e.target)
+}, 300);
+window.addEventListener("resize", resizeFn)
 </script>
 <style lang="scss" scoped>
 .book-home {
@@ -45,6 +51,7 @@ const openBookMark = (param) => {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+
     .book-content {
         width: calc(100% - 1rem);
         display: flex;
