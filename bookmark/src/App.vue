@@ -22,8 +22,6 @@ const headerHeight = "60px"
     width: 100%;
     top: v-bind(headerHeight);
     height: calc(100% - v-bind(headerHeight));
-    overflow-y: auto;
-    overflow-x: hidden;
   }
 }
 </style>
