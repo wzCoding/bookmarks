@@ -1,6 +1,7 @@
 <template>
     <div class="book-home">
-        <VueDraggable class="book-content" ref="dragEl" v-model="currentMarks">
+        <VueDraggable class="book-content" ref="dragEl" v-model="currentMarks" @start="onDragStart" @end="onDragEnd"
+            @move="onDragMove">
             <BookMark v-for="bookmark in pageMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
             </BookMark>
         </VueDraggable>
@@ -10,7 +11,7 @@
 </template>
 
 <script setup>
-import { isRef, ref, toValue, unref } from 'vue';
+import { ref } from 'vue';
 import { usebookStore } from '@/store/usebookStore';
 import { usei18nStore } from '@/store/usei18nStore';
 import { VueDraggable } from 'vue-draggable-plus';
@@ -38,7 +39,15 @@ const openBookMark = (param) => {
         bookStore.getCurrentMarks(param.id);
     }
 }
-
+const onDragStart = (e) => {
+    //console.log(e)
+}
+const onDragEnd = (e) => {
+    //console.log(e)
+}
+const onDragMove = (e) => {
+    console.log(e)
+}
 </script>
 <style lang="scss" scoped>
 .book-home {
