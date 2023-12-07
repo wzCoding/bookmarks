@@ -47,6 +47,9 @@ export const usebookStore = defineStore("bookmarks", () => {
     const totalNum = computed(() => {
         return currentMarks.value.length;
     });
+    const totalPage = computed(() => {
+        return Math.ceil(totalNum.value / pageSize.value);
+    });
     function getFolder(id) {
         return allBookMarks.filter(item => item.id == id)[0];
     }
@@ -62,7 +65,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         pageSize.value = size;
     }
     function pageChange(page) {
-        currentPage.value = page;
+        currentPage.value = page < 1 ? 1 : (page > totalPage.value ? totalPage.value : page);
     }
     return {
         currentTitle,
@@ -72,6 +75,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         pageSize,
         currentPage,
         totalNum,
+        totalPage,
         getCurrentMarks,
         sizeChange,
         pageChange
