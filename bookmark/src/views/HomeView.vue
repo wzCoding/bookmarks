@@ -4,6 +4,7 @@
             @move="onDragMove">
             <BookMark v-for="bookmark in pageMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
             </BookMark>
+            <div class="prev"></div>
         </VueDraggable>
         <BookFooter :page-size="pageSize" :current-page="currentPage" :total="totalNum" :locale="i18nStore.locale"
             @currentChange="currentChange" @sizeChange="sizeChange"></BookFooter>
@@ -25,6 +26,15 @@ const bookStore = usebookStore();
 const dragEl = ref();
 
 const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
+console.log(currentMarks.value)
+const prevArea = {
+    name: "prev",
+    id: "prev"
+}
+const nextArea = {
+    name: "next",
+    id: "next"
+}
 const currentChange = (page) => {
     bookStore.pageChange(page);
 }
@@ -67,6 +77,15 @@ const onDragMove = (e) => {
         position: relative;
         padding: var(--content-padding);
         gap: var(--content-gap);
+        .prev{
+            position: absolute;
+            left: -3rem;
+            top: 0;
+            width: 3rem;
+            height: 100%;
+            background-color: red;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
     }
 }
 </style>
