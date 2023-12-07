@@ -19,7 +19,7 @@ const headerStyle = computed(() => {
 });
 const bookStore = usebookStore();
 const goBack = () => {
-    //console.log(bookStore.parentId)
+    bookStore.pageChange(1);
     bookStore.getCurrentMarks(bookStore.parentId)
 }
 </script>

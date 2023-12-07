@@ -13,9 +13,10 @@
 import { ref } from 'vue';
 import { usebookStore } from '@/store/usebookStore';
 import { usei18nStore } from '@/store/usei18nStore';
+import { VueDraggable } from 'vue-draggable-plus';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
-
+console.log(VueDraggable);
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 
@@ -43,6 +44,7 @@ const openBookMark = (param) => {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+
     .book-content {
         width: calc(100% - 1rem);
         display: flex;

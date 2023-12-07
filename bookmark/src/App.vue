@@ -5,7 +5,7 @@
   </div>
 </template>
 <script setup>
-import BookHeader from './components/header.vue';
+import BookHeader from '@/components/header.vue';
 const headerHeight = "60px"
 </script>
 <style lang="scss">
