@@ -28,19 +28,10 @@ body {
     #app {
         --card-columns: 2; // 卡片列数
         --extra-space: 0.625rem; // 额外空间
-        .el-pagination.is-background.el-pagination--small {
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            align-items: center;
-            .el-pagination__sizes {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding-bottom: 0.5rem;
-            }
-            .el-pagination__jump.is-last{
-                padding-top: 0.5rem;
+        .book-footer{
+            .el-pagination__sizes,
+            .el-pagination__jump{
+                display: none !important;
             }
         }
     }

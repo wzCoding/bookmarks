@@ -1,8 +1,8 @@
 <template>
     <div class="book-footer">
         <ElConfigProvider :locale="locale">
-            <el-pagination :hide-on-single-page="true" :small="true" :background="true" :current-page="currentPage"
-                :page-size="pageSize" :pager-count="pagerCount" :page-sizes="pageSizes" :layout="layout" :total="500"
+            <el-pagination :hide-on-single-page="false" :small="true" :background="true" :current-page="currentPage"
+                :page-size="pageSize" :pager-count="pagerCount" :page-sizes="pageSizes" :layout="layout" :total="total"
                 @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </ElConfigProvider>
     </div>
@@ -33,7 +33,7 @@ const handleSizeChange = (size) => {
 <style lang="scss" scoped>
 .book-footer {
     padding: var(--content-padding);
-    position: absolute;
+    position: relative;
     left: 0;
     bottom: 0;
     width: calc(100% - var(--content-padding) * 2);

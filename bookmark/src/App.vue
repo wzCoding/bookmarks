@@ -19,9 +19,11 @@ const headerHeight = "60px"
 
   .book-container {
     position: relative;
-    width: 100%;
     top: v-bind(headerHeight);
+    width: 100%;
     height: calc(100% - v-bind(headerHeight));
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 </style>
