@@ -1,25 +1,29 @@
 <template>
     <div class="book-home">
-        <div class="book-content">
-            <BookMark v-for="bookmark in bookStore.pageMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
+        <VueDraggable class="book-content" ref="dragEl" v-model="currentMarks">
+            <BookMark v-for="bookmark in pageMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
             </BookMark>
-        </div>
-        <BookFooter :page-size="bookStore.currentSize" :current-page="bookStore.currentPage" :total="bookStore.totalNum"
-            :locale="i18nStore.locale" @currentChange="currentChange" @sizeChange="sizeChange"></BookFooter>
+        </VueDraggable>
+        <BookFooter :page-size="pageSize" :current-page="currentPage" :total="totalNum" :locale="i18nStore.locale"
+            @currentChange="currentChange" @sizeChange="sizeChange"></BookFooter>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { isRef, ref, toValue, unref } from 'vue';
 import { usebookStore } from '@/store/usebookStore';
 import { usei18nStore } from '@/store/usei18nStore';
 import { VueDraggable } from 'vue-draggable-plus';
+import { storeToRefs } from 'pinia';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
-console.log(VueDraggable);
+
+
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
+const dragEl = ref();
 
+const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
 const currentChange = (page) => {
     bookStore.pageChange(page);
 }

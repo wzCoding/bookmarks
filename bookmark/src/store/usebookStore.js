@@ -36,12 +36,12 @@ export const usebookStore = defineStore("bookmarks", () => {
     const currentMarks = ref(getFolder(defaultShowId).children);
 
     //分页相关
-    const currentSize = ref(defaultSize);
+    const pageSize = ref(defaultSize);
     const currentPage = ref(defaultPage);
     //当前分页的书签列表
     const pageMarks = computed(() => {
-        const startIndex = (currentPage.value - 1) * currentSize.value;
-        const endIndex = startIndex + currentSize.value;
+        const startIndex = (currentPage.value - 1) * pageSize.value;
+        const endIndex = startIndex + pageSize.value;
         return currentMarks.value.slice(startIndex, endIndex);
     });
     const totalNum = computed(() => {
@@ -59,7 +59,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;
     }
     function sizeChange(size) {
-        currentSize.value = size;
+        pageSize.value = size;
     }
     function pageChange(page) {
         currentPage.value = page;
@@ -69,7 +69,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         currentMarks,
         parentId,
         pageMarks,
-        currentSize,
+        pageSize,
         currentPage,
         totalNum,
         getCurrentMarks,
