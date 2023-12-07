@@ -20,10 +20,10 @@ const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 
 const currentChange = (page) => {
-    bookStore.currentPage = page;
+    bookStore.pageChange(page);
 }
 const sizeChange = (size) => {
-    bookStore.currentSize = size;
+    bookStore.sizeChange(size);
 }
 const openBookMark = (param) => {
     if (param.url) {
@@ -38,8 +38,11 @@ const openBookMark = (param) => {
 <style lang="scss" scoped>
 .book-home {
     position: relative;
-   
-
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
     .book-content {
         width: calc(100% - 1rem);
         display: flex;

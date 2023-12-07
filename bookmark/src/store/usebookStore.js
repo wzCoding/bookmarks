@@ -58,6 +58,12 @@ export const usebookStore = defineStore("bookmarks", () => {
         currentMarks.value = folder.children;
         currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;
     }
+    function sizeChange(size) {
+        currentSize.value = size;
+    }
+    function pageChange(page) {
+        currentPage.value = page;
+    }
     return {
         currentTitle,
         currentMarks,
@@ -66,6 +72,8 @@ export const usebookStore = defineStore("bookmarks", () => {
         currentSize,
         currentPage,
         totalNum,
-        getCurrentMarks
+        getCurrentMarks,
+        sizeChange,
+        pageChange
     }
 })
