@@ -1,5 +1,5 @@
 <template>
-    <div class="bookmark-card">
+    <div class="bookmark-card" :class="`bookmark-${bookmark.index}`">
         <div class="bookmark-header">
             <div class="bookmark-icon">
                 <transition name="fade">
@@ -28,7 +28,7 @@
     </div>
 </template>
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, toRef } from 'vue';
 import { ElTooltip, ElButton } from 'element-plus'
 const props = defineProps({
     bookmark: {
@@ -39,6 +39,8 @@ const props = defineProps({
 const emit = defineEmits(['open']);
 const defaultIcon = "./icons/folder.png";
 const defaultTitle = "bookMark";
+
+
 const disableTip = ref(true);
 const hasIcon = ref(false);
 const tip = ref();

@@ -1,8 +1,7 @@
 <template>
     <div class="book-home">
-        <VueDraggable ref="dragEl" v-model="currentMarks" @start="onDragStart" @end="onDragEnd"
-            @move="onDragMove" @change="onDragChange" target=".book-content">
-            <TransitionGroup tag="div" name="fade" class="book-content">
+        <VueDraggable ref="drag" v-model="currentMarks" @start="onDragStart" @end="onDragEnd" target=".book-transition" class="book-content">
+            <TransitionGroup tag="div" name="fade" class="book-transition">
                 <BookMark v-for="bookmark in pageMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
                 </BookMark>
             </TransitionGroup>
@@ -24,19 +23,11 @@ import BookFooter from '@/components/footer.vue';
 
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
-const dragEl = ref();
-
+const drag = ref();
 const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
 console.log(currentMarks.value)
-const prevArea = {
-    name: "prev",
-    id: "prev"
-}
-const nextArea = {
-    name: "next",
-    id: "next"
-}
 const currentChange = (page) => {
+    
     bookStore.pageChange(page);
 }
 const sizeChange = (size) => {
@@ -51,40 +42,29 @@ const openBookMark = (param) => {
     }
 }
 const onDragStart = (e) => {
-    //console.log(e)
+    
 }
 const onDragEnd = (e) => {
-    console.log(e)
-}
-const onDragMove = (e) => {
-    console.log(e)
-    // if (e.related.className.includes("page-prev")) {
-    //     bookStore.pageChange(currentPage.value - 1);
-    // }
-    // if (e.related.className.includes("page-next")) {
-    //     bookStore.pageChange(currentPage.value + 1);
-    // }
-}
-const onDragChange = (e) => {
-    //console.log(e)
+   
 }
 </script>
 <style lang="scss" scoped>
 .fade-move,
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+    transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
-  transform: scaleY(0.01) translate(30px, 0);
+    opacity: 0;
+    transform: scaleY(0.01) translate(30px, 0);
 }
 
 .fade-leave-active {
-  position: absolute;
+    position: absolute;
 }
+
 .book-home {
     position: relative;
     height: 100%;
@@ -92,8 +72,11 @@ const onDragChange = (e) => {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-
-    .book-content {
+    .book-content{
+        position: inherit;
+        width: 100%;
+    }
+    .book-transition {
         width: calc(100% - 1rem);
         display: flex;
         justify-content: flex-start;
@@ -102,26 +85,6 @@ const onDragChange = (e) => {
         position: relative;
         padding: var(--content-padding);
         gap: var(--content-gap);
-        --page-change-area-width: 3rem;
-
-        .prev,
-        .next {
-            position: fixed;
-            top: 0;
-            width: var(--page-change-area-width);
-            height: 100%;
-            background-color: red;
-            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-            z-index: 99;
-        }
-
-        .prev {
-            left: -2rem;
-        }
-
-        .next {
-            right: -2rem;
-        }
     }
 }
 </style>
