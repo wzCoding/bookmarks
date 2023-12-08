@@ -1,5 +1,5 @@
 <template>
-    <div class="bookmark-card" :class="`bookmark-${bookmark.index}`">
+    <div class="bookmark-card" :class="`bookmark-${bookmark.index}`" @contextmenu="handleContextMenu">
         <div class="bookmark-header">
             <div class="bookmark-icon">
                 <transition name="fade">
@@ -24,12 +24,29 @@
                 <span>{{ modifyDate }}</span>
             </div>
         </div>
-        <el-button type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
+        <!-- <el-button type="primary" size="small" class="card-button" @click="handleClick">打开</el-button> -->
+        <el-dropdown size="small" trigger="click" split-button type="primary" @click="handleClick">
+            <el-icon>
+                <component :is="dropDownItems[openType].icon" />
+            </el-icon>
+            <span :open-type="openType">打开</span>
+            <template #dropdown>
+                <el-dropdown-menu>
+                    <el-dropdown-item v-for="item in dropDownItems" :key="item.id" @click="onItemChange">
+                        <el-icon>
+                            <component :is="item.icon" />
+                        </el-icon>
+                        <span :open-type="item.id">{{ item.label }}</span>
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown>
     </div>
 </template>
 <script setup>
 import { computed, ref, toRef } from 'vue';
-import { ElTooltip, ElButton } from 'element-plus'
+import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
+import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
 const props = defineProps({
     bookmark: {
         type: Object,
@@ -40,10 +57,30 @@ const emit = defineEmits(['open']);
 const defaultIcon = "./icons/folder.png";
 const defaultTitle = "bookMark";
 
-
 const disableTip = ref(true);
 const hasIcon = ref(false);
 const tip = ref();
+const openType = ref(1);
+const dropDownItems = [
+    {
+        label: "当前页",
+        icon: HomeFilled,
+        type: "_self",
+        id:0
+    },
+    {
+        label: "新页签",
+        icon: ChromeFilled,
+        type: "_blank",
+        id:1
+    },
+    {
+        label: "新窗口",
+        icon: Promotion,
+        type: "_newwindow",
+        id:2
+    },
+]
 const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title.trim() : defaultTitle
 });
@@ -58,11 +95,16 @@ const showTitle = () => {
     const tipWidth = tip.value.offsetWidth;
     disableTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
 }
+const onItemChange = (e) => {
+    const type = e.target.getAttribute("open-type");
+    openType.value = type ? type : 1;
+}
 const handleClick = () => {
     const param = {
         id: props.bookmark.id,
         parentId: props.bookmark.parentId ? props.bookmark.parentId : null,
         url: props.bookmark.url ? props.bookmark.url : null,
+        openType: dropDownItems[openType.value].type,
     }
     emit("open", param);
 }
@@ -83,14 +125,18 @@ const iconUrl = getIconUrl(props.bookmark.url);
 const loadIcon = () => {
     const img = new Image();
     img.src = iconUrl
-    img.onload = async function(){
+    img.onload = async function () {
         return Promise.resolve(this).then(res => {
             hasIcon.value = iconUrl == defaultIcon ? true : res.naturalWidth == 16 ? false : true;
         });
     }
 }
 loadIcon();
-
+const handleContextMenu = (e) =>{
+    e.preventDefault();
+    
+    console.log(e)
+}
 </script>
 <style lang="scss" scoped>
 .bookmark-card {
@@ -181,5 +227,6 @@ loadIcon();
             background-color: #1890ff;
         }
     }
+
 }
 </style>

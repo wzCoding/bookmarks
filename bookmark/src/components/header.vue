@@ -19,8 +19,8 @@ const headerStyle = computed(() => {
 });
 const bookStore = usebookStore();
 const goBack = () => {
+    bookStore.getCurrentMarks(bookStore.parentId);
     bookStore.pageChange(1);
-    bookStore.getCurrentMarks(bookStore.parentId)
 }
 </script>
 <style lang="scss" scoped>

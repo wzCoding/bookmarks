@@ -1,6 +1,7 @@
 <template>
     <div class="book-home">
-        <VueDraggable ref="drag" v-model="currentMarks" @start="onDragStart" @end="onDragEnd" target=".book-transition" class="book-content">
+        <VueDraggable ref="drag" v-model="currentMarks" @start="onDragStart" @end="onDragEnd" target=".book-transition"
+            class="book-content">
             <TransitionGroup tag="div" name="fade" class="book-transition">
                 <BookMark v-for="bookmark in pageMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
                 </BookMark>
@@ -20,14 +21,12 @@ import { storeToRefs } from 'pinia';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
 
-
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
-const drag = ref();
 const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
-console.log(currentMarks.value)
+const drag = ref();
 const currentChange = (page) => {
-    
+
     bookStore.pageChange(page);
 }
 const sizeChange = (size) => {
@@ -35,17 +34,19 @@ const sizeChange = (size) => {
 }
 const openBookMark = (param) => {
     if (param.url) {
-        window.open(param.url, "_blank");
+        const features = param.openType == "_newwindow" ? "noopener,noreferrer,top=0, left=0" :
+            "noopener,noreferrer";
+        window.open(param.url, param.openType, features);
     } else {
         console.log(param)
         bookStore.getCurrentMarks(param.id);
     }
 }
 const onDragStart = (e) => {
-    
+
 }
 const onDragEnd = (e) => {
-   
+
 }
 </script>
 <style lang="scss" scoped>
@@ -72,10 +73,12 @@ const onDragEnd = (e) => {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    .book-content{
+
+    .book-content {
         position: inherit;
         width: 100%;
     }
+
     .book-transition {
         width: calc(100% - 1rem);
         display: flex;

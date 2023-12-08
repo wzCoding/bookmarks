@@ -24,6 +24,7 @@ function getTree(result) {
 getTree();
 
 const defaultTitle = "我的书签";
+const defaultId = "0";
 const defaultShowTitle = "书签栏"
 const defaultShowId = "1";
 const defaultSize = 8;
@@ -55,7 +56,9 @@ export const usebookStore = defineStore("bookmarks", () => {
     }
     //获取当前展示书签列表
     function getCurrentMarks(id) {
-        if (!id) return;
+        if (!id){
+            id = defaultId
+        }
         const folder = getFolder(id);
         parentId.value = folder.parentId;
         currentMarks.value = folder.children;

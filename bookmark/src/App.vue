@@ -6,7 +6,14 @@
 </template>
 <script setup>
 import BookHeader from '@/components/header.vue';
+import { onBeforeMount, onMounted } from 'vue';
 const headerHeight = "60px"
+onBeforeMount(() => {
+  document.body.style.background = "red"
+});
+onMounted(() => {
+  document.body.style.background = "#fff"
+})
 </script>
 <style lang="scss">
 #app {
@@ -15,7 +22,7 @@ const headerHeight = "60px"
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
   height: 100%;
-  
+
 
   .book-container {
     position: relative;
