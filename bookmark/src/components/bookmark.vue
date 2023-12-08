@@ -24,8 +24,8 @@
                 <span>{{ modifyDate }}</span>
             </div>
         </div>
-        <!-- <el-button type="primary" size="small" class="card-button" @click="handleClick">打开</el-button> -->
-        <el-dropdown size="small" trigger="click" split-button type="primary" @click="handleClick">
+        <el-button v-if="buttonType" type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
+        <el-dropdown v-else size="small" trigger="click" split-button type="primary" @click="handleClick">
             <el-icon>
                 <component :is="dropDownItems[openType].icon" />
             </el-icon>
@@ -44,7 +44,7 @@
     </div>
 </template>
 <script setup>
-import { computed, ref, toRef } from 'vue';
+import { computed, ref} from 'vue';
 import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
 const props = defineProps({
@@ -54,9 +54,9 @@ const props = defineProps({
     }
 });
 const emit = defineEmits(['open']);
+
 const defaultIcon = "./icons/folder.png";
 const defaultTitle = "bookMark";
-
 const disableTip = ref(true);
 const hasIcon = ref(false);
 const tip = ref();
@@ -66,19 +66,19 @@ const dropDownItems = [
         label: "当前页",
         icon: HomeFilled,
         type: "_self",
-        id:0
+        id: 0
     },
     {
         label: "新页签",
         icon: ChromeFilled,
         type: "_blank",
-        id:1
+        id: 1
     },
     {
         label: "新窗口",
         icon: Promotion,
         type: "_newwindow",
-        id:2
+        id: 2
     },
 ]
 const title = computed(() => {
@@ -89,12 +89,34 @@ const textIcon = computed(() => {
     const result = title.value.replace(regExp, '');
     return result.slice(0, 1);
 });
-
+const buttonType = computed(() => {
+    return props.bookmark.children ? true : false;
+})
 const showTitle = () => {
     const parentWidth = tip.value.parentNode.offsetWidth;
     const tipWidth = tip.value.offsetWidth;
     disableTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
 }
+const getDate = (timestamp) => {
+    if (!timestamp) return;
+    const date = new Date(timestamp);
+    return date.toLocaleDateString();
+}
+const getIconUrl = (url) => {
+    const iconUrl = url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${url}` : defaultIcon
+    const img = new Image();
+    img.src = iconUrl
+    img.onload = async function () {
+        return Promise.resolve(this).then(res => {
+            hasIcon.value = iconUrl == defaultIcon ? true : res.naturalWidth == 16 ? false : true;
+        });
+    }
+    return iconUrl;
+}
+const createDate = getDate(props.bookmark.dateAdded);
+const modifyDate = getDate(props.bookmark.dateGroupModified);
+const iconUrl = getIconUrl(props.bookmark.url);
+
 const onItemChange = (e) => {
     const type = e.target.getAttribute("open-type");
     openType.value = type ? type : 1;
@@ -108,33 +130,10 @@ const handleClick = () => {
     }
     emit("open", param);
 }
-const getDate = (timestamp) => {
-    if (!timestamp) return;
-    const date = new Date(timestamp);
-    return date.toLocaleDateString();
-}
-const createDate = getDate(props.bookmark.dateAdded);
-const modifyDate = getDate(props.bookmark.dateGroupModified);
-const getIconUrl = (url) => {
-    if (!url) return defaultIcon;
-    url = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
-    return url;
-}
-const iconUrl = getIconUrl(props.bookmark.url);
 
-const loadIcon = () => {
-    const img = new Image();
-    img.src = iconUrl
-    img.onload = async function () {
-        return Promise.resolve(this).then(res => {
-            hasIcon.value = iconUrl == defaultIcon ? true : res.naturalWidth == 16 ? false : true;
-        });
-    }
-}
-loadIcon();
-const handleContextMenu = (e) =>{
+const handleContextMenu = (e) => {
     e.preventDefault();
-    
+
     console.log(e)
 }
 </script>
