@@ -22,6 +22,7 @@ import { storeToRefs } from 'pinia';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
 import contextMenu from '@/components/contextMenu.vue';
+let menuInstance = null;
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
@@ -49,29 +50,31 @@ const openBookMark = (param) => {
         bookStore.getCurrentMarks(param.id);
     }
 }
-let menuInstance = null;
-const createMenu = (props) => {
+const createMenu = (x, y) => {
+    const props = {
+        xAxis: x,
+        yAxis: y,
+        onDestroyContextMenu: () => {
+            render(null, container);
+        }
+    }
     const container = document.createElement("div");
     const vnode = createVNode(contextMenu, props);
     render(vnode, container);
     document.body.appendChild(container.firstElementChild);
 
     const component = vnode.component;
-    return component.exposed
+    const { closeMenu } = component.exposed;
+    component.exposed.showMenu.value = true;
+    return {
+        closeMenu
+    };
 }
 const openMenu = (e) => {
-    const props = {
-        xAxis: e.clientX,
-        yAxis: e.clientY,
+    if (menuInstance) {
+        menuInstance.closeMenu();
     }
-    console.log(e)
-    console.log(props)
-    if(menuInstance){
-        menuInstance.top.value = e.clientX
-        menuInstance.left.value = e.clientY
-    }else{
-        menuInstance = createMenu(props);
-    } 
+    menuInstance = createMenu(e.clientX, e.clientY);
 }
 const onDragStart = (e) => {
 

@@ -1,44 +1,113 @@
 <template>
-    <div class="context-menu" :style="styleObject">
-        contextmenu
-    </div>
+    <transition name="fade">
+        <div ref="contextMenu" class="context-menu" v-show="showMenu" :style="styleObject" @mouseenter="clearTimer"
+            @mouseleave="startTimer">
+            <div class="menu-item" v-for="item in menuList" :key="item.label" :data-type="item.type" @click="handleItemClick">
+                <el-icon>
+                    <component :is="item.icon" />
+                </el-icon>
+                <span class="menu-label">{{ item.label }}</span>
+            </div>
+        </div>
+    </transition>
 </template>
 <script setup>
-import { computed, ref, watchEffect } from 'vue';
+import { computed, ref } from 'vue';
+import { ElIcon } from 'element-plus';
+import { Warning, Edit, Delete, Plus } from '@element-plus/icons-vue';
+const menuWidth = "72px"
+const timer = ref(null);
 const props = defineProps({
     xAxis: { type: Number, default: 0 },
     yAxis: { type: Number, default: 0 }
 });
-const emits = defineEmits(['openContextMenu']);
-const left = ref(props.xAxis);
-const top = ref(props.yAxis);
-const styleObject = ref(null);
-const getPosition = (x, y) => {
-    const left = `${x.value}px`
-    const top = `${y.value}px`
+const emits = defineEmits(['openContextMenu', 'destroyContextMenu']);
+const showMenu = ref(false);
+const styleObject = computed(() => {
+
     return {
-        top,
-        left
+        left: `${props.xAxis}px`,
+        top: `${props.yAxis}px`
     }
+});
+const menuList = [
+    { label: "详细信息", icon: Warning, type: "info" },
+    { label: "编辑书签", icon: Edit, type: "edit" },
+    { label: "添加书签", icon: Plus, type: "update" },
+    { label: "删除书签", icon: Delete, type: "delete" }
+]
+const closeMenu = () => {
+    showMenu.value = false;
+    emits('destroyContextMenu');
 }
-watchEffect(() => {
-    styleObject.value = getPosition(left, top);
-})
-defineExpose({ left, top })
+const handleItemClick = (e) => {
+    const type = e.currentTarget.dataset.type;
+    console.log(type)
+}
+const startTimer = () => {
+    clearTimer();
+    timer.value = setTimeout(closeMenu, 2000);
+}
+const clearTimer = () => {
+    clearTimeout(timer.value);
+}
+defineExpose({ showMenu, closeMenu });
+
 </script>
 <style lang="scss" scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 0.2s linear;
+}
+
+.fade-enter-from {
+    opacity: 0;
+    transform: translateY(-1rem);
+}
+
+.fade-leave-to {
+    opacity: 0;
+    transform: translateY(1rem);
+}
+
 .context-menu {
     position: absolute;
     z-index: 1000;
     background-color: #fff;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    padding: 5px 0;
+    padding: 0.75rem;
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-    /* 防止点击菜单后页面消失 */
-    pointer-events: none;
-    width: 200px;
-    height: 300px;
     border-radius: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    width: v-bind(menuWidth);
+
+    .menu-item {
+        width: 100%;
+        font-size: 0.75rem;
+        color: #999;
+        cursor: pointer;
+        padding: .5rem 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .menu-label {
+            padding-left: .25rem;
+        }
+
+        &:hover {
+            color: #409eff;
+        }
+
+        &:first-child {
+            padding-top: 0;
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
 }
 </style>
