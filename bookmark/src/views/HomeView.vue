@@ -40,7 +40,7 @@ const openBookMark = (param) => {
             chrome.windows.create({
                 focused:true,
                 url:param.url,
-                state:"fullscreen",
+                state:"maximized",
             })
         }
     } else {
