@@ -42,8 +42,8 @@
 </template>
 <script setup>
 import { computed, ref } from 'vue';
-import { ElTag, ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
-import { Promotion, HomeFilled, ChromeFilled, Link,Folder } from '@element-plus/icons-vue'
+import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
+import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
 const props = defineProps({
     bookmark: {
         type: Object,
@@ -211,9 +211,7 @@ const handleContextMenu = (e) => {
     }
 
     .bookmark-content {
-        min-height: var(--icon-size);
         margin-bottom: 1rem;
-
         .bookmark-info {
             display: flex;
             justify-content: flex-start;
@@ -222,10 +220,6 @@ const handleContextMenu = (e) => {
             gap: 0.25rem;
             color: #999;
             font-size: 0.75rem;
-            .el-icon{
-                top: 1px;
-                left: -1px;
-            }
         }
     }
 }</style>
