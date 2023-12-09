@@ -4,21 +4,26 @@
     </div>
 </template>
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 const props = defineProps({
     xAxis: { type: Number, default: 0 },
     yAxis: { type: Number, default: 0 }
 });
 const emits = defineEmits(['openContextMenu']);
-const left = ref(null);
-const top = ref(null);
-const styleObject = computed(() => {
+const left = ref(props.xAxis);
+const top = ref(props.yAxis);
+const styleObject = ref(null);
+const getPosition = (x, y) => {
+    const left = `${x.value}px`
+    const top = `${y.value}px`
     return {
-        left: left.value ? `${left.value}px` : `${props.xAxis}px`,
-        top: top.value ? `${top.value}px` : `${props.yAxis}px`
+        top,
+        left
     }
-});
-
+}
+watchEffect(() => {
+    styleObject.value = getPosition(left, top);
+})
 defineExpose({ left, top })
 </script>
 <style lang="scss" scoped>
