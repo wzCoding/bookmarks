@@ -34,9 +34,15 @@ const sizeChange = (size) => {
 }
 const openBookMark = (param) => {
     if (param.url) {
-        const features = param.openType == "_newwindow" ? "noopener,noreferrer,top=0, left=0" :
-            "noopener,noreferrer";
-        window.open(param.url, param.openType, features);
+        if(param.openType !== "_newwindow"){
+            window.open(param.url, param.openType, "noopener,noreferrer");
+        }else{
+            chrome.windows.create({
+                focused:true,
+                url:param.url,
+                state:"fullscreen",
+            })
+        }
     } else {
         console.log(param)
         bookStore.getCurrentMarks(param.id);

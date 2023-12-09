@@ -14,14 +14,11 @@
             </el-tooltip>
         </div>
         <div class="bookmark-content">
-            <div v-if="createDate" class="bookmark-info">
-                <span v-if="props.bookmark.children">创建日期：</span>
-                <span v-else>添加日期：</span>
-                <span>{{ createDate }}</span>
+            <div v-if="buttonType" class="bookmark-info">
+                <span>最近修改：{{ modifyDate }}</span>
             </div>
-            <div v-if="modifyDate" class="bookmark-info">
-                <span>修改日期：</span>
-                <span>{{ modifyDate }}</span>
+            <div v-else class="bookmark-info">
+                <span>最近访问：{{ visitDate ? visitDate : createDate }}</span>
             </div>
         </div>
         <el-button v-if="buttonType" type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
@@ -44,9 +41,9 @@
     </div>
 </template>
 <script setup>
-import { computed, ref} from 'vue';
-import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
-import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
+import { computed, ref } from 'vue';
+import { ElTag, ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
+import { Promotion, HomeFilled, ChromeFilled, Link,Folder } from '@element-plus/icons-vue'
 const props = defineProps({
     bookmark: {
         type: Object,
@@ -91,10 +88,10 @@ const textIcon = computed(() => {
 });
 const buttonType = computed(() => {
     return props.bookmark.children ? true : false;
-})
+});
 const showTitle = () => {
-    const parentWidth = tip.value.parentNode.offsetWidth;
-    const tipWidth = tip.value.offsetWidth;
+    const parentWidth = tip.value ? tip.value.parentNode.offsetWidth : 'parentWidth';
+    const tipWidth = tip.value ? tip.value.offsetWidth : 0;
     disableTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
 }
 const getDate = (timestamp) => {
@@ -113,8 +110,10 @@ const getIconUrl = (url) => {
     }
     return iconUrl;
 }
+
 const createDate = getDate(props.bookmark.dateAdded);
 const modifyDate = getDate(props.bookmark.dateGroupModified);
+const visitDate = getDate(props.bookmark.dateLastUsed);
 const iconUrl = getIconUrl(props.bookmark.url);
 
 const onItemChange = (e) => {
@@ -133,8 +132,8 @@ const handleClick = () => {
 
 const handleContextMenu = (e) => {
     e.preventDefault();
-
-    console.log(e)
+    console.log(props.bookmark)
+    console.log(e.target)
 }
 </script>
 <style lang="scss" scoped>
@@ -216,16 +215,17 @@ const handleContextMenu = (e) => {
         margin-bottom: 1rem;
 
         .bookmark-info {
-            font-size: .75rem;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 0.25rem;
             color: #999;
+            font-size: 0.75rem;
+            .el-icon{
+                top: 1px;
+                left: -1px;
+            }
         }
     }
-
-    .card-button {
-        &:hover {
-            background-color: #1890ff;
-        }
-    }
-
-}
-</style>
+}</style>
