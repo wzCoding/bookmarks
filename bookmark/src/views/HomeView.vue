@@ -3,7 +3,7 @@
         <VueDraggable ref="drag" v-model="currentMarks" @start="onDragStart" @end="onDragEnd" target=".book-transition"
             class="book-content">
             <TransitionGroup tag="div" name="fade" class="book-transition">
-                <BookMark v-for="bookmark in pageMarks" :key="bookmark.id" @open="openBookMark" :bookmark="bookmark">
+                <BookMark v-for="bookmark in pageMarks" :key="bookmark.id" :bookmark="bookmark" @openUrl="openBookMark" @openContextMenu="openMenu">
                 </BookMark>
             </TransitionGroup>
         </VueDraggable>
@@ -20,7 +20,7 @@ import { VueDraggable } from 'vue-draggable-plus';
 import { storeToRefs } from 'pinia';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
-
+import contextMenu from '@/components/contextMenu.vue';
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
@@ -47,6 +47,10 @@ const openBookMark = (param) => {
         console.log(param)
         bookStore.getCurrentMarks(param.id);
     }
+}
+const openMenu = (e)=>{
+    console.log(e)
+    console.log(contextMenu)
 }
 const onDragStart = (e) => {
 

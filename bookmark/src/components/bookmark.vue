@@ -50,7 +50,7 @@ const props = defineProps({
         default: () => { return {} }
     }
 });
-const emit = defineEmits(['open']);
+const emit = defineEmits(['openUrl','openContextMenu']);
 
 const defaultIcon = "./icons/folder.png";
 const defaultTitle = "bookMark";
@@ -127,13 +127,12 @@ const handleClick = () => {
         url: props.bookmark.url ? props.bookmark.url : null,
         openType: dropDownItems[openType.value].type,
     }
-    emit("open", param);
+    emit("openUrl", param);
 }
 
 const handleContextMenu = (e) => {
     e.preventDefault();
-    console.log(props.bookmark)
-    console.log(e.target)
+    emit("openContextMenu", e);
 }
 </script>
 <style lang="scss" scoped>
