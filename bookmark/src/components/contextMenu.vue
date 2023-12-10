@@ -1,8 +1,8 @@
 <template>
     <transition name="fade">
-        <div ref="contextMenu" class="context-menu" v-show="showMenu" :style="styleObject" @mouseenter="clearTimer"
-            @mouseleave="startTimer">
-            <div class="menu-item" v-for="item in menuList" :key="item.label" :data-type="item.type" @click="handleItemClick">
+        <div ref="contextMenu" class="context-menu" :style="styleObject" v-show="showMenu" v-click-outside="onClickOutside">
+            <div class="menu-item" v-for="item in menuList" :key="item.label" :data-type="item.type"
+                @click="handleItemClick">
                 <el-icon>
                     <component :is="item.icon" />
                 </el-icon>
@@ -13,19 +13,18 @@
 </template>
 <script setup>
 import { computed, ref } from 'vue';
-import { ElIcon } from 'element-plus';
+import { ElIcon, ClickOutside as vClickOutside } from 'element-plus';
 import { Warning, Edit, Delete, Plus } from '@element-plus/icons-vue';
 const menuWidth = "100px"
-const timer = ref(null);
 const props = defineProps({
     xAxis: { type: Number, default: 0 },
     yAxis: { type: Number, default: 0 }
 });
-const emits = defineEmits(['openContextMenu', 'destroyContextMenu']);
+const emits = defineEmits(['openContextMenu', 'destroyContextMenu', 'outSideClick']);
 const showMenu = ref(false);
 const styleObject = computed(() => {
-    console.log(document.documentElement.clientWidth, document.documentElement.clientHeight)
-    console.log(props.xAxis, props.yAxis)
+    // console.log(document.documentElement.clientWidth, document.documentElement.clientHeight)
+    // console.log(props.xAxis, props.yAxis)
     return {
         left: `${props.xAxis}px`,
         top: `${props.yAxis}px`
@@ -45,12 +44,8 @@ const handleItemClick = (e) => {
     const type = e.currentTarget.dataset.type;
     console.log(type)
 }
-const startTimer = () => {
-    clearTimer();
-    timer.value = setTimeout(closeMenu, 2000);
-}
-const clearTimer = () => {
-    clearTimeout(timer.value);
+const onClickOutside = (e) =>{
+    closeMenu()
 }
 defineExpose({ showMenu, closeMenu });
 

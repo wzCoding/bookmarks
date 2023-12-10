@@ -22,13 +22,13 @@ import { storeToRefs } from 'pinia';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
 import contextMenu from '@/components/contextMenu.vue';
+
 let menuInstance = null;
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
 const drag = ref();
 const currentChange = (page) => {
-
     bookStore.pageChange(page);
 }
 const sizeChange = (size) => {
@@ -60,6 +60,7 @@ const createMenu = (x, y) => {
     }
     const container = document.createElement("div");
     const vnode = createVNode(contextMenu, props);
+
     render(vnode, container);
     document.body.appendChild(container.firstElementChild);
 
