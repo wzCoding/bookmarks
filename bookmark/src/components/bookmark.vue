@@ -22,18 +22,19 @@
             </div>
         </div>
         <el-button v-if="buttonType" type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
-        <el-dropdown v-else size="small" trigger="click" split-button type="primary" @click="handleClick">
+        <el-dropdown v-else size="small" trigger="click" split-button type="primary" @command="onItemChange"
+            @click="handleClick">
             <el-icon>
                 <component :is="dropDownItems[openType].icon" />
             </el-icon>
             <span :open-type="openType">打开</span>
             <template #dropdown>
                 <el-dropdown-menu>
-                    <el-dropdown-item v-for="item in dropDownItems" :key="item.id" @click="onItemChange">
+                    <el-dropdown-item v-for="item in dropDownItems" :key="item.id" :command="item.id">
                         <el-icon>
                             <component :is="item.icon" />
                         </el-icon>
-                        <span :open-type="item.id">{{ item.label }}</span>
+                        <span>{{ item.label }}</span>
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </template>
@@ -50,7 +51,7 @@ const props = defineProps({
         default: () => { return {} }
     }
 });
-const emit = defineEmits(['openUrl','openContextMenu']);
+const emit = defineEmits(['openUrl', 'openContextMenu']);
 
 const defaultIcon = "./icons/folder.png";
 const defaultTitle = "bookMark";
@@ -116,9 +117,8 @@ const modifyDate = getDate(props.bookmark.dateGroupModified);
 const visitDate = getDate(props.bookmark.dateLastUsed);
 const iconUrl = getIconUrl(props.bookmark.url);
 
-const onItemChange = (e) => {
-    const type = e.target.getAttribute("open-type");
-    openType.value = type ? type : 1;
+const onItemChange = (command) => {
+    openType.value = command == null || command == undefined ? 1 : command;
 }
 const handleClick = () => {
     const param = {
@@ -144,10 +144,10 @@ const handleContextMenu = (e) => {
     padding: .5rem;
     width: calc(var(--rest-space) / var(--card-columns) - var(--extra-space));
     transition: all 0.3s ease;
-
     cursor: pointer;
 
-    &:hover {
+    &:hover,
+    &.active {
         box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.3);
     }
 
@@ -211,6 +211,7 @@ const handleContextMenu = (e) => {
 
     .bookmark-content {
         margin-bottom: 1rem;
+
         .bookmark-info {
             display: flex;
             justify-content: flex-start;
@@ -221,4 +222,5 @@ const handleContextMenu = (e) => {
             font-size: 0.75rem;
         }
     }
-}</style>
+}
+</style>

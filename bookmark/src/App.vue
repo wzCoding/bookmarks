@@ -15,15 +15,13 @@ const headerHeight = "60px"
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
   height: 100%;
-
+  
 
   .book-container {
     position: relative;
     top: v-bind(headerHeight);
     width: 100%;
     height: calc(100% - v-bind(headerHeight));
-    overflow-y: auto;
-    overflow-x: hidden;
   }
 }
 </style>

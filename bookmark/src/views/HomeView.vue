@@ -1,5 +1,5 @@
 <template>
-    <div class="book-home">
+    <div class="book-home" @[dynamicScroll]="onScroll">
         <VueDraggable ref="drag" v-model="currentMarks" @start="onDragStart" @end="onDragEnd" target=".book-transition"
             class="book-content">
             <TransitionGroup tag="div" name="fade" class="book-transition">
@@ -23,11 +23,13 @@ import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
 import contextMenu from '@/components/contextMenu.vue';
 
-let menuInstance = null;
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
 const drag = ref();
+const dynamicScroll = ref();
+let menuInstance = null;
+let currentMark = null;
 const currentChange = (page) => {
     bookStore.pageChange(page);
 }
@@ -47,7 +49,7 @@ const openBookMark = (param) => {
         }
     } else {
         console.log(param)
-        bookStore.getCurrentMarks(param.id,true);
+        bookStore.getCurrentMarks(param.id, true);
     }
 }
 const createMenu = (x, y) => {
@@ -55,6 +57,9 @@ const createMenu = (x, y) => {
         xAxis: x,
         yAxis: y,
         onDestroyContextMenu: () => {
+            dynamicScroll.value = null;
+            currentMark.classList.remove("active")
+            currentMark = null
             render(null, container);
         }
     }
@@ -75,6 +80,9 @@ const openMenu = (e) => {
     if (menuInstance) {
         menuInstance.closeMenu();
     }
+    dynamicScroll.value = "scroll"
+    currentMark = e.currentTarget;
+    currentMark.classList.add("active")
     menuInstance = createMenu(e.clientX, e.clientY);
 }
 const onDragStart = (e) => {
@@ -82,6 +90,11 @@ const onDragStart = (e) => {
 }
 const onDragEnd = (e) => {
 
+}
+const onScroll = () => {
+    if (menuInstance) {
+        menuInstance.closeMenu();
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -108,6 +121,8 @@ const onDragEnd = (e) => {
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .book-content {
         position: inherit;
