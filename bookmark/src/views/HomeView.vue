@@ -74,15 +74,15 @@ const createMenu = (x, y) => {
     component.exposed.showMenu.value = true;
     return {
         closeMenu
-    };
+    }
 }
 const openMenu = (e) => {
-    if (menuInstance) {
+    if(menuInstance){
         menuInstance.closeMenu();
     }
     dynamicScroll.value = "scroll"
     currentMark = e.currentTarget;
-    currentMark.classList.add("active")
+    currentMark.classList.add("active")  
     menuInstance = createMenu(e.clientX, e.clientY);
 }
 const onDragStart = (e) => {

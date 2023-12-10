@@ -12,7 +12,7 @@
 </template>
 <script setup>
 import { computed, ref } from 'vue';
-import { ElIcon, ClickOutside as vClickOutside, Mousewheel as vMouseWheel} from 'element-plus';
+import { ElIcon, ClickOutside as vClickOutside, Mousewheel as vMouseWheel } from 'element-plus';
 import { Warning, Edit, Delete, Plus } from '@element-plus/icons-vue';
 const menuWidth = "100px"
 const menuHeight = "144px"
@@ -22,28 +22,20 @@ const props = defineProps({
 });
 const emits = defineEmits(['openContextMenu', 'destroyContextMenu']);
 const showMenu = ref(false);
+const width = Number(menuWidth.replace("px", ""));
+const height = Number(menuHeight.replace("px", ""));
 const styles = computed(() => {
-    console.log(document.documentElement.clientWidth, document.documentElement.clientHeight)
-    console.log(props.xAxis, props.yAxis)
-    const w = Number(menuWidth.replace("px", "")), h = Number(menuHeight.replace("px", ""));
-    const result = {
-        left: `${props.xAxis}px`,
-        top: `${props.yAxis}px`
+    return {
+        left: document.documentElement.clientWidth - props.xAxis < width ? `${props.xAxis - width}px` : `${props.xAxis}px`,
+        top: document.documentElement.clientHeight - props.yAxis < height ? `${props.yAxis - height}px` : `${props.yAxis}px`
     }
-    if (document.documentElement.clientWidth - props.xAxis < w) {
-        result.left = `${props.xAxis - w}px`;
-    }
-    if (document.documentElement.clientHeight - props.yAxis < h) {
-        result.top = `${props.yAxis - h}px`;
-    }
-    return result;
 });
 const menuList = [
     { label: "详细信息", icon: Warning, type: "info" },
     { label: "编辑书签", icon: Edit, type: "edit" },
     { label: "添加书签", icon: Plus, type: "update" },
     { label: "删除书签", icon: Delete, type: "delete" }
-]
+];
 const closeMenu = () => {
     showMenu.value = false;
     emits('destroyContextMenu');
