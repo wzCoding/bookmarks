@@ -15,7 +15,7 @@
 import { computed, ref } from 'vue';
 import { ElIcon } from 'element-plus';
 import { Warning, Edit, Delete, Plus } from '@element-plus/icons-vue';
-const menuWidth = "72px"
+const menuWidth = "100px"
 const timer = ref(null);
 const props = defineProps({
     xAxis: { type: Number, default: 0 },
@@ -24,7 +24,8 @@ const props = defineProps({
 const emits = defineEmits(['openContextMenu', 'destroyContextMenu']);
 const showMenu = ref(false);
 const styleObject = computed(() => {
-
+    console.log(document.documentElement.clientWidth, document.documentElement.clientHeight)
+    console.log(props.xAxis, props.yAxis)
     return {
         left: `${props.xAxis}px`,
         top: `${props.yAxis}px`
@@ -67,14 +68,13 @@ defineExpose({ showMenu, closeMenu });
 
 .fade-leave-to {
     opacity: 0;
-    transform: translateY(1rem);
+    transform: translateY(-1rem);
 }
 
 .context-menu {
     position: absolute;
     z-index: 1000;
     background-color: #fff;
-    padding: 0.75rem;
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
     border-radius: 5px;
     display: flex;
@@ -102,11 +102,11 @@ defineExpose({ showMenu, closeMenu });
         }
 
         &:first-child {
-            padding-top: 0;
+            padding-top: 1rem;
         }
 
         &:last-child {
-            padding-bottom: 0;
+            padding-bottom: 1rem;
         }
     }
 }
