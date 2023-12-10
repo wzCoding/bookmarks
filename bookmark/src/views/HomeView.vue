@@ -47,7 +47,7 @@ const openBookMark = (param) => {
         }
     } else {
         console.log(param)
-        bookStore.getCurrentMarks(param.id);
+        bookStore.getCurrentMarks(param.id,true);
     }
 }
 const createMenu = (x, y) => {

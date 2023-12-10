@@ -55,9 +55,14 @@ export const usebookStore = defineStore("bookmarks", () => {
         return allBookMarks.filter(item => item.id == id)[0];
     }
     //获取当前展示书签列表
-    function getCurrentMarks(id) {
+    function getCurrentMarks(id,initPage) {
         if (!id){
             id = defaultId
+        }
+        //初始化分页参数
+        if(initPage){
+            pageChange(defaultPage)
+            sizeChange(defaultSize)
         }
         const folder = getFolder(id);
         parentId.value = folder.parentId;
