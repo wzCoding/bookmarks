@@ -6,7 +6,8 @@
     </el-page-header>
 </template>
 <script setup>
-import { computed } from 'vue';
+import { computed,watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { ElPageHeader } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 const props = defineProps({
@@ -18,8 +19,13 @@ const headerStyle = computed(() => {
     }
 });
 const bookStore = usebookStore();
+const router = useRouter();
 const goBack = () => {
-    bookStore.getCurrentMarks(bookStore.parentId,true);
+    if(router.currentRoute.value.fullPath !== "/"){
+        router.push('/');
+    }else{
+        bookStore.getCurrentMarks(bookStore.parentId,true); 
+    }
 }
 </script>
 <style lang="scss" scoped>

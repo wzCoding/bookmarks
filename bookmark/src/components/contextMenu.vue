@@ -21,7 +21,7 @@ const props = defineProps({
     xAxis: { type: Number, default: 0 },
     yAxis: { type: Number, default: 0 }
 });
-const emits = defineEmits(['openContextMenu', 'destroyContextMenu']);
+const emits = defineEmits(['openContextMenu', 'destroyContextMenu', 'contextMenuClick']);
 const showMenu = ref(false);
 const timer = ref(null);
 const width = Number(menuWidth.replace("px", ""));
@@ -44,7 +44,8 @@ const closeMenu = () => {
 }
 const onItemClick = (e) => {
     const type = e.currentTarget.dataset.type;
-    console.log(type)
+    emits('contextMenuClick', type)
+    closeMenu()
 }
 const onClickOutside = () => {
     closeMenu()

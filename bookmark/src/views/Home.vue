@@ -15,10 +15,12 @@
 
 <script setup>
 import { createVNode, ref, render } from 'vue';
+import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import { usebookStore } from '@/store/usebookStore';
 import { usei18nStore } from '@/store/usei18nStore';
 import { VueDraggable } from 'vue-draggable-plus';
-import { storeToRefs } from 'pinia';
+import { ElMessageBox, ElMessage } from 'element-plus';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
 import contextMenu from '@/components/contextMenu.vue';
@@ -56,12 +58,13 @@ const createMenu = (x, y) => {
     const props = {
         xAxis: x,
         yAxis: y,
+        onContextMenuClick: onContextMenuClick,
         onDestroyContextMenu: () => {
             dynamicScroll.value = null;
             currentMark.classList.remove("active")
             currentMark = null
             render(null, container);
-        }
+        },
     }
     const container = document.createElement("div");
     const vnode = createVNode(contextMenu, props);
@@ -77,13 +80,36 @@ const createMenu = (x, y) => {
     }
 }
 const openMenu = (e) => {
-    if(menuInstance){
+    if (menuInstance) {
         menuInstance.closeMenu();
     }
     dynamicScroll.value = "scroll"
     currentMark = e.currentTarget;
-    currentMark.classList.add("active")  
+    currentMark.classList.add("active")
     menuInstance = createMenu(e.clientX, e.clientY);
+}
+const router = useRouter()
+const onContextMenuClick = (type) => {
+    if (type !== "delete") {
+        router.push(`/${type}`)
+    } else {
+        ElMessageBox.confirm("确定删除该书签吗？", "提示", {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }).then(() => {
+            ElMessage({
+                type: 'success',
+                message: '删除成功',
+            })
+        })
+            .catch(() => {
+                ElMessage({
+                    type: 'info',
+                    message: '取消删除',
+                })
+            })
+    }
 }
 const onDragStart = (e) => {
 
