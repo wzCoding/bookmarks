@@ -1,7 +1,6 @@
 <template>
     <div class="book-home" @[dynamicScroll]="onScroll">
-        <VueDraggable ref="drag" v-model="currentMarks" @start="onDragStart" @end="onDragEnd" target=".book-transition"
-            class="book-content">
+        <VueDraggable ref="drag" v-model="currentMarks" @end="onDragEnd" target=".book-transition" class="book-content">
             <TransitionGroup tag="div" name="fade" class="book-transition">
                 <BookMark v-for="bookmark in pageMarks" :key="bookmark.id" :bookmark="bookmark" @openUrl="openBookMark"
                     @openContextMenu="openMenu">
@@ -9,7 +8,7 @@
             </TransitionGroup>
         </VueDraggable>
         <BookFooter :page-size="pageSize" :current-page="currentPage" :total="totalNum" :locale="i18nStore.locale"
-            @currentChange="currentChange" @sizeChange="sizeChange"></BookFooter>
+            @currentChange="pageChange" @sizeChange="sizeChange"></BookFooter>
     </div>
 </template>
 
@@ -23,22 +22,30 @@ import { VueDraggable } from 'vue-draggable-plus';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
-import contextMenu from '@/components/contextMenu.vue';
+import contextMenuTemplate from '@/components/contextMenu.vue';
 
+let contextMenu = null;
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 const router = useRouter();
-const { currentMarks, currentTitle, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
 const drag = ref();
 const dynamicScroll = ref();
-let currentInstance = null;
-let currentTarget = null;
-const currentChange = (page) => {
+const {
+    currentMarks,
+    currentTitle,
+    currentPage,
+    totalNum,
+    pageSize,
+    pageMarks
+} = storeToRefs(bookStore);
+//分页回调方法
+const pageChange = (page) => {
     bookStore.pageChange(page);
 }
 const sizeChange = (size) => {
     bookStore.sizeChange(size);
 }
+//打开书签卡片
 const openBookMark = (param) => {
     if (param.url) {
         if (param.openType !== "_newwindow") {
@@ -55,18 +62,19 @@ const openBookMark = (param) => {
         bookStore.getCurrentMarks(param.id, true);
     }
 }
+//创建右键contextMenu
 const createMenu = (x, y) => {
     const props = {
         xAxis: x,
         yAxis: y,
         onContextMenuClick: onContextMenuClick,
         onDestroyContextMenu: () => {
-            initCurrent();
+            initContextMenu();
             render(null, container);
         },
     }
     const container = document.createElement("div");
-    const vnode = createVNode(contextMenu, props);
+    const vnode = createVNode(contextMenuTemplate, props);
 
     render(vnode, container);
     document.body.appendChild(container.firstElementChild);
@@ -78,26 +86,28 @@ const createMenu = (x, y) => {
         closeMenu
     }
 }
+//右键点击打开contextMenu
 const openMenu = (e, id) => {
-    if (currentInstance) {
-        currentInstance.closeMenu();
+    if (contextMenu) {
+        contextMenu.closeMenu();
     }
-    currentInstance = createMenu(e.clientX, e.clientY);
-    initCurrent(e.currentTarget, id);
+    contextMenu = createMenu(e.clientX, e.clientY);
+    initContextMenu(e.currentTarget, id);
 }
 //在这里初始化部分书签参数
-const initCurrent = (target, id) => {
+const initContextMenu = (target, id) => {
     dynamicScroll.value = target ? "scroll" : null;
-    currentInstance.id = target ? id : null;
-    target ? target.classList.toggle("active") : currentInstance.target.classList.toggle("active");
-    currentInstance.target = target ? target : null;
+    contextMenu.id = target ? id : null;
+    target ? target.classList.toggle("active") : contextMenu.target.classList.toggle("active");
+    contextMenu.target = target ? target : null;
 }
+//在这里处理contextMenu点击事件
 const onContextMenuClick = (type) => {
     if (type !== "delete") {
         router.push({
             name: type,
             params: {
-                id: currentInstance.id,
+                id: contextMenu.id,
             }
         })
     } else {
@@ -113,15 +123,15 @@ const onContextMenuClick = (type) => {
         })
     }
 }
-const onDragStart = (e) => {
 
-}
+//拖拽结束调用chrome Api跟新书签
 const onDragEnd = (e) => {
-
+    console.log(e)
 }
+//监听页面滚动事件，关闭contextMenu
 const onScroll = () => {
-    if (currentInstance) {
-        currentInstance.closeMenu();
+    if (contextMenu) {
+        contextMenu.closeMenu();
     }
 }
 </script>
