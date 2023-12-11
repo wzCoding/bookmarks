@@ -98,7 +98,6 @@ const onContextMenuClick = (type) => {
             name: type,
             params: {
                 id: currentInstance.id,
-                type: type
             }
         })
     } else {

@@ -8,9 +8,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/info/detail',
+    path: '/info/bookmark-:id',
     name: 'info',
-    props: {id:"",type:""},
+    props: true,
     component: () => import(/* webpackChunkName: "Info" */ '../views/Info.vue')
   },
   {
