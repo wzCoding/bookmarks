@@ -6,7 +6,7 @@
 </template>
 <script setup>
 import BookHeader from '@/components/header.vue';
-const headerHeight = "60px"
+const headerHeight = "56px"
 </script>
 <style lang="scss">
 #app {

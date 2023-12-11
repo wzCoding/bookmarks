@@ -1,6 +1,7 @@
 <template>
     <transition name="fade">
-        <div ref="contextMenu" class="context-menu" :style="styles" v-show="showMenu" v-click-outside="onClickOutside">
+        <div ref="contextMenu" class="context-menu" :style="styles" v-show="showMenu" v-click-outside="onClickOutside"
+            @mouseleave="startTimer" @mouseenter="clearTimer">
             <div class="menu-item" v-for="item in menuList" :key="item.label" :data-type="item.type" @click="onItemClick">
                 <el-icon>
                     <component :is="item.icon" />
@@ -12,7 +13,7 @@
 </template>
 <script setup>
 import { computed, ref } from 'vue';
-import { ElIcon, ClickOutside as vClickOutside, Mousewheel as vMouseWheel } from 'element-plus';
+import { ElIcon, ClickOutside as vClickOutside } from 'element-plus';
 import { Warning, Edit, Delete, Plus } from '@element-plus/icons-vue';
 const menuWidth = "100px"
 const menuHeight = "144px"
@@ -22,6 +23,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['openContextMenu', 'destroyContextMenu']);
 const showMenu = ref(false);
+const timer = ref(null);
 const width = Number(menuWidth.replace("px", ""));
 const height = Number(menuHeight.replace("px", ""));
 const styles = computed(() => {
@@ -46,6 +48,13 @@ const onItemClick = (e) => {
 }
 const onClickOutside = () => {
     closeMenu()
+}
+const startTimer = () => {
+    clearTimer();
+    timer.value = setTimeout(closeMenu, 2000)
+}
+const clearTimer = () => {
+    clearTimeout(timer.value)
 }
 defineExpose({ showMenu, closeMenu });
 </script>
