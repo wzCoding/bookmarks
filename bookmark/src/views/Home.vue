@@ -27,11 +27,13 @@ import contextMenu from '@/components/contextMenu.vue';
 
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
+const router = useRouter();
 const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
 const drag = ref();
 const dynamicScroll = ref();
 let menuInstance = null;
 let currentMark = null;
+let currentMarkTitle = null;
 const currentChange = (page) => {
     bookStore.pageChange(page);
 }
@@ -79,28 +81,29 @@ const createMenu = (x, y) => {
         closeMenu
     }
 }
-const openMenu = (e) => {
+const openMenu = (e,title) => {
     if (menuInstance) {
         menuInstance.closeMenu();
     }
     dynamicScroll.value = "scroll"
     currentMark = e.currentTarget;
+    currentMarkTitle = title;
     currentMark.classList.add("active")
     menuInstance = createMenu(e.clientX, e.clientY);
 }
-const router = useRouter()
+
 const onContextMenuClick = (type) => {
     if (type !== "delete") {
         router.push(`/${type}`)
     } else {
-        ElMessageBox.confirm("确定删除该书签吗？", "提示", {
+        ElMessageBox.confirm(`确定删除书签 '${currentMarkTitle}' 吗？`, "提示", {
             confirmButtonText: '确认',
             cancelButtonText: '取消',
             type: 'warning',
         }).then(() => {
             ElMessage({
                 type: 'success',
-                message: '删除成功',
+                message: `删除书签 '${currentMarkTitle}' 成功`,
             })
         })
             .catch(() => {
