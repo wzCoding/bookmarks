@@ -20,7 +20,7 @@ function setLocalCache(key, data) {
     } else {
         const parsedCache = JSON.parse(cache);
         const dataKey = Object.keys(data)[0];
-        if(!parsedCache[dataKey] && data[dataKey] !== 1){
+        if(!parsedCache[dataKey] && String(data[dataKey]) !== "1"){
             parsedCache[dataKey] = data[dataKey];
             window.localStorage.setItem(key, JSON.stringify(parsedCache));
         }
