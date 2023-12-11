@@ -54,6 +54,9 @@ export const usebookStore = defineStore("bookmarks", () => {
     function getFolder(id) {
         return allBookMarks.filter(item => item.id == id)[0];
     }
+    function getMark(id){
+        return currentMarks.value.filter(item => item.id == id)[0];
+    }
     //获取当前展示书签列表
     function getCurrentMarks(id,initPage) {
         if (!id){
@@ -69,6 +72,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         currentMarks.value = folder.children;
         currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;
     }
+    
     function sizeChange(size) {
         pageSize.value = size;
     }
@@ -85,6 +89,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         totalNum,
         totalPage,
         getCurrentMarks,
+        getMark,
         sizeChange,
         pageChange
     }

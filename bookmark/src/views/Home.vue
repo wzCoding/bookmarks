@@ -28,8 +28,8 @@ let contextMenu = null;
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 const router = useRouter();
-const drag = ref();
 const dynamicScroll = ref();
+const drag = ref();
 const {
     currentMarks,
     currentTitle,

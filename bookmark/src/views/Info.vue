@@ -1,10 +1,14 @@
 <template>
-    <div>{{ id }}</div>
+    <div>{{ info.title }}</div>
 </template>
 <script setup>
+import { usebookStore } from '@/store/usebookStore';
+import { ref } from 'vue';
 const props = defineProps(({
     id: { type: String, default: "0", required: true }
 }))
-console.log(props.id)
+const bookStore = usebookStore();
+const info = bookStore.getMark(props.id)
+console.log(info)
 </script>
 <style lang="scss" scoped></style>
