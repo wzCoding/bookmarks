@@ -13,6 +13,30 @@ function debounce(func, delay = 1000) {
         }, delay)
     }
 }
+function setLocalCache(key, data) {
+    const cache = window.localStorage.getItem(key);
+    if (!cache) {
+        window.localStorage.setItem(key, JSON.stringify(data));
+    } else {
+        const parsedCache = JSON.parse(cache);
+        const dataKey = Object.keys(data)[0];
+        if(!parsedCache[dataKey]){
+            parsedCache[dataKey] = data[dataKey];
+            window.localStorage.setItem(key, JSON.stringify(parsedCache));
+        }
+    }
+}
+function getLocalCache(key, id) {
+    const cache = window.localStorage.getItem(key);
+    if (cache) {
+        const parsedCache = JSON.parse(cache);
+        return parsedCache[id];
+    } else {
+        return "";
+    }
+}
 export {
-    debounce
+    debounce, 
+    setLocalCache,
+    getLocalCache
 }

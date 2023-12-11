@@ -42,9 +42,10 @@
     </div>
 </template>
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
+import { setLocalCache, getLocalCache } from '@/utils/index';
 const props = defineProps({
     bookmark: {
         type: Object,
@@ -55,6 +56,7 @@ const emit = defineEmits(['openUrl', 'openContextMenu']);
 
 const defaultIcon = "./icons/folder.png";
 const defaultTitle = "bookMark";
+const cacheKey = "bookmark-open";
 const disableTip = ref(true);
 const hasIcon = ref(false);
 const tip = ref();
@@ -79,6 +81,10 @@ const dropDownItems = [
         id: 2
     },
 ]
+onMounted(() => {
+    const result = getLocalCache(cacheKey, props.bookmark.id);
+    openType.value = result ? result : 1;
+})
 const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title.trim() : defaultTitle
 });
@@ -118,15 +124,17 @@ const visitDate = getDate(props.bookmark.dateLastUsed);
 const iconUrl = getIconUrl(props.bookmark.url);
 
 const onItemChange = (command) => {
-    openType.value = command == null || command == undefined ? 1 : command;
+    openType.value = (command == null || command == undefined) ? 1 : command;
 }
+
 const handleClick = () => {
     const param = {
         id: props.bookmark.id,
         parentId: props.bookmark.parentId ? props.bookmark.parentId : null,
         url: props.bookmark.url ? props.bookmark.url : null,
-        openType: dropDownItems[openType.value].type,
+        openType: dropDownItems[openType.value].type
     }
+    setLocalCache(cacheKey, { [props.bookmark.id]: openType.value });
     emit("openUrl", param);
 }
 
@@ -148,7 +156,7 @@ const handleContextMenu = (e) => {
 
     &:hover,
     &.active {
-        box-shadow: 0 0 6px 2px rgba(0,0,0,0.3);
+        box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.3);
     }
 
     .fade-enter-active,
