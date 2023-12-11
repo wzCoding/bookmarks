@@ -140,7 +140,7 @@ const handleClick = () => {
 
 const handleContextMenu = (e) => {
     e.preventDefault();
-    emit("openContextMenu", e, props.bookmark.title);
+    emit("openContextMenu", e, props.bookmark.id);
 }
 </script>
 <style lang="scss" scoped>

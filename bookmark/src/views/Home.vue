@@ -28,12 +28,11 @@ import contextMenu from '@/components/contextMenu.vue';
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 const router = useRouter();
-const { currentMarks, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
+const { currentMarks, currentTitle, currentPage, totalNum, pageSize, pageMarks } = storeToRefs(bookStore);
 const drag = ref();
 const dynamicScroll = ref();
-let menuInstance = null;
-let currentMark = null;
-let currentMarkTitle = null;
+let currentInstance = null;
+let currentTarget = null;
 const currentChange = (page) => {
     bookStore.pageChange(page);
 }
@@ -62,9 +61,7 @@ const createMenu = (x, y) => {
         yAxis: y,
         onContextMenuClick: onContextMenuClick,
         onDestroyContextMenu: () => {
-            dynamicScroll.value = null;
-            currentMark.classList.remove("active")
-            currentMark = null
+            initCurrent();
             render(null, container);
         },
     }
@@ -81,37 +78,40 @@ const createMenu = (x, y) => {
         closeMenu
     }
 }
-const openMenu = (e,title) => {
-    if (menuInstance) {
-        menuInstance.closeMenu();
+const openMenu = (e, id) => {
+    if (currentInstance) {
+        currentInstance.closeMenu();
     }
-    dynamicScroll.value = "scroll"
-    currentMark = e.currentTarget;
-    currentMarkTitle = title;
-    currentMark.classList.add("active")
-    menuInstance = createMenu(e.clientX, e.clientY);
+    currentInstance = createMenu(e.clientX, e.clientY);
+    initCurrent(e.currentTarget, id);
 }
-
+//在这里初始化部分书签参数
+const initCurrent = (target, id) => {
+    dynamicScroll.value = target ? "scroll" : null;
+    currentInstance.id = target ? id : null;
+    target ? target.classList.toggle("active") : currentInstance.target.classList.toggle("active");
+    currentInstance.target = target ? target : null;
+}
 const onContextMenuClick = (type) => {
     if (type !== "delete") {
-        router.push(`/${type}`)
+        router.push({
+            name: type,
+            params: {
+                id: currentInstance.id,
+                type: type
+            }
+        })
     } else {
-        ElMessageBox.confirm(`确定删除书签 '${currentMarkTitle}' 吗？`, "提示", {
+        ElMessageBox.confirm(`确定删除书签 '${currentTitle.value}' 吗？`, "提示", {
             confirmButtonText: '确认',
             cancelButtonText: '取消',
             type: 'warning',
         }).then(() => {
             ElMessage({
                 type: 'success',
-                message: `删除书签 '${currentMarkTitle}' 成功`,
+                message: `删除书签 '${currentTitle.value}' 成功`,
             })
         })
-            .catch(() => {
-                ElMessage({
-                    type: 'info',
-                    message: '取消删除',
-                })
-            })
     }
 }
 const onDragStart = (e) => {
@@ -121,8 +121,8 @@ const onDragEnd = (e) => {
 
 }
 const onScroll = () => {
-    if (menuInstance) {
-        menuInstance.closeMenu();
+    if (currentInstance) {
+        currentInstance.closeMenu();
     }
 }
 </script>

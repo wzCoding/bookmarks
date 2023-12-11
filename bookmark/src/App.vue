@@ -15,8 +15,6 @@ const headerHeight = "56px"
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
   height: 100%;
-  
-
   .book-container {
     position: relative;
     top: v-bind(headerHeight);
