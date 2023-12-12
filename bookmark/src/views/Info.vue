@@ -49,7 +49,7 @@ const contentList = [
     height: calc(100% - 2 * var(--padding));
     background-color: #fff;
     padding: var(--padding);
-    color: #999;
+    color:#666;
     .info-title {
         background: #ddd;
         padding: 1rem;
@@ -72,16 +72,14 @@ const contentList = [
             width: 100%;
             border-bottom: 2px solid #ddd;
             padding-bottom: var(--padding);
+            color: #666;
             .item-value{
                font-size: 0.85rem;
-               color: #666;
                max-width: 80%;
                word-wrap: break-word;
                text-align: right;
             }
         }
     }
-
-    .info-content-item {}
 }
 </style>
