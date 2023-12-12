@@ -32,7 +32,7 @@ const defaultPage = 1;
 
 export const usebookStore = defineStore("bookmarks", () => {
     //书签展示相关
-    const parentId = ref(null);
+    const parentId = ref(defaultId);
     const currentTitle = ref(defaultShowTitle);
     const currentMarks = ref(getFolder(defaultShowId).children);
 
@@ -54,25 +54,23 @@ export const usebookStore = defineStore("bookmarks", () => {
     function getFolder(id) {
         return allBookMarks.filter(item => item.id == id)[0];
     }
-    function getMark(id){
+    function getMark(id) {
         return currentMarks.value.filter(item => item.id == id)[0];
     }
     //获取当前展示书签列表
-    function getCurrentMarks(id,initPage) {
-        if (!id){
-            id = defaultId
-        }
+    function getCurrentMarks(id, initPage) {
+        if (!id) return;
         //初始化分页参数
-        if(initPage){
+        if (initPage) {
             pageChange(defaultPage)
             sizeChange(defaultSize)
         }
         const folder = getFolder(id);
-        parentId.value = folder.parentId;
         currentMarks.value = folder.children;
         currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;
+        parentId.value = folder.parentId ? folder.parentId : defaultShowId;
     }
-    
+
     function sizeChange(size) {
         pageSize.value = size;
     }

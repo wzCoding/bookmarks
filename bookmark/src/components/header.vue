@@ -1,13 +1,14 @@
 <template>
     <el-page-header class="book-header" :style="headerStyle" @back="goBack">
         <template #content>
-            <span> {{ bookStore.currentTitle }} </span>
+            <span> {{ currentTitle }} </span>
         </template>
     </el-page-header>
 </template>
 <script setup>
-import { computed,watch } from 'vue';
+import { computed, watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import { ElPageHeader } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 const props = defineProps({
@@ -19,14 +20,20 @@ const headerStyle = computed(() => {
     }
 });
 const bookStore = usebookStore();
+const { currentTitle, parentId } = storeToRefs(bookStore);
 const router = useRouter();
+let oldTitle = currentTitle.value;
 const goBack = () => {
-    if(router.currentRoute.value.fullPath !== "/"){
+    if (router.currentRoute.value.fullPath !== "/") {
+        currentTitle.value = oldTitle
         router.push('/');
-    }else{
-        bookStore.getCurrentMarks(bookStore.parentId,true); 
+    } else {
+        bookStore.getCurrentMarks(parentId.value, true);
     }
 }
+watch(currentTitle, (newVal, oldVal) => {
+    oldTitle = oldVal;
+})
 </script>
 <style lang="scss" scoped>
 .book-header {
@@ -39,8 +46,9 @@ const goBack = () => {
     :deep(.el-page-header__header) {
         width: 100%;
         height: 100%;
-        .el-page-header__left{
-            padding:0.75rem;
+
+        .el-page-header__left {
+            padding: 0.75rem;
         }
     }
 }
