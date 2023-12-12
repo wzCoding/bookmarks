@@ -23,6 +23,8 @@ const bookStore = usebookStore();
 const info = bookStore.getMark(props.id)
 console.log(info)
 bookStore.currentTitle = defaultTitle;
+const allNode = bookStore.getAllNode();
+console.log(allNode)
 const contentList = [
     {
         label: "书签类型",

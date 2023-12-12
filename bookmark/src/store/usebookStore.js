@@ -70,7 +70,9 @@ export const usebookStore = defineStore("bookmarks", () => {
         currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;
         parentId.value = folder.parentId ? folder.parentId : defaultShowId;
     }
+    function getAllNode(id){
 
+    }
     function sizeChange(size) {
         pageSize.value = size;
     }
@@ -88,6 +90,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         totalPage,
         getCurrentMarks,
         getMark,
+        getAllNode,
         sizeChange,
         pageChange
     }
