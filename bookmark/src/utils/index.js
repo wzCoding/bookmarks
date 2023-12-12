@@ -39,13 +39,34 @@ function getCurrentTab(callback) {
     let queryOptions = { active: true, lastFocusedWindow: true };
     chrome.tabs.query(queryOptions, ([tab]) => {
         if (chrome.runtime.lastError) console.error(chrome.runtime.lastError);
-        // `tab` will either be a `tabs.Tab` instance or `undefined`.
         callback && callback(tab);
     });
+}
+function getDate(date) {
+    if (!date) return
+    const dateObj = new Date(date);
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
+    const day = dateObj.getDate();
+    const add0 = (num) => { return num < 10 ? "0" + num : num }
+    return `${year}/${add0(month)}/${add0(day)}`
+}
+function getIconUrl(url, callback) {
+    const iconUrl = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
+    const img = new Image();
+    img.src = iconUrl
+    img.onload = async function () {
+        return Promise.resolve(this).then(res => {
+            callback && callback(res)
+        });
+    }
+    return iconUrl;
 }
 export {
     debounce,
     setLocalCache,
     getLocalCache,
-    getCurrentTab
+    getCurrentTab,
+    getDate,
+    getIconUrl
 }

@@ -2,10 +2,15 @@
     <div class="bookmark-card" :class="`bookmark-${bookmark.index}`" @contextmenu="handleContextMenu">
         <div class="bookmark-header">
             <div class="bookmark-icon">
-                <transition name="fade">
-                    <img v-if="hasIcon" :src="iconUrl" alt="bookmark-icon">
-                    <div v-else class="text-icon">{{ textIcon.toUpperCase() }}</div>
-                </transition>
+                <div v-if="isFolder">
+                    <img src="../assets/icon//folder.png" alt="bookmark-icon">
+                </div>
+                <div v-else>
+                    <transition name="fade">
+                        <img v-if="hasIcon" :src="iconUrl" alt="bookmark-icon">
+                        <div v-else class="text-icon">{{ textIcon.toUpperCase() }}</div>
+                    </transition>
+                </div>
             </div>
             <el-tooltip placement="top" :disabled="disableTip" :content="title">
                 <div class="bookmark-title" @mouseover="showTitle">
@@ -14,14 +19,14 @@
             </el-tooltip>
         </div>
         <div class="bookmark-content">
-            <div v-if="buttonType" class="bookmark-info">
+            <div v-if="isFolder" class="bookmark-info">
                 <span>最近修改：{{ modifyDate }}</span>
             </div>
             <div v-else class="bookmark-info">
                 <span>最近访问：{{ visitDate ? visitDate : createDate }}</span>
             </div>
         </div>
-        <el-button v-if="buttonType" type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
+        <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
         <el-dropdown v-else size="small" trigger="click" split-button type="primary" @command="onItemChange"
             @click="handleClick">
             <el-icon>
@@ -45,7 +50,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
-import { setLocalCache, getLocalCache } from '@/utils/index';
+import { setLocalCache, getLocalCache, getDate, getIconUrl } from '@/utils/index';
 const props = defineProps({
     bookmark: {
         type: Object,
@@ -54,13 +59,17 @@ const props = defineProps({
 });
 const emit = defineEmits(['openUrl', 'openContextMenu']);
 
-const defaultIcon = "./icons/folder.png";
-const defaultTitle = "bookMark";
 const cacheKey = "bookmark-open";
 const disableTip = ref(true);
 const hasIcon = ref(false);
 const tip = ref();
 const openType = ref(1);
+const createDate = getDate(props.bookmark.dateAdded);
+const modifyDate = getDate(props.bookmark.dateGroupModified);
+const visitDate = getDate(props.bookmark.dateLastUsed);
+const iconUrl = getIconUrl(props.bookmark.url, (res) => {
+    hasIcon.value = res.naturalWidth == 16 ? false : true;
+});
 const dropDownItems = [
     {
         label: "当前页",
@@ -86,14 +95,14 @@ onMounted(() => {
     openType.value = result ? result : 1;
 })
 const title = computed(() => {
-    return props.bookmark.title ? props.bookmark.title.trim() : defaultTitle
+    return props.bookmark.title ? props.bookmark.title.trim() : "bookmark";
 });
 const textIcon = computed(() => {
     const regExp = /[\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/gm;
     const result = title.value.replace(regExp, '');
     return result.slice(0, 1);
 });
-const buttonType = computed(() => {
+const isFolder = computed(() => {
     return props.bookmark.children ? true : false;
 });
 const showTitle = () => {
@@ -101,27 +110,8 @@ const showTitle = () => {
     const tipWidth = tip.value ? tip.value.offsetWidth : 0;
     disableTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
 }
-const getDate = (timestamp) => {
-    if (!timestamp) return;
-    const date = new Date(timestamp);
-    return date.toLocaleDateString();
-}
-const getIconUrl = (url) => {
-    const iconUrl = url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${url}` : defaultIcon
-    const img = new Image();
-    img.src = iconUrl
-    img.onload = async function () {
-        return Promise.resolve(this).then(res => {
-            hasIcon.value = iconUrl == defaultIcon ? true : res.naturalWidth == 16 ? false : true;
-        });
-    }
-    return iconUrl;
-}
 
-const createDate = getDate(props.bookmark.dateAdded);
-const modifyDate = getDate(props.bookmark.dateGroupModified);
-const visitDate = getDate(props.bookmark.dateLastUsed);
-const iconUrl = getIconUrl(props.bookmark.url);
+
 
 const onItemChange = (command) => {
     openType.value = (command == null || command == undefined) ? 1 : command;
