@@ -23,7 +23,7 @@ const bookStore = usebookStore();
 const info = bookStore.getMark(props.id)
 console.log(info)
 bookStore.currentTitle = defaultTitle;
-const allNode = bookStore.getAllNode();
+const allNode = bookStore.getAllNode(info.id);
 console.log(allNode)
 const contentList = [
     {

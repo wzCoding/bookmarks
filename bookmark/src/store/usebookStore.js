@@ -70,8 +70,13 @@ export const usebookStore = defineStore("bookmarks", () => {
         currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;
         parentId.value = folder.parentId ? folder.parentId : defaultShowId;
     }
-    function getAllNode(id){
-
+    function getAllNode(id, result = []) {
+        const node = allBookMarks.filter(item => item.id == id)[0];
+        if (node && node.parentId) {
+            result.push({ title: node.title, id: node.id, type: node.children ? 'folder' : 'bookmark' });
+            getAllNode(node.parentId, result)
+        }
+        return result;
     }
     function sizeChange(size) {
         pageSize.value = size;
