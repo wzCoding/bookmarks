@@ -20,7 +20,7 @@ function setLocalCache(key, data) {
     } else {
         const parsedCache = JSON.parse(cache);
         const dataKey = Object.keys(data)[0];
-        if(!parsedCache[dataKey] && String(data[dataKey]) !== "1"){
+        if (!parsedCache[dataKey] && String(data[dataKey]) !== "1") {
             parsedCache[dataKey] = data[dataKey];
             window.localStorage.setItem(key, JSON.stringify(parsedCache));
         }
@@ -35,8 +35,17 @@ function getLocalCache(key, id) {
         return "";
     }
 }
+function getCurrentTab(callback) {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    chrome.tabs.query(queryOptions, ([tab]) => {
+        if (chrome.runtime.lastError) console.error(chrome.runtime.lastError);
+        // `tab` will either be a `tabs.Tab` instance or `undefined`.
+        callback && callback(tab);
+    });
+}
 export {
-    debounce, 
+    debounce,
     setLocalCache,
-    getLocalCache
+    getLocalCache,
+    getCurrentTab
 }

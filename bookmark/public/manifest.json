@@ -8,7 +8,8 @@
     },
     "permissions": [
         "sidePanel",
-        "bookmarks"
+        "bookmarks",
+        "tabs"
     ],
     "side_panel": {
         "default_path": "index.html"
