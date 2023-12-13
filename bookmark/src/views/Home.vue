@@ -37,10 +37,11 @@ const {
     currentPage,
     totalNum,
     pageSize,
-    pageMarks
+    pageMarks,
 } = storeToRefs(bookStore);
 //分页回调方法
 const pageChange = (page) => {
+    console.log(page)
     bookStore.pageChange(page);
 }
 const sizeChange = (size) => {
@@ -69,7 +70,7 @@ const openBookMark = (param) => {
             })
         }
     } else {
-        console.log(param)
+        bookStore.pageCache[param.parentId] = currentPage.value;
         bookStore.getCurrentMarks(param.id, true);
     }
 }

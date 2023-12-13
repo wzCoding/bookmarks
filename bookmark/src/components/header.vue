@@ -19,16 +19,16 @@ const headerStyle = computed(() => {
         height: props.height.includes('px') ? props.height : `${props.height}px`
     }
 });
+const router = useRouter();
 const bookStore = usebookStore();
 const { currentTitle, parentId } = storeToRefs(bookStore);
-const router = useRouter();
 let oldTitle = currentTitle.value;
 const goBack = () => {
     if (router.currentRoute.value.fullPath !== "/") {
         currentTitle.value = oldTitle
         router.push('/');
     } else {
-        bookStore.getCurrentMarks(parentId.value, true);
+        bookStore.getCurrentMarks(parentId.value);
     }
 }
 watch(currentTitle, (newVal, oldVal) => {

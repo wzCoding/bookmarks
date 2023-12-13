@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { defineStore } from "pinia";
 
 let allBookMarks = [];
@@ -39,6 +39,9 @@ export const usebookStore = defineStore("bookmarks", () => {
     //分页相关
     const pageSize = ref(defaultSize);
     const currentPage = ref(defaultPage);
+    const pageCache = reactive({
+        [defaultShowId]: defaultPage,
+    })
     //当前分页的书签列表
     const pageMarks = computed(() => {
         const startIndex = (currentPage.value - 1) * pageSize.value;
@@ -52,28 +55,31 @@ export const usebookStore = defineStore("bookmarks", () => {
         return Math.ceil(totalNum.value / pageSize.value);
     });
     function getFolder(id) {
-        if(!id) return
+        if (!id) return
         return allBookMarks.filter(item => item.id == id)[0];
     }
     function getMark(id) {
-        if(!id) return
+        if (!id) return
         return currentMarks.value.filter(item => item.id == id)[0];
     }
     //获取当前展示书签列表
     function getCurrentMarks(id, initPage) {
         if (!id) return;
-        //初始化分页参数
-        if (initPage) {
-            pageChange(defaultPage)
-            sizeChange(defaultSize)
-        }
+       
         const folder = getFolder(id);
         currentMarks.value = folder.children;
         currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;
         parentId.value = folder.parentId ? folder.parentId : defaultShowId;
+        //初始化分页参数
+        if (initPage) {
+            pageChange(defaultPage)
+            sizeChange(defaultSize)
+        } else {
+            pageCache[id] ? pageChange(pageCache[id]) : (pageCache[id] = defaultPage);
+        }
     }
     function getAllNode(id, result = []) {
-        if(!id) return []
+        if (!id) return []
         const node = allBookMarks.filter(item => item.id == id)[0];
         if (node && node.parentId) {
             result.push({ title: node.title, id: node.id, type: node.children ? 'folder' : 'bookmark' });
@@ -94,6 +100,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         pageMarks,
         pageSize,
         currentPage,
+        pageCache,
         totalNum,
         totalPage,
         getCurrentMarks,

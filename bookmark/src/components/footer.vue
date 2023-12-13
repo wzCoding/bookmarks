@@ -8,7 +8,6 @@
     </div>
 </template>
 <script setup>
-import { computed } from 'vue';
 import { ElConfigProvider, ElPagination } from 'element-plus';
 //footer分页组件属性
 const props = defineProps({
