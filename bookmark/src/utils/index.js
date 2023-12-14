@@ -1,3 +1,4 @@
+//防抖函数
 function debounce(func, delay = 1000) {
     let timer = null
     return function () {
@@ -13,6 +14,7 @@ function debounce(func, delay = 1000) {
         }, delay)
     }
 }
+//设置localStorage缓存
 function setLocalCache(key, data) {
     const cache = window.localStorage.getItem(key);
     if (!cache) {
@@ -26,6 +28,7 @@ function setLocalCache(key, data) {
         }
     }
 }
+//获取localStorage缓存
 function getLocalCache(key, id) {
     const cache = window.localStorage.getItem(key);
     if (cache) {
@@ -35,6 +38,7 @@ function getLocalCache(key, id) {
         return "";
     }
 }
+//获取当前active状态的浏览器页签
 function getCurrentTab(callback) {
     let queryOptions = { active: true, lastFocusedWindow: true };
     chrome.tabs.query(queryOptions, ([tab]) => {
@@ -42,6 +46,7 @@ function getCurrentTab(callback) {
         callback && callback(tab);
     });
 }
+//简单的日期格式化
 function getDate(date) {
     if (!date) return
     const dateObj = new Date(date);
@@ -51,6 +56,7 @@ function getDate(date) {
     const add0 = (num) => { return num < 10 ? "0" + num : num }
     return `${year}/${add0(month)}/${add0(day)}`
 }
+//利用 Google Url 获取书签链接的图标
 function getIconUrl(url, callback) {
     const iconUrl = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
     const img = new Image();
@@ -62,6 +68,7 @@ function getIconUrl(url, callback) {
     }
     return iconUrl;
 }
+//修改bookmark
 function updateBookMark(option, callback) {
     if (!option) return;
     const id = option.id;
@@ -69,6 +76,7 @@ function updateBookMark(option, callback) {
         callback && callback(res);
     })
 }
+//创建bookmark
 function createBookMark(option, callback) {
     if (!option) return;
     const id = option.id;
@@ -82,12 +90,14 @@ function createBookMark(option, callback) {
         callback && callback(res);
     })
 }
+//删除bookmark
 function removeBookMark(id, callback) {
     if (!id) return;
     chrome.bookmarks.remove(id, (res) => {
         callback && callback(res);
     })
 }
+//移动bookmark
 function moveBookMark(option, callback) {
     if (!option) return;
     const id = option.id;
