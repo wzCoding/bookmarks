@@ -62,11 +62,52 @@ function getIconUrl(url, callback) {
     }
     return iconUrl;
 }
+function updateBookMark(option, callback) {
+    if (!option) return;
+    const id = option.id;
+    chrome.bookmarks.update(id, option, (res) => {
+        callback && callback(res);
+    })
+}
+function createBookMark(option, callback) {
+    if (!option) return;
+    const id = option.id;
+    const details = {
+        index: option.index ? option.index : 0,
+        parentId: option.parentId ? option.parentId : "1",
+        title: option.title ? option.title : "",
+        url: option.url ? option.url : "",
+    }
+    chrome.bookmarks.create(details, (res) => {
+        callback && callback(res);
+    })
+}
+function removeBookMark(id, callback) {
+    if (!id) return;
+    chrome.bookmarks.remove(id, (res) => {
+        callback && callback(res);
+    })
+}
+function moveBookMark(option, callback) {
+    if (!option) return;
+    const id = option.id;
+    const details = {
+        index: option.index ? option.index : 0,
+        parentId: option.parentId ? option.parentId : "1",
+    }
+    chrome.bookmarks.move(id, details, (res) => {
+        callback && callback(res);
+    })
+}
 export {
     debounce,
     setLocalCache,
     getLocalCache,
     getCurrentTab,
     getDate,
-    getIconUrl
+    getIconUrl,
+    updateBookMark,
+    createBookMark,
+    removeBookMark,
+    moveBookMark
 }
