@@ -1,5 +1,5 @@
 <template>
-    <div>update</div>
+    <div>create</div>
 </template>
 <script setup>
 </script>

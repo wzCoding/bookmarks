@@ -14,14 +14,15 @@ const routes = [
     component: () => import(/* webpackChunkName: "Info" */ '../views/Info.vue')
   },
   {
-    path: '/edit',
+    path: '/edit/bookmark-:id',
     name: 'edit',
-    component: () => import(/* webpackChunkName: "Info" */ '../views/Edit.vue')
+    props: true,
+    component: () => import(/* webpackChunkName: "Edit" */ '../views/Edit.vue')
   },
   {
     path: '/update',
     name: 'update',
-    component: () => import(/* webpackChunkName: "Info" */ '../views/Update.vue')
+    component: () => import(/* webpackChunkName: "Create" */ '../views/Create.vue')
   },
 ]
 
