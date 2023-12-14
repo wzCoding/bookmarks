@@ -86,7 +86,7 @@ const dropDownItems = [
     {
         label: "新窗口",
         icon: Promotion,
-        type: "_newwindow",
+        type: "_window",
         id: 2
     },
 ]
@@ -110,8 +110,6 @@ const showTitle = () => {
     const tipWidth = tip.value ? tip.value.offsetWidth : 0;
     disableTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
 }
-
-
 
 const onItemChange = (command) => {
     openType.value = (command == null || command == undefined) ? 1 : command;

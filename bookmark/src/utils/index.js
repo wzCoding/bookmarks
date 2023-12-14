@@ -109,6 +109,19 @@ function moveBookMark(option, callback) {
         callback && callback(res);
     })
 }
+function openUrl(option) {
+    if (!option) return;
+    const { type, url } = option;
+    if (type === "_blank") {
+        window.open(url, type, "noopener,noreferrer");
+    } else if (type === "_window") {
+        chrome.windows.create({ url: url, focused: true, state: "maximized" })
+    } else {
+        getCurrentTab((tab) => {
+            chrome.tabs.update(tab.id, { url: url, active: true });
+        })
+    }
+}
 export {
     debounce,
     setLocalCache,
@@ -119,5 +132,6 @@ export {
     updateBookMark,
     createBookMark,
     removeBookMark,
-    moveBookMark
+    moveBookMark,
+    openUrl
 }
