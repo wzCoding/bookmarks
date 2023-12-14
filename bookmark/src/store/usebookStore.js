@@ -55,11 +55,11 @@ export const usebookStore = defineStore("bookmarks", () => {
         return Math.ceil(totalNum.value / pageSize.value);
     });
     function getFolder(id) {
-        if (!id) return
+        if (!id) return {};
         return allBookMarks.filter(item => item.id == id)[0];
     }
     function getMark(id) {
-        if (!id) return
+        if (!id) return {};
         return currentMarks.value.filter(item => item.id == id)[0];
     }
     //获取当前展示书签列表
@@ -79,7 +79,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         }
     }
     function getAllNode(id, result = []) {
-        if (!id) return []
+        if (!id) return [];
         const node = allBookMarks.filter(item => item.id == id)[0];
         if (node && node.parentId) {
             result.push({ title: node.title, id: node.id, type: node.children ? 'folder' : 'bookmark' });

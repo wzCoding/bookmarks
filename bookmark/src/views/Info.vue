@@ -32,10 +32,10 @@ const router = useRouter();
 bookStore.currentTitle = defaultTitle;
 const info = bookStore.getMark(props.id);
 const nodeClick = (id) => {
-    if(id !== info.id){
+    if (id !== info.id) {
         bookStore.getCurrentMarks(id, true);
         router.push("/");
-    }else{
+    } else {
         router.back();
     }
 }
@@ -82,10 +82,12 @@ if (info) {
 
     .info-title {
         background: #ddd;
-        padding: 1rem;
+        padding: var(--padding);
         cursor: pointer;
         border-radius: 4px;
-        font-size: 1.25rem;
+        font-size: 1rem;
+        width: calc(100% - var(--padding) * 2);
+        color:#333;
     }
 
     .info-content {
@@ -104,6 +106,7 @@ if (info) {
             border-bottom: 2px solid #ddd;
             padding-bottom: var(--padding);
             color: #666;
+
             .item-value {
                 font-size: 0.85rem;
                 max-width: 70%;
@@ -122,8 +125,10 @@ if (info) {
         padding: var(--padding);
         padding-bottom: 0;
         width: calc(100% - 2 * var(--padding));
+
         :deep(.el-timeline) {
             padding: 0;
+
             .bookmark-node {
                 font-size: 0.85rem;
             }
@@ -131,5 +136,4 @@ if (info) {
         }
 
     }
-}
-</style>
+}</style>
