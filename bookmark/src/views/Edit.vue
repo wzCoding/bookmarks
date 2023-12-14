@@ -9,7 +9,7 @@
             </el-form-item>
         </el-form>
         <div class="submit-edit">
-            <el-button round type="primary" @click="submitForm(EditForm)">提交</el-button>
+            <el-button round type="primary" @click="submitForm(EditForm)">更新</el-button>
             <el-button round @click="resetForm(EditForm)">重置</el-button>
         </div>
     </div>
@@ -19,21 +19,20 @@ import { reactive, ref } from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 import { updateBookMark } from '@/utils/index';
+
 const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
 const EditForm = ref();
 const bookStore = usebookStore();
+bookStore.currentTitle = "编辑书签"
 const targetMark = bookStore.getMark(props.id) ? bookStore.getMark(props.id) : { title: "" };
 const form = reactive({ title: "", url: "" });
 const rules = reactive({
     title: [{ required: false, trigger: 'blur' }],
     url: [{ required: false, message: '请输入有效的url地址', trigger: 'blur', validator: validateUrl }]
 });
-const forms = [
-    { label: "书签名称:", name: "title", placeholder: "" },
-    { label: "书签地址:", name: "url", placeholder: "" }
-]
+const forms = [{ label: "书签名称:", name: "title", placeholder: "" }]
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 async function validateUrl(rule, value, callback) {
     return new Promise((resolve, reject) => {
@@ -79,14 +78,16 @@ function resetForm(el) {
     el.resetFields();
 }
 if (targetMark) {
-    forms[0].placeholder = targetMark.title,
-        forms[1].placeholder = targetMark.url
+    forms[0].placeholder = targetMark.title;
+    if(!targetMark.children){
+        forms.push({ label: "书签地址:", name: "url", placeholder: targetMark.url })
+    }
 }
 </script>
 <style lang="scss" scoped>
 .bookmark-edit {
     --padding: 1.25rem;
-    padding: 1.25rem;
+    padding: var(--padding);
     display: flex;
     justify-content: flex-start;
     align-items: flex-end;
@@ -95,7 +96,7 @@ if (targetMark) {
     transition: all 0.3s;
 
     .edit-title {
-        background: #ddd;
+        background: #F0F2F5;
         padding: var(--padding);
         cursor: pointer;
         border-radius: 4px;

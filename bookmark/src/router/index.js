@@ -20,8 +20,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "Edit" */ '../views/Edit.vue')
   },
   {
-    path: '/update',
-    name: 'update',
+    path: '/create/bookmark-:id',
+    name: 'create',
+    props:true,
     component: () => import(/* webpackChunkName: "Create" */ '../views/Create.vue')
   },
 ]

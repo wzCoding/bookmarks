@@ -35,7 +35,7 @@ const styles = computed(() => {
 const menuList = [
     { label: "详细信息", icon: Warning, type: "info" },
     { label: "编辑书签", icon: Edit, type: "edit" },
-    { label: "添加书签", icon: Plus, type: "update" },
+    { label: "添加书签", icon: Plus, type: "create" },
     { label: "删除书签", icon: Delete, type: "delete" }
 ];
 const closeMenu = () => {
