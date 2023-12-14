@@ -31,7 +31,7 @@ const handleSizeChange = (size) => {
 </script>
 <style lang="scss" scoped>
 .book-footer {
-    padding: var(--content-padding);
+    padding-bottom: var(--content-padding);
     position: relative;
     left: 0;
     bottom: 0;

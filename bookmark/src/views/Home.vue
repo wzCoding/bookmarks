@@ -41,7 +41,6 @@ const {
 } = storeToRefs(bookStore);
 //分页回调方法
 const pageChange = (page) => {
-    console.log(page)
     bookStore.pageChange(page);
 }
 const sizeChange = (size) => {
@@ -56,8 +55,17 @@ const openBookMark = (param) => {
         bookStore.getCurrentMarks(param.id, true);
     }
 }
+
+//右键点击打开contextMenu
+const openMenu = (e, id) => {
+    if (contextMenu) {
+        contextMenu.closeMenu();
+    }
+    contextMenu = createContextMenu(e.clientX, e.clientY);
+    initContextMenu(e.currentTarget, id);
+}
 //创建右键contextMenu
-const createMenu = (x, y) => {
+const createContextMenu = (x, y) => {
     const props = {
         xAxis: x,
         yAxis: y,
@@ -79,14 +87,6 @@ const createMenu = (x, y) => {
     return {
         closeMenu
     }
-}
-//右键点击打开contextMenu
-const openMenu = (e, id) => {
-    if (contextMenu) {
-        contextMenu.closeMenu();
-    }
-    contextMenu = createMenu(e.clientX, e.clientY);
-    initContextMenu(e.currentTarget, id);
 }
 //在这里初始化部分书签参数
 const initContextMenu = (target, id) => {

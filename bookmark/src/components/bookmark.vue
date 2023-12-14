@@ -181,7 +181,7 @@ const handleContextMenu = (e) => {
                 width: var(--icon-size);
                 line-height: var(--icon-size);
                 text-align: center;
-                color: lightgray;
+                color: #409eff;
                 font-size: 1.5rem;
                 box-shadow: 0 0 10px 12px rgba(0, 0, 0, 0.1) inset;
                 border-radius: 3px;

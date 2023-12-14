@@ -76,7 +76,11 @@ function getCurrentTab(callback) {
 function updateBookMark(option, callback) {
     if (!option) return;
     const id = option.id;
-    chrome.bookmarks.update(id, option, (res) => {
+    const details = {
+        title: option.title ? option.title : "",
+        url: option.url ? option.url : ""
+    }
+    chrome.bookmarks.update(id, details, (res) => {
         callback && callback(res);
     })
 }

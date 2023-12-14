@@ -43,7 +43,6 @@ let contents = null;
 let allNodes = null;
 if (info) {
     allNodes = bookStore.getAllNode(info.id).reverse();
-    console.log(allNodes)
     contents = [
         {
             label: "书签类型",
@@ -105,7 +104,6 @@ if (info) {
             border-bottom: 2px solid #ddd;
             padding-bottom: var(--padding);
             color: #666;
-
             .item-value {
                 font-size: 0.85rem;
                 max-width: 70%;
@@ -124,10 +122,8 @@ if (info) {
         padding: var(--padding);
         padding-bottom: 0;
         width: calc(100% - 2 * var(--padding));
-
         :deep(.el-timeline) {
             padding: 0;
-
             .bookmark-node {
                 font-size: 0.85rem;
             }
