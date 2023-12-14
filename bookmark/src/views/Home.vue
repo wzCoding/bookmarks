@@ -20,7 +20,7 @@ import { usebookStore } from '@/store/usebookStore';
 import { usei18nStore } from '@/store/usei18nStore';
 import { VueDraggable } from 'vue-draggable-plus';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { getCurrentTab } from '@/utils/index';
+import { openTabs } from '@/utils/index';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
 import contextMenuTemplate from '@/components/contextMenu.vue';
@@ -50,25 +50,7 @@ const sizeChange = (size) => {
 //打开书签卡片
 const openBookMark = (param) => {
     if (param.url) {
-        if (param.openType == "_blank") {
-            //直接使用window对象打开新页签
-            window.open(param.url, param.openType, "noopener,noreferrer");
-        } else if (param.openType == "_self") {
-            //调用chrome extension tabs Api 更新当前页签
-            getCurrentTab((tab) => {
-                chrome.tabs.update(tab.id, {
-                    url: param.url,
-                    active: true,
-                });
-            })
-        } else {
-            //调用chrome extension window Api 打开新窗口
-            chrome.windows.create({
-                focused: true,
-                url: param.url,
-                state: "maximized",
-            })
-        }
+        openTabs(param);
     } else {
         bookStore.pageCache[param.parentId] = currentPage.value;
         bookStore.getCurrentMarks(param.id, true);

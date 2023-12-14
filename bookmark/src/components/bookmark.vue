@@ -120,7 +120,7 @@ const handleClick = () => {
         id: props.bookmark.id,
         parentId: props.bookmark.parentId ? props.bookmark.parentId : null,
         url: props.bookmark.url ? props.bookmark.url : null,
-        openType: dropDownItems[openType.value].type
+        type: dropDownItems[openType.value].type
     }
     setLocalCache(cacheKey, { [props.bookmark.id]: openType.value });
     emit("openUrl", param);

@@ -38,14 +38,7 @@ function getLocalCache(key, id) {
         return "";
     }
 }
-//获取当前active状态的浏览器页签
-function getCurrentTab(callback) {
-    let queryOptions = { active: true, lastFocusedWindow: true };
-    chrome.tabs.query(queryOptions, ([tab]) => {
-        if (chrome.runtime.lastError) console.error(chrome.runtime.lastError);
-        callback && callback(tab);
-    });
-}
+
 //简单的日期格式化
 function getDate(date) {
     if (!date) return
@@ -56,6 +49,7 @@ function getDate(date) {
     const add0 = (num) => { return num < 10 ? "0" + num : num }
     return `${year}/${add0(month)}/${add0(day)}`
 }
+
 //利用 Google Url 获取书签链接的图标
 function getIconUrl(url, callback) {
     const iconUrl = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
@@ -68,6 +62,16 @@ function getIconUrl(url, callback) {
     }
     return iconUrl;
 }
+
+//获取当前active状态的浏览器页签
+function getCurrentTab(callback) {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    chrome.tabs.query(queryOptions, ([tab]) => {
+        if (chrome.runtime.lastError) console.error(chrome.runtime.lastError);
+        callback && callback(tab);
+    });
+}
+
 //修改bookmark
 function updateBookMark(option, callback) {
     if (!option) return;
@@ -76,6 +80,7 @@ function updateBookMark(option, callback) {
         callback && callback(res);
     })
 }
+
 //创建bookmark
 function createBookMark(option, callback) {
     if (!option) return;
@@ -90,6 +95,7 @@ function createBookMark(option, callback) {
         callback && callback(res);
     })
 }
+
 //删除bookmark
 function removeBookMark(id, callback) {
     if (!id) return;
@@ -97,6 +103,7 @@ function removeBookMark(id, callback) {
         callback && callback(res);
     })
 }
+
 //移动bookmark
 function moveBookMark(option, callback) {
     if (!option) return;
@@ -109,7 +116,9 @@ function moveBookMark(option, callback) {
         callback && callback(res);
     })
 }
-function openUrl(option) {
+
+//根据target关键字来打开链接
+function openTabs(option) {
     if (!option) return;
     const { type, url } = option;
     if (type === "_blank") {
@@ -133,5 +142,5 @@ export {
     createBookMark,
     removeBookMark,
     moveBookMark,
-    openUrl
+    openTabs
 }
