@@ -1,6 +1,6 @@
 <template>
-    <el-form ref="FormEl" :model="form" :rules="rules" status-icon label-position="top">
-        <el-form-item v-for="item in forms" v-show="item.show" :label="item.label" :prop="item.name">
+    <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
+        <el-form-item v-for="item in forms" v-show="item.show ? item.show : true" :label="item.label" :prop="item.name">
             <el-input v-if="item.type == 'input'" v-model="form[item.name]" :placeholder="item.placeholder" clearable />
             <el-select v-if="item.type == 'select'" v-model="form[item.name]" :placeholder="item.placeholder"
                 @change="item.onChange ? item.onChange(CreateForm) : ''">
@@ -28,7 +28,16 @@ const props = defineProps({
 });
 const emit = defineEmits(['submit', 'reset']);
 const FormEl = ref();
-const form = reactive()
+const form = reactive({});
+const rules = reactive({});
+if(props.forms.length){
+    props.forms.forEach(item => {
+        form[item.name] = "";
+        rules[item.name] = [
+            { required: item.required, message: item.requireMessage,validator: item.validate, trigger: 'blur' }
+        ];
+    });
+}
 async function submitForm(el) {
     if (!form.title && !form.url) return;
     await el.validate(valid => {
