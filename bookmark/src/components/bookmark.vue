@@ -60,8 +60,8 @@ const openType = ref(1);
 const createDate = getDate(props.bookmark.dateAdded);
 const modifyDate = getDate(props.bookmark.dateGroupModified);
 const visitDate = getDate(props.bookmark.dateLastUsed);
-const iconUrl = faviconURL(props.bookmark.url);
-
+//const iconUrl = faviconURL(props.bookmark.url);
+const iconUrl = ""
 const dropDownItems = [
     {
         label: "当前页",

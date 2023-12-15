@@ -1,9 +1,10 @@
 <template>
     <div class="bookmark-create">
         <el-form ref="CreateForm" :model="form" :rules="rules" status-icon label-position="top">
-            <el-form-item v-for="item in forms" :key="item.name" :label="item.label" :prop="item.name">
+            <el-form-item v-for="item in forms" v-show="item.show" :label="item.label" :prop="item.name">
                 <el-input v-if="item.type == 'input'" v-model="form[item.name]" :placeholder="item.placeholder" clearable />
-                <el-select v-if="item.type == 'select'" v-model="form[item.name]" :placeholder="item.placeholder">
+                <el-select v-if="item.type == 'select'" v-model="form[item.name]" :placeholder="item.placeholder"
+                    @change="item.onChange ? item.onChange(CreateForm) : ''">
                     <el-option v-for="option in item.options" :key="option.value" :label="option.label"
                         :value="option.value" />
                 </el-select>
@@ -16,7 +17,7 @@
     </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElMessage, ElSelect, ElOption } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 import { createBookMark } from '@/utils/index';
@@ -25,28 +26,46 @@ const props = defineProps({
 });
 const CreateForm = ref();
 const bookStore = usebookStore();
-bookStore.currentTitle = "添加书签"
+bookStore.currentTitle = "添加书签";
+const allNodes = bookStore.getAllNodes(props.id).reverse();
 const targetMark = bookStore.getMark(props.id) ? bookStore.getMark(props.id) : { title: "" };
-const form = reactive({ title: "", url: "", level: "" });
+const form = reactive({ type: "", title: "", url: "", level: "" });
 const rules = reactive({
-    title: [{ required: false,message: '请输入书签名称', trigger: 'blur' }],
-    url: [{ required: false, message: '请输入有效的url地址', trigger: 'blur', validator: validateUrl }],
-    level: [{ required: false, message: '请选择添加位置', trigger: 'blur', validator: validateLevel }]
+    type: [{ required: true, message: '请选择书签类型', trigger: 'blur' }],
+    title: [{ required: true, message: '请输入书签名称', trigger: 'blur' }],
+    url: [{ required: true, message: '请输入有效的url地址', trigger: 'blur', validator: validateUrl }],
+    level: [{ required: true, message: '请选择添加位置', trigger: 'blur' }]
 });
-const forms = [
-    { label: "书签名称:", name: "title", placeholder: "请输入书签名称", type: "input" },
-    { label: "书签地址:", name: "url", placeholder: "请输入书签链接地址", type: "input" },
+const forms = reactive([
+    {
+        label: "书签类型:",
+        name: "type",
+        placeholder: "请选择书签类型",
+        type: "select",
+        options: [
+            { label: "书签文件夹", value: "folder" },
+            { label: "网址链接", value: "url" }
+        ],
+        show: true,
+        required: true,
+        requireMessage: "请选择书签类型",
+        onChange: () => {
+            forms[2].show = form.type == "url";
+        }
+    },
+    { label: "书签名称:", name: "title", placeholder: "请输入书签名称", type: "input", show: true, required: true, requireMessage: "请输入书签名称" },
+    { label: "书签地址:", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址" },
     {
         label: "添加位置:",
         name: "level",
         placeholder: "请选择添加位置",
         type: "select",
-        options: [
-            { value: "0", label: "书签栏" },
-            { value: "1", label: "书签栏(置顶)" }
-        ]
+        options: [],
+        show: true,
+        required: true,
+        requireMessage: "请选择添加位置"
     }
-]
+])
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 async function validateUrl(rule, value, callback) {
     return new Promise((resolve, reject) => {
@@ -56,19 +75,6 @@ async function validateUrl(rule, value, callback) {
             } else {
                 resolve()
             }
-        } else {
-            reject(rule.message)
-        }
-    }).then(() => {
-        callback && callback();
-    }).catch(err => {
-        callback && callback(new Error(err));
-    })
-}
-async function validateLevel(rule, value, callback) {
-    return new Promise((resolve, reject) => {
-        if (value) {
-            resolve()
         } else {
             reject(rule.message)
         }
@@ -105,7 +111,15 @@ function resetForm(el) {
     el.resetFields();
 }
 if (targetMark) {
-   //
+    //
+}
+if (allNodes) {
+    allNodes.forEach(item => {
+        forms[forms.length - 1].options.push({
+            label: item.title,
+            value: item.id
+        })
+    })
 }
 </script>
 <style lang="scss" scoped>
@@ -131,7 +145,8 @@ if (targetMark) {
     :deep(.el-form.el-form--label-top) {
         width: 100%;
         padding: 0.5rem 0;
-        .el-select{
+
+        .el-select {
             width: 100%;
         }
     }

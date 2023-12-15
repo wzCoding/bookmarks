@@ -78,12 +78,12 @@ export const usebookStore = defineStore("bookmarks", () => {
             pageCache[id] ? pageChange(pageCache[id]) : (pageCache[id] = defaultPage);
         }
     }
-    function getAllNode(id, result = []) {
+    function getAllNodes(id, result = []) {
         if (!id) return [];
         const node = allBookMarks.filter(item => item.id == id)[0];
         if (node && node.parentId) {
             result.push({ title: node.title, id: node.id, type: node.children ? 'folder' : 'bookmark' });
-            getAllNode(node.parentId, result)
+            getAllNodes(node.parentId, result)
         }
         return result;
     }
@@ -105,7 +105,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         totalPage,
         getCurrentMarks,
         getMark,
-        getAllNode,
+        getAllNodes,
         sizeChange,
         pageChange
     }

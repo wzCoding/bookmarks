@@ -42,7 +42,7 @@ const nodeClick = (id) => {
 let contents = null;
 let allNodes = null;
 if (info) {
-    allNodes = bookStore.getAllNode(info.id).reverse();
+    allNodes = bookStore.getAllNodes(info.id).reverse();
     contents = [
         {
             label: "书签类型:",
