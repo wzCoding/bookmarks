@@ -50,7 +50,7 @@ function getDate(date) {
     return `${year}/${add0(month)}/${add0(day)}`
 }
 
-//利用 Google Url 获取书签链接的图标
+//利用 Google Url 获取书签链接的favicon
 function getIconUrl(url, callback) {
     const iconUrl = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
     const img = new Image();
@@ -61,6 +61,13 @@ function getIconUrl(url, callback) {
         });
     }
     return iconUrl;
+}
+//利用chrome-extension Api直接获取书签链接的favicon
+function faviconURL(u) {
+    const url = new URL(chrome.runtime.getURL("/_favicon/"));
+    url.searchParams.set("pageUrl", u);
+    url.searchParams.set("size", "32");
+    return url.toString();
 }
 
 //获取当前active状态的浏览器页签
@@ -146,5 +153,6 @@ export {
     createBookMark,
     removeBookMark,
     moveBookMark,
-    openTabs
+    openTabs,
+    faviconURL
 }

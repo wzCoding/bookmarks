@@ -2,15 +2,8 @@
     <div class="bookmark-card" :class="`bookmark-${bookmark.index}`" @contextmenu="handleContextMenu">
         <div class="bookmark-header">
             <div class="bookmark-icon">
-                <div v-if="isFolder">
-                    <img src="../assets/icon//folder.png" alt="bookmark-icon">
-                </div>
-                <div v-else>
-                    <transition name="fade">
-                        <img v-if="hasIcon" :src="iconUrl" alt="bookmark-icon">
-                        <div v-else class="text-icon">{{ textIcon.toUpperCase() }}</div>
-                    </transition>
-                </div>
+                <img v-if="isFolder" src="../assets/icon/folder.png" alt="bookmark-icon">
+                <img v-else :src="iconUrl" alt="bookmark-icon">
             </div>
             <el-tooltip placement="top" :disabled="disableTip" :content="title">
                 <div class="bookmark-title" @mouseover="showTitle">
@@ -50,7 +43,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
-import { setLocalCache, getLocalCache, getDate, getIconUrl } from '@/utils/index';
+import { setLocalCache, getLocalCache, getDate, faviconURL } from '@/utils/index';
 const props = defineProps({
     bookmark: {
         type: Object,
@@ -67,9 +60,8 @@ const openType = ref(1);
 const createDate = getDate(props.bookmark.dateAdded);
 const modifyDate = getDate(props.bookmark.dateGroupModified);
 const visitDate = getDate(props.bookmark.dateLastUsed);
-const iconUrl = getIconUrl(props.bookmark.url, (res) => {
-    hasIcon.value = res.naturalWidth == 16 ? false : true;
-});
+const iconUrl = faviconURL(props.bookmark.url);
+
 const dropDownItems = [
     {
         label: "当前页",
@@ -96,11 +88,6 @@ onMounted(() => {
 })
 const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title.trim() : "bookmark";
-});
-const textIcon = computed(() => {
-    const regExp = /[\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/gm;
-    const result = title.value.replace(regExp, '');
-    return result.slice(0, 1);
 });
 const isFolder = computed(() => {
     return props.bookmark.children ? true : false;
@@ -176,19 +163,14 @@ const handleContextMenu = (e) => {
             height: var(--icon-size);
             position: relative;
             overflow: hidden;
-
-            .text-icon {
-                width: var(--icon-size);
-                line-height: var(--icon-size);
-                text-align: center;
-                color: #909399;
-                font-size: 1.5rem;
-                box-shadow: 0 0 10px 12px rgba(0, 0, 0, 0.1) inset;
-                border-radius: 3px;
-            }
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.1) inset;
+            border-radius: 50%;
 
             img {
-                width: var(--icon-size);
+                width: calc(var(--icon-size) / 2);
                 border-radius: 3px;
             }
         }

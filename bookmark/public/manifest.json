@@ -9,7 +9,8 @@
     "permissions": [
         "sidePanel",
         "bookmarks",
-        "tabs"
+        "tabs",
+        "favicon"
     ],
     "side_panel": {
         "default_path": "index.html"

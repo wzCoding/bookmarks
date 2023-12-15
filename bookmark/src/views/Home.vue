@@ -114,6 +114,8 @@ const onContextMenuClick = (type) => {
                 type: 'success',
                 message: `删除书签 '${currentTitle.value}' 成功`,
             })
+        }).catch(error=>{
+            console.log(error)
         })
     }
 }
