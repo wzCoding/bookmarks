@@ -23,7 +23,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { openTabs } from '@/utils/index';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
-import contextMenuTemplate from '@/components/contextMenu.vue';
+import ContextMenuTemplate from '@/components/contextMenu.vue';
 
 let contextMenu = null;
 const i18nStore = usei18nStore();
@@ -76,7 +76,7 @@ const createContextMenu = (x, y) => {
         },
     }
     const container = document.createElement("div");
-    const vnode = createVNode(contextMenuTemplate, props);
+    const vnode = createVNode(ContextMenuTemplate, props);
 
     render(vnode, container);
     document.body.appendChild(container.firstElementChild);

@@ -1,41 +1,22 @@
 <template>
     <div class="bookmark-create">
-        <el-form ref="CreateForm" :model="form" :rules="rules" status-icon label-position="top">
-            <el-form-item v-for="item in forms" v-show="item.show" :label="item.label" :prop="item.name">
-                <el-input v-if="item.type == 'input'" v-model="form[item.name]" :placeholder="item.placeholder" clearable />
-                <el-select v-if="item.type == 'select'" v-model="form[item.name]" :placeholder="item.placeholder"
-                    @change="item.onChange ? item.onChange(CreateForm) : ''">
-                    <el-option v-for="option in item.options" :key="option.value" :label="option.label"
-                        :value="option.value" />
-                </el-select>
-            </el-form-item>
-        </el-form>
-        <div class="submit-edit">
-            <el-button round type="primary" @click="submitForm(CreateForm)">添加</el-button>
-            <el-button round @click="resetForm(CreateForm)">重置</el-button>
-        </div>
+        <Forms :forms="forms" submit-text="添加" @submit="submitForm"></Forms>
     </div>
 </template>
 <script setup>
 import { computed, reactive, ref } from 'vue';
-import { ElForm, ElFormItem, ElInput, ElButton, ElMessage, ElSelect, ElOption } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 import { createBookMark } from '@/utils/index';
+import Forms from '@/components/forms.vue';
 const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
-const CreateForm = ref();
 const bookStore = usebookStore();
 bookStore.currentTitle = "添加书签";
+const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const allNodes = bookStore.getAllNodes(props.id).reverse();
-const targetMark = bookStore.getMark(props.id) ? bookStore.getMark(props.id) : { title: "" };
-const form = reactive({ type: "", title: "", url: "", level: "" });
-const rules = reactive({
-    type: [{ required: true, message: '请选择书签类型', trigger: 'blur' }],
-    title: [{ required: true, message: '请输入书签名称', trigger: 'blur' }],
-    url: [{ required: true, message: '请输入有效的url地址', trigger: 'blur', validator: validateUrl }],
-    level: [{ required: true, message: '请选择添加位置', trigger: 'blur' }]
-});
+const targetNode = bookStore.getMark(props.id) ? bookStore.getMark(props.id) : { title: "" };
 const forms = reactive([
     {
         label: "书签类型:",
@@ -49,15 +30,19 @@ const forms = reactive([
         show: true,
         required: true,
         requireMessage: "请选择书签类型",
-        onChange: () => {
-            forms[2].show = form.type == "url";
+        onChange: (form) => {
+            const index = 2;
+            const key = "type"
+            forms[index].required = form[key] === "url";
+            
+            //forms[index].show = form[key] === "url";
         }
     },
     { label: "书签名称:", name: "title", placeholder: "请输入书签名称", type: "input", show: true, required: true, requireMessage: "请输入书签名称" },
-    { label: "书签地址:", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址",validate:validateUrl },
+    { label: "书签地址:", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址", validate: validateUrl },
     {
         label: "添加位置:",
-        name: "level",
+        name: "id",
         placeholder: "请选择添加位置",
         type: "select",
         options: [],
@@ -66,7 +51,6 @@ const forms = reactive([
         requireMessage: "请选择添加位置"
     }
 ])
-const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 async function validateUrl(rule, value, callback) {
     return new Promise((resolve, reject) => {
         if (value) {
@@ -84,33 +68,18 @@ async function validateUrl(rule, value, callback) {
         callback && callback(new Error(err));
     })
 }
-async function submitForm(el) {
-    if (!form.title && !form.url) return;
-    await el.validate(valid => {
-        if (valid) {
-            console.log("submit edit");
-            const option = {
-                id: targetMark.id,
-                title: form.title ? form.title : targetMark.title,
-                url: form.url ? form.url : targetMark.url
-            }
-            console.log(option)
-            // createBookMark(option, (res) => {
-            //     if (res) {
-            //         ElMessage({
-            //             type: 'success',
-            //             message: `更新书签 '${option.title}' 成功`,
-            //         })
-            //     }
-            // })
-        }
-    })
+async function submitForm(param) {
+    console.log(param)
+    // createBookMark(option, (res) => {
+    //     if (res) {
+    //         ElMessage({
+    //             type: 'success',
+    //             message: `更新书签 '${option.title}' 成功`,
+    //         })
+    //     }
+    // })
 }
-function resetForm(el) {
-    if (!el) return;
-    el.resetFields();
-}
-if (targetMark) {
+if (targetNode) {
     //
 }
 if (allNodes) {
