@@ -1,6 +1,6 @@
 <template>
     <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
-        <el-form-item v-for="item in formOptions" v-show="item.show" :label="item.label" :prop="item.name">
+        <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show" :label="item.label" :prop="item.name">
             <template v-if="item.type == 'input'">
                 <el-input v-model="form[item.name]" :placeholder="item.placeholder" clearable />
             </template>
@@ -44,7 +44,6 @@ if (props.forms.length) {
 async function submitForm(el) {
     if (!el) return;
     await el.validate(valid => {
-        console.log(valid)
         if (valid) {
             console.log("submit");
             emit('submit', form);
