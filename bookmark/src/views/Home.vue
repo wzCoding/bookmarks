@@ -57,18 +57,19 @@ const openBookMark = (param) => {
 }
 
 //右键点击打开contextMenu
-const openMenu = (e, id) => {
+const openMenu = (e, bookmark) => {
     if (contextMenu) {
         contextMenu.closeMenu();
     }
-    contextMenu = createContextMenu(e.clientX, e.clientY);
-    initContextMenu(e.currentTarget, id);
+    contextMenu = createContextMenu(e.clientX, e.clientY, bookmark);
+    initContextMenu(e.currentTarget, bookmark.id);
 }
 //创建右键contextMenu
-const createContextMenu = (x, y) => {
+const createContextMenu = (x, y, bookmark) => {
     const props = {
         xAxis: x,
         yAxis: y,
+        target: bookmark,
         onContextMenuClick: onContextMenuClick,
         onDestroyContextMenu: () => {
             initContextMenu();
@@ -114,7 +115,7 @@ const onContextMenuClick = (type) => {
                 type: 'success',
                 message: `删除书签 '${currentTitle.value}' 成功`,
             })
-        }).catch(error=>{
+        }).catch(error => {
             console.log(error)
         })
     }

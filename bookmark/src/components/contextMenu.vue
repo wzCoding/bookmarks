@@ -19,25 +19,33 @@ const menuWidth = "100px"
 const menuHeight = "144px"
 const props = defineProps({
     xAxis: { type: Number, default: 0 },
-    yAxis: { type: Number, default: 0 }
+    yAxis: { type: Number, default: 0 },
+    target: { type: Object, default: () => { return {} } }
 });
 const emits = defineEmits(['openContextMenu', 'destroyContextMenu', 'contextMenuClick']);
 const showMenu = ref(false);
 const timer = ref(null);
 const width = Number(menuWidth.replace("px", ""));
 const height = Number(menuHeight.replace("px", ""));
+const menuList = [
+    { label: "详细信息", icon: Warning, type: "info" },
+    { label: "编辑书签", icon: Edit, type: "edit" },
+];
+if (props.target.children) {
+    menuList.push({ label: "添加书签", icon: Plus, type: "create" })
+    if (props.target.children.length !== 0) {
+        menuList.push({ label: "删除书签", icon: Delete, type: "delete" })
+    }
+} else {
+    menuList.push({ label: "删除书签", icon: Delete, type: "delete" })
+}
 const styles = computed(() => {
     return {
         left: document.documentElement.clientWidth - props.xAxis < width ? `${props.xAxis - width}px` : `${props.xAxis}px`,
         top: document.documentElement.clientHeight - props.yAxis < height ? `${props.yAxis - height}px` : `${props.yAxis}px`
     }
 });
-const menuList = [
-    { label: "详细信息", icon: Warning, type: "info" },
-    { label: "编辑书签", icon: Edit, type: "edit" },
-    { label: "添加书签", icon: Plus, type: "create" },
-    { label: "删除书签", icon: Delete, type: "delete" }
-];
+
 const closeMenu = () => {
     showMenu.value = false;
     emits('destroyContextMenu');
@@ -52,7 +60,7 @@ const onClickOutside = () => {
 }
 const startTimer = () => {
     clearTimer();
-    timer.value = setTimeout(closeMenu, 2000)
+    //timer.value = setTimeout(closeMenu, 2000)
 }
 const clearTimer = () => {
     clearTimeout(timer.value)

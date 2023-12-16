@@ -5,8 +5,8 @@
                 <img v-if="isFolder" src="../assets/icon/folder.png" alt="bookmark-icon">
                 <img v-else :src="iconUrl" alt="bookmark-icon">
             </div>
-            <el-tooltip placement="top" :disabled="disableTip" :content="title">
-                <div class="bookmark-title" @mouseover="showTitle">
+            <el-tooltip placement="top" :disabled="noTip" :content="title">
+                <div class="bookmark-title" @mouseover="showTip">
                     <span ref="tip">{{ title }}</span>
                 </div>
             </el-tooltip>
@@ -53,8 +53,7 @@ const props = defineProps({
 const emit = defineEmits(['openUrl', 'openContextMenu']);
 
 const cacheKey = "bookmark-open";
-const disableTip = ref(true);
-const hasIcon = ref(false);
+const noTip = ref(true);
 const tip = ref();
 const openType = ref(1);
 const createDate = getDate(props.bookmark.dateAdded);
@@ -92,10 +91,10 @@ const title = computed(() => {
 const isFolder = computed(() => {
     return props.bookmark.children ? true : false;
 });
-const showTitle = () => {
+const showTip = () => {
     const parentWidth = tip.value ? tip.value.parentNode.offsetWidth : 'parentWidth';
     const tipWidth = tip.value ? tip.value.offsetWidth : 0;
-    disableTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
+    noTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
 }
 
 const onItemChange = (command) => {
@@ -115,7 +114,7 @@ const handleClick = () => {
 
 const handleContextMenu = (e) => {
     e.preventDefault();
-    emit("openContextMenu", e, props.bookmark.id);
+    emit("openContextMenu", e, props.bookmark);
 }
 </script>
 <style lang="scss" scoped>

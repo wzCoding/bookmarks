@@ -14,7 +14,7 @@
             </template>
         </el-form-item>
     </el-form>
-    <div v-if="submit" class="submit-button">
+    <div v-if="submit" class="form-button">
         <el-button round type="primary" @click="submitForm(FormEl)">{{ submitText }}</el-button>
         <el-button round @click="resetForm(FormEl)">{{ resetText }}</el-button>
     </div>
