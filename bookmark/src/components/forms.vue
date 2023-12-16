@@ -3,11 +3,12 @@
         <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show" :label="item.label" :prop="item.name">
             <template v-if="item.type == 'input'">
                 <el-input v-model="form[item.name]" :placeholder="item.placeholder"
-                    :disabled="item.disable ? item.disable : false" clearable />
+                    :disabled="item.disable ? item.disable : false" clearable
+                    @input="item.onInput ? handleInput(FormEl, item.onInput) : ''" />
             </template>
             <template v-if="item.type == 'select'">
                 <el-select v-model="form[item.name]" :placeholder="item.placeholder"
-                    @change="item.onChange ? selectChange(FormEl, item.onChange) : ''">
+                    @change="item.onChange ? handleSelect(FormEl, item.onChange) : ''">
                     <el-option v-for="option in item.options" :key="option.value" :label="option.label"
                         :value="option.value" />
                 </el-select>
@@ -22,6 +23,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElOption } from 'element-plus';
+import { debounce } from '@/utils/index';
 const props = defineProps({
     forms: { type: Array, default: () => [] },
     position: { type: String, default: 'top' },
@@ -44,7 +46,10 @@ if (props.forms.length) {
         formOptions.push(item);
     });
 }
-async function selectChange(el, callback) {
+const handleInput = debounce((el,callback)=>{
+   callback && callback(form)
+},500);
+async function handleSelect(el, callback) {
     await el.clearValidate("type")
     callback && callback(form)
 }

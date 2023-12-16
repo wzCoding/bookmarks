@@ -1,6 +1,6 @@
 <template>
     <div class="bookmark-info">
-        <Title :title="info && info.title ? info.title : '--'" />
+        <Title :title="info && info.title ? info.title : '--'"/>
         <div class="info-content">
             <Forms :forms="contents" :submit="false"></Forms>
         </div>
@@ -103,7 +103,6 @@ if (info) {
         align-items: flex-start;
         padding: calc(var(--padding) / 2) 0;
         gap: var(--padding);
-
         :deep(.el-form) {
             width: 100%;
 

@@ -1,10 +1,11 @@
 <template>
-    <h1 class="page-title">{{ title }}</h1>
+    <h1 class="page-title" :value="title">{{ title }}</h1>
 </template>
 <script setup>
 const props = defineProps({
     title: { type: String, default: '' },
 });
+defineEmits(['update:title'])
 </script>
 <style lang="scss" scoped>
 .page-title {

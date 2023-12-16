@@ -97,7 +97,7 @@ const initContextMenu = (target, id) => {
     contextMenu.target = target ? target : null;
 }
 //在这里处理contextMenu点击事件
-const onContextMenuClick = (type) => {
+const onContextMenuClick = (type,title) => {
     if (type !== "delete") {
         router.push({
             name: type,
@@ -106,14 +106,14 @@ const onContextMenuClick = (type) => {
             }
         })
     } else {
-        ElMessageBox.confirm(`确定删除书签 '${currentTitle.value}' 吗？`, "提示", {
+        ElMessageBox.confirm(`确定删除书签 '${title}' 吗？`, "提示", {
             confirmButtonText: '确认',
             cancelButtonText: '取消',
             type: 'warning',
         }).then(() => {
             ElMessage({
                 type: 'success',
-                message: `删除书签 '${currentTitle.value}' 成功`,
+                message: `删除书签 '${title}' 成功`,
             })
         }).catch(error => {
             console.log(error)

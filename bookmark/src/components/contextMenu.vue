@@ -52,7 +52,7 @@ const closeMenu = () => {
 }
 const onItemClick = (e) => {
     const type = e.currentTarget.dataset.type;
-    emits('contextMenuClick', type)
+    emits('contextMenuClick', type, props.target.title)
     closeMenu()
 }
 const onClickOutside = () => {
@@ -88,7 +88,7 @@ defineExpose({ showMenu, closeMenu });
     z-index: 1000;
     background-color: #fff;
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-    border-radius:1rem;
+    border-radius: 1rem;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -97,6 +97,7 @@ defineExpose({ showMenu, closeMenu });
     height: v-bind(menuHeight);
     box-sizing: border-box;
     padding: 0.5rem;
+
     .menu-item {
         font-size: 0.85rem;
         color: #999;
@@ -105,13 +106,14 @@ defineExpose({ showMenu, closeMenu });
         justify-content: center;
         align-items: center;
         transition: all 0.1s;
+
         .menu-label {
             padding-left: 0.5rem;
         }
+
         &:hover {
             color: #409eff;
             transform: scale(1.1);
         }
     }
-}
-</style>
+}</style>
