@@ -1,7 +1,7 @@
 <template>
     <div class="bookmark-edit">
-        <Title :title="form.title ? form.title : targetMark.title ? targetMark.title : '--'"/>
-        <Forms :form="form" submit-text="更新"></Forms>
+        <Title :title="targetNode.title ? targetNode.title : '--'" />
+        <Forms :forms="forms" submit-text="更新" @submit="submitForm"></Forms>
     </div>
 </template>
 <script setup>
@@ -14,17 +14,19 @@ import Title from '@/components/title.vue';
 const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
-const EditForm = ref();
 const bookStore = usebookStore();
-bookStore.currentTitle = "编辑书签"
-const targetMark = bookStore.getMark(props.id) ? bookStore.getMark(props.id) : { title: "" };
-const form = reactive({ title: "", url: "" });
-const rules = reactive({
-    title: [{ required: false, trigger: 'blur' }],
-    url: [{ required: false, message: '请输入有效的url地址', trigger: 'blur', validator: validateUrl }]
-});
-const forms = [{ label: "书签名称:", name: "title", placeholder: "" }]
+bookStore.currentTitle = "编辑书签";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
+const targetNode = bookStore.getMark(props.id) ? bookStore.getMark(props.id) : { title: "" };
+const forms = reactive([
+    { label: "书签名称:", name: "title", placeholder: "", required: false }
+])
+if (targetNode) {
+    forms[0].placeholder = targetNode.title;
+    if (!targetNode.children) {
+        forms.push({ label: "书签地址:", name: "url", placeholder: targetNode.url, required: false, validator: validateUrl })
+    }
+}
 async function validateUrl(rule, value, callback) {
     return new Promise((resolve, reject) => {
         if (value) {
@@ -42,38 +44,18 @@ async function validateUrl(rule, value, callback) {
         callback && callback(new Error(err));
     })
 }
-async function submitForm(el) {
-    if (!form.title && !form.url) return;
-    await el.validate(valid => {
-        if (valid) {
-            console.log("submit edit");
-            const option = {
-                id: targetMark.id,
-                title: form.title ? form.title : targetMark.title,
-                url: form.url ? form.url : targetMark.url
-            }
-            console.log(option)
-            // updateBookMark(option, (res) => {
-            //     if (res) {
-            //         ElMessage({
-            //             type: 'success',
-            //             message: `更新书签 '${option.title}' 成功`,
-            //         })
-            //     }
-            // })
-        }
-    })
+function submitForm(param) {
+    console.log(param)
+    // updateBookMark(option, (res) => {
+    //     if (res) {
+    //         ElMessage({
+    //             type: 'success',
+    //             message: `更新书签 '${option.title}' 成功`,
+    //         })
+    //     }
+    // })
 }
-function resetForm(el) {
-    if (!el) return;
-    el.resetFields();
-}
-if (targetMark) {
-    forms[0].placeholder = targetMark.title;
-    if(!targetMark.children){
-        forms.push({ label: "书签地址:", name: "url", placeholder: targetMark.url })
-    }
-}
+
 </script>
 <style lang="scss" scoped>
 .bookmark-edit {
@@ -85,19 +67,5 @@ if (targetMark) {
     flex-direction: column;
     width: calc(100% - var(--padding) * 2);
     transition: all 0.3s;
-
-    .edit-title {
-        background: #F0F2F5;
-        padding: var(--padding);
-        cursor: pointer;
-        border-radius: 4px;
-        font-size: 1rem;
-        width: calc(100% - var(--padding) * 2);
-    }
-
-    :deep(.el-form.el-form--label-top) {
-        width: 100%;
-        padding: 0.5rem 0;
-    }
 }
 </style>
