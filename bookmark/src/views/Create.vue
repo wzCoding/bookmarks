@@ -4,7 +4,7 @@
     </div>
 </template>
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { ElMessage } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 import { createBookMark } from '@/utils/index';
@@ -16,7 +16,8 @@ const bookStore = usebookStore();
 bookStore.currentTitle = "添加书签";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const allNodes = bookStore.getAllNodes(props.id).reverse();
-const targetNode = bookStore.getMark(props.id) ? bookStore.getMark(props.id) : { title: "" };
+const targetNode = allNodes[allNodes.length - 1];
+const urlIndex = 2;
 const forms = reactive([
     {
         label: "书签类型:",
@@ -30,16 +31,10 @@ const forms = reactive([
         show: true,
         required: true,
         requireMessage: "请选择书签类型",
-        onChange: (form) => {
-            const index = 2;
-            const key = "type"
-            forms[index].required = form[key] === "url";
-            
-            //forms[index].show = form[key] === "url";
-        }
+        onChange: typeChange
     },
     { label: "书签名称:", name: "title", placeholder: "请输入书签名称", type: "input", show: true, required: true, requireMessage: "请输入书签名称" },
-    { label: "书签地址:", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址", validate: validateUrl },
+    { label: "书签地址:", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址", validator: validateUrl },
     {
         label: "添加位置:",
         name: "id",
@@ -54,13 +49,9 @@ const forms = reactive([
 async function validateUrl(rule, value, callback) {
     return new Promise((resolve, reject) => {
         if (value) {
-            if (!regExp.test(value)) {
-                reject(rule.message)
-            } else {
-                resolve()
-            }
+            !regExp.test(value) ? reject(rule.message) : resolve()
         } else {
-            reject(rule.message)
+            !forms[urlIndex].required ? resolve() : reject(rule.message)
         }
     }).then(() => {
         callback && callback();
@@ -68,7 +59,10 @@ async function validateUrl(rule, value, callback) {
         callback && callback(new Error(err));
     })
 }
-async function submitForm(param) {
+function typeChange(form) {
+    forms[urlIndex].required = forms[urlIndex].show = form.type === "url";
+}
+function submitForm(param) {
     console.log(param)
     // createBookMark(option, (res) => {
     //     if (res) {
@@ -79,12 +73,11 @@ async function submitForm(param) {
     //     }
     // })
 }
-if (targetNode) {
-    //
-}
 if (allNodes) {
+    const index = forms.length - 1;
+    forms[index].defaultValue = allNodes[allNodes.length-1].id;
     allNodes.forEach(item => {
-        forms[forms.length - 1].options.push({
+        forms[index].options.push({
             label: item.title,
             value: item.id
         })

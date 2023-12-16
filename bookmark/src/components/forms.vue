@@ -6,14 +6,14 @@
             </template>
             <template v-if="item.type == 'select'">
                 <el-select v-model="form[item.name]" :placeholder="item.placeholder"
-                    @change="item.onChange ? item.onChange(form) : ''">
+                    @change="item.onChange ? selectChange(FormEl, item.onChange) : ''">
                     <el-option v-for="option in item.options" :key="option.value" :label="option.label"
                         :value="option.value" />
                 </el-select>
             </template>
         </el-form-item>
     </el-form>
-    <div class="submit-edit">
+    <div v-if="submit" class="submit-button">
         <el-button round type="primary" @click="submitForm(FormEl)">{{ submitText }}</el-button>
         <el-button round @click="resetForm(FormEl)">{{ resetText }}</el-button>
     </div>
@@ -24,6 +24,7 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElOption } from 'eleme
 const props = defineProps({
     forms: { type: Array, default: () => [] },
     position: { type: String, default: 'top' },
+    submit: { type: Boolean, default: true },
     submitText: { type: String, default: '提交' },
     resetText: { type: String, default: '重置' }
 });
@@ -36,10 +37,14 @@ if (props.forms.length) {
     props.forms.forEach(item => {
         item.show = item.show === undefined ? true : item.show;
         item.required = item.required === undefined ? false : item.required;
-        form[item.name] = "";
-        rules[item.name] = [{ required: item.required, message: item.requireMessage, validator: item.validate, trigger: 'blur' }];
+        form[item.name] = item.defaultValue ? item.defaultValue : '';
+        rules[item.name] = [{ required: item.required, message: item.requireMessage, validator: item.validator, trigger: 'blur' }];
         formOptions.push(item)
     });
+}
+async function selectChange(el, callback) {
+    await el.clearValidate("type")
+    callback && callback(form)
 }
 async function submitForm(el) {
     if (!el) return;
@@ -60,9 +65,5 @@ function resetForm(el) {
 .el-form {
     width: 100%;
     padding: 0.5rem 0;
-
-    .el-select {
-        width: 100%;
-    }
 }
 </style>

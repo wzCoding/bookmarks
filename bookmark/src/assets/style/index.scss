@@ -62,6 +62,9 @@ body {
 }
 
 //element-plus样式修改
-.el-popper {
+.el-popper[role='tooltip'] {
     max-width: 20rem;
+    &.el-select__popper{
+        max-width: 100%;
+    }
 }
