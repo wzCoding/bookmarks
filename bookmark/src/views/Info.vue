@@ -1,12 +1,8 @@
 <template>
     <div class="bookmark-info">
-        <h1 class="info-title">{{ info && info.title ? info.title : "--" }}</h1>
+        <Title :title="info && info.title ? info.title : '--'" />
         <div class="info-content">
-            <el-form label-position="top" label-width="auto">
-                <el-form-item v-for="item in contents" :label="item.label" :key="item.label">
-                    <el-input :value="item.value ? item.value : '--'" disabled/>
-                </el-form-item>
-            </el-form>
+            <Forms :forms="contents" :submit="false"></Forms>
         </div>
         <div class="show-node">
             <el-timeline>
@@ -20,10 +16,12 @@
     </div>
 </template>
 <script setup>
-import { ElForm, ElFormItem, ElInput,ElTimeline, ElTimelineItem, ElLink } from 'element-plus';
+import { ElTimeline, ElTimelineItem, ElLink } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 import { getDate } from '@/utils/index';
 import { useRouter } from 'vue-router';
+import Forms from '@/components/forms.vue';
+import Title from '@/components/title.vue';
 const props = defineProps(({
     id: { type: String, default: "0", required: true }
 }));
@@ -46,21 +44,29 @@ if (info) {
     contents = [
         {
             label: "书签类型:",
-            value: info.children ? "书签文件夹" : "网址链接"
+            name: "type",
+            defaultValue: info.children ? "书签文件夹" : "网址链接",
+            disable: true
         },
         {
             label: "添加日期:",
-            value: getDate(info.dateAdded)
+            name: "dateAdded",
+            defaultValue: getDate(info.dateAdded),
+            disable: true
         },
         {
             label: info.children ? "修改日期:" : "最近访问:",
-            value: info.children ? getDate(info.dateLastModified) : (getDate(info.dateLastUsed) ? getDate(info.dateLastUsed) : getDate(info.dateAdded))
+            name: "dateLastModified",
+            defaultValue: info.children ? getDate(info.dateLastModified) : (getDate(info.dateLastUsed) ? getDate(info.dateLastUsed) : getDate(info.dateAdded)),
+            disable: true
         }
     ]
     if (!info.children) {
         contents.push({
             label: "链接地址:",
-            value: info.url
+            name: "url",
+            defaultValue: info.url,
+            disable: true
         })
     }
 }
@@ -79,7 +85,7 @@ if (info) {
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-    
+
     .info-title {
         background: #F0F2F5;
         padding: var(--padding);
@@ -87,7 +93,7 @@ if (info) {
         border-radius: 4px;
         font-size: 1rem;
         width: calc(100% - var(--padding) * 2);
-        color:#333;
+        color: #333;
     }
 
     .info-content {
@@ -97,7 +103,8 @@ if (info) {
         align-items: flex-start;
         padding: calc(var(--padding) / 2) 0;
         gap: var(--padding);
-        .el-form{
+
+        .el-form {
             width: 100%;
         }
     }
@@ -121,4 +128,5 @@ if (info) {
         }
 
     }
-}</style>
+}
+</style>

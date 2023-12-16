@@ -1,5 +1,6 @@
 <template>
     <div class="bookmark-create">
+        <Title :title="targetNode.title"/>
         <Forms :forms="forms" submit-text="添加" @submit="submitForm"></Forms>
     </div>
 </template>
@@ -9,6 +10,7 @@ import { ElMessage } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 import { createBookMark } from '@/utils/index';
 import Forms from '@/components/forms.vue';
+import Title from '@/components/title.vue';
 const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
@@ -75,7 +77,7 @@ function submitForm(param) {
 }
 if (allNodes) {
     const index = forms.length - 1;
-    forms[index].defaultValue = allNodes[allNodes.length-1].id;
+    forms[index].defaultValue = allNodes[allNodes.length - 1].id;
     allNodes.forEach(item => {
         forms[index].options.push({
             label: item.title,

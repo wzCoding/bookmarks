@@ -1,25 +1,16 @@
 <template>
     <div class="bookmark-edit">
-        <h1 class="edit-title">
-            {{ form.title ? form.title : targetMark.title ? targetMark.title : '--' }}
-        </h1>
-        <el-form ref="EditForm" :model="form" :rules="rules" status-icon label-position="top">
-            <el-form-item v-for="item in forms" :key="item.name" :label="item.label" :prop="item.name">
-                <el-input v-model="form[item.name]" :placeholder="item.placeholder" clearable />
-            </el-form-item>
-        </el-form>
-        <div class="submit-edit">
-            <el-button round type="primary" @click="submitForm(EditForm)">更新</el-button>
-            <el-button round @click="resetForm(EditForm)">重置</el-button>
-        </div>
+        <Title :title="form.title ? form.title : targetMark.title ? targetMark.title : '--'"/>
+        <Forms :form="form" submit-text="更新"></Forms>
     </div>
 </template>
 <script setup>
 import { reactive, ref } from 'vue';
-import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 import { updateBookMark } from '@/utils/index';
-
+import Forms from '@/components/forms.vue';
+import Title from '@/components/title.vue';
 const props = defineProps({
     id: { type: String, default: "0", required: true }
 });

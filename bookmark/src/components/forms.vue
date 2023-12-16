@@ -2,7 +2,8 @@
     <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
         <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show" :label="item.label" :prop="item.name">
             <template v-if="item.type == 'input'">
-                <el-input v-model="form[item.name]" :placeholder="item.placeholder" clearable />
+                <el-input v-model="form[item.name]" :placeholder="item.placeholder"
+                    :disabled="item.disable ? item.disable : false" clearable />
             </template>
             <template v-if="item.type == 'select'">
                 <el-select v-model="form[item.name]" :placeholder="item.placeholder"
@@ -37,9 +38,10 @@ if (props.forms.length) {
     props.forms.forEach(item => {
         item.show = item.show === undefined ? true : item.show;
         item.required = item.required === undefined ? false : item.required;
+        item.type = item.type === undefined ? 'input' : item.type;
         form[item.name] = item.defaultValue ? item.defaultValue : '';
         rules[item.name] = [{ required: item.required, message: item.requireMessage, validator: item.validator, trigger: 'blur' }];
-        formOptions.push(item)
+        formOptions.push(item);
     });
 }
 async function selectChange(el, callback) {
