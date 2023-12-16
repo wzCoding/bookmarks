@@ -104,7 +104,7 @@ defineExpose({ showMenu, closeMenu });
         display: flex;
         justify-content: center;
         align-items: center;
-        transition: all 0.2s;
+        transition: all 0.1s;
         .menu-label {
             padding-left: 0.5rem;
         }
