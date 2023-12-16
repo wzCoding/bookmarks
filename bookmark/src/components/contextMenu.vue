@@ -110,7 +110,7 @@ defineExpose({ showMenu, closeMenu });
         }
         &:hover {
             color: #409eff;
-            font-weight: 600;
+            transform: scale(1.1);
         }
     }
 }

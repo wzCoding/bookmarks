@@ -37,8 +37,8 @@ const nodeClick = (id) => {
         router.back();
     }
 }
-let contents = null;
-let allNodes = null;
+let contents = [];
+let allNodes = [];
 if (info) {
     allNodes = bookStore.getAllNodes(info.id).reverse();
     contents = [

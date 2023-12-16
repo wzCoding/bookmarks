@@ -54,7 +54,7 @@ const emit = defineEmits(['openUrl', 'openContextMenu']);
 
 const cacheKey = "bookmark-open";
 const noTip = ref(true);
-const tip = ref();
+const tip = ref("");
 const openType = ref(1);
 const createDate = getDate(props.bookmark.dateAdded);
 const modifyDate = getDate(props.bookmark.dateGroupModified);
@@ -130,7 +130,7 @@ const handleContextMenu = (e) => {
 
     &:hover,
     &.active {
-        box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 6px 2px rgba(64, 158, 255, 0.8);
     }
 
     .fade-enter-active,

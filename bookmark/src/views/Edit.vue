@@ -5,7 +5,7 @@
     </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { ElMessage } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
 import { updateBookMark } from '@/utils/index';

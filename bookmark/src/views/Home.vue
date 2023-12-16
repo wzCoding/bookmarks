@@ -25,7 +25,7 @@ import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
 import ContextMenuTemplate from '@/components/contextMenu.vue';
 
-let contextMenu = null;
+let contextMenu = {};
 const i18nStore = usei18nStore();
 const bookStore = usebookStore();
 const router = useRouter();
