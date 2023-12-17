@@ -60,7 +60,7 @@ const onClickOutside = () => {
 }
 const startTimer = () => {
     clearTimer();
-    timer.value = setTimeout(closeMenu, 2000)
+    //timer.value = setTimeout(closeMenu, 2000)
 }
 const clearTimer = () => {
     clearTimeout(timer.value)
@@ -106,14 +106,15 @@ defineExpose({ showMenu, closeMenu });
         justify-content: center;
         align-items: center;
         transition: all 0.1s;
-
+        width: 100%;
+        padding: 0.5rem;
         .menu-label {
             padding-left: 0.5rem;
         }
 
         &:hover {
             color: #409eff;
-            transform: scale(1.1);
+            background-color: #409eff33;
         }
     }
 }</style>
