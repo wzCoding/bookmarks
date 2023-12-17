@@ -19,8 +19,8 @@
                 <span>最近访问：{{ visitDate ? visitDate : createDate }}</span>
             </div>
         </div>
-        <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
-        <el-dropdown v-else size="small" trigger="click" split-button type="primary" @command="onItemChange"
+        <el-button v-if="isFolder" type="default" size="small" class="card-button" @click="handleClick">打开</el-button>
+        <el-dropdown v-else type="default" size="small" trigger="click" split-button @command="onItemChange"
             @click="handleClick">
             <el-icon>
                 <component :is="dropDownItems[openType].icon" />
@@ -130,7 +130,7 @@ const handleContextMenu = (e) => {
 
     &:hover,
     &.active {
-        box-shadow: 0 0 6px 2px rgba(64, 158, 255, 0.8);
+        box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.3);
     }
 
     .fade-enter-active,
