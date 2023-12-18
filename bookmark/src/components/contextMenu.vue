@@ -60,7 +60,7 @@ const onClickOutside = () => {
 }
 const startTimer = () => {
     clearTimer();
-    //timer.value = setTimeout(closeMenu, 2000)
+    timer.value = setTimeout(closeMenu, 2000)
 }
 const clearTimer = () => {
     clearTimeout(timer.value)

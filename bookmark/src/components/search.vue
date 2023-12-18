@@ -1,14 +1,16 @@
 <template>
-    <h1 class="page-title" :value="title">{{ title }}</h1>
+    <div class="book-search">
+         
+    </div>
 </template>
 <script setup>
 const props = defineProps({
     title: { type: String, default: '' },
 });
-defineEmits(['update:title'])
+defineEmits(['search'])
 </script>
 <style lang="scss" scoped>
-.page-title {
+.book-search {
     --padding:1rem;
     width: calc(100% - var(--padding) * 2);
     padding: var(--padding);

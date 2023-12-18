@@ -1,15 +1,18 @@
 <template>
-    <el-page-header class="book-header" :style="headerStyle" @back="goBack">
+    <el-page-header ref="pageHeader" title="返回" class="book-header" :style="headerStyle" @back="goBack">
         <template #content>
-            <span> {{ currentTitle }} </span>
+            <div class="header-content">
+                <span>{{ currentTitle }}</span>
+            </div>
         </template>
     </el-page-header>
 </template>
 <script setup>
-import { computed, watch, ref } from 'vue';
+import { computed, watch, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { ElPageHeader } from 'element-plus';
+import { ElPageHeader, ElButton } from 'element-plus';
+import { Search } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 const props = defineProps({
     height: { type: String, default: '60' },
@@ -19,6 +22,11 @@ const headerStyle = computed(() => {
         height: props.height.includes('px') ? props.height : `${props.height}px`
     }
 });
+const pageHeader = ref(null);
+onMounted(() => {
+    const el = pageHeader.value.$el.firstElementChild;
+    console.log(el)
+})
 const router = useRouter();
 const bookStore = usebookStore();
 const { currentTitle, parentId } = storeToRefs(bookStore);
@@ -50,6 +58,12 @@ watch(currentTitle, (newVal, oldVal) => {
         .el-page-header__left {
             padding: 0.75rem;
         }
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 }
 </style>

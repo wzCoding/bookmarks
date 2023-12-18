@@ -2,7 +2,7 @@
     <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
         <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show" :label="item.label" :prop="item.name">
             <template v-if="item.type == 'input'">
-                <el-input v-model="form[item.name]" :placeholder="item.placeholder"
+                <el-input v-model.lazy="form[item.name]" :placeholder="item.placeholder"
                     :disabled="item.disable ? item.disable : false" clearable
                     @input="item.onInput ? handleInput(FormEl, item.onInput) : ''" />
             </template>
@@ -23,7 +23,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElOption } from 'element-plus';
-import { debounce } from '@/utils/index';
 const props = defineProps({
     forms: { type: Array, default: () => [] },
     position: { type: String, default: 'top' },
@@ -46,9 +45,9 @@ if (props.forms.length) {
         formOptions.push(item);
     });
 }
-const handleInput = debounce((el,callback)=>{
-   callback && callback(form)
-},500);
+function handleInput(el, callback) {
+    callback && callback(form)
+}
 async function handleSelect(el, callback) {
     await el.clearValidate("type")
     callback && callback(form)
