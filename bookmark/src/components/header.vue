@@ -1,8 +1,17 @@
 <template>
     <el-page-header ref="pageHeader" title="返回" class="book-header" :style="headerStyle" @back="goBack">
-        <template #content>
-            <div class="header-content">
-                <span>{{ currentTitle }}</span>
+        <template #extra>
+            <div class="header-extra">
+                <span class="header-title">{{ currentTitle }}</span>
+                <div class="header-menu">
+                    <div class="search-box">
+                        <el-icon @click="openSearch">
+                            <Search />
+                        </el-icon>
+                        <el-input v-model="inputVal" placeholder="Pick a date" :suffix-icon="Search"
+                            :class="{ active: searchActive }" />
+                    </div>
+                </div>
             </div>
         </template>
     </el-page-header>
@@ -11,8 +20,8 @@
 import { computed, watch, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { ElPageHeader, ElButton } from 'element-plus';
-import { Search } from '@element-plus/icons-vue';
+import { ElPageHeader, ElIcon, ElButton, ElInput } from 'element-plus';
+import { Search, Menu } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 const props = defineProps({
     height: { type: String, default: '60' },
@@ -25,12 +34,17 @@ const headerStyle = computed(() => {
 const pageHeader = ref(null);
 onMounted(() => {
     const el = pageHeader.value.$el.firstElementChild;
-    console.log(el)
+    console.log(el.children)
 })
+const inputVal = ref();
+const searchActive = ref(false);
 const router = useRouter();
 const bookStore = usebookStore();
 const { currentTitle, parentId } = storeToRefs(bookStore);
 let oldTitle = currentTitle.value;
+const openSearch = () => {
+     searchActive.value = true;
+}
 const goBack = () => {
     if (router.currentRoute.value.fullPath !== "/") {
         currentTitle.value = oldTitle
@@ -45,25 +59,50 @@ watch(currentTitle, (newVal, oldVal) => {
 </script>
 <style lang="scss" scoped>
 .book-header {
-    width: 100%;
+    --padding: 0.75rem;
     z-index: 3;
     position: fixed;
     background-color: #fff;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
+    padding: 0 var(--padding);
+    width: calc(100% - var(--padding) * 2);
+    --back-button-width: 5.5rem;
 
     :deep(.el-page-header__header) {
         width: 100%;
         height: 100%;
 
         .el-page-header__left {
-            padding: 0.75rem;
+            margin-right: 0;
+            width: var(--back-button-width);
+        }
+
+        .el-page-header__extra {
+            flex: 1;
+            height: 100%;
+
+            .search-box {
+                position: relative;
+                width: 100%;
+                .el-input.el-input--suffix {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 0;
+                    &.active{
+                        width: 100%;
+                        left: 0;
+                    }
+                }
+            }
         }
     }
 
-    .header-content {
+    .header-extra {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        width: 100%;
+        height: 100%;
     }
-}
-</style>
+}</style>
