@@ -36,15 +36,17 @@ const inputVal = ref();
 const searchActive = ref(false);
 const router = useRouter();
 const bookStore = usebookStore();
-const { currentTitle, parentId } = storeToRefs(bookStore);
+const { currentTitle,currentMarks, parentId } = storeToRefs(bookStore);
 let oldTitle = currentTitle.value;
+let oldMarks = currentMarks.value;
 const openSearch = () => {
     searchActive.value = true;
+    oldMarks = currentMarks.value;
 }
 const searchBook = debounce(() => {
     if(inputVal.value.trim()){
         console.log(inputVal.value)
-        bookStore.currentMarks = bookStore.getMark(inputVal.value)
+        currentMarks.value = bookStore.getMark(inputVal.value)
     }
 }, 300)
 const openSetting = () => {
@@ -59,10 +61,12 @@ const goBack = () => {
             bookStore.getCurrentMarks(parentId.value);
         }
     } else {
+        currentMarks.value = oldMarks;
         searchActive.value = false;
+        inputVal.value = '';
     }
 }
-watch(currentTitle, (newVal, oldVal) => {
+watch(currentTitle, (newVal,oldVal) => {
     oldTitle = oldVal;
 })
 </script>

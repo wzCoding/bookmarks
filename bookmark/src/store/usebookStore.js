@@ -62,13 +62,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         if (!str) return {};
         const isText = isNaN(str);
         if (isText) {
-            const list = [];
-            allBookMarks.forEach(item => {
-                if (item.title.includes(str)) {
-                    list.push(item)
-                }
-            })
-            return list;
+            return allBookMarks.filter(item => item.title.includes(str));
         }
         return currentMarks.value.filter(item => item.id == str)[0];
     }
