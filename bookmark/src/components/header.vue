@@ -1,16 +1,14 @@
 <template>
     <el-page-header ref="pageHeader" title="返回" class="book-header" :style="headerStyle" @back="goBack">
         <template #extra>
-            <div class="header-extra">
+            <div class="header-extra" :class="{ active: searchActive }">
                 <span class="header-title">{{ currentTitle }}</span>
                 <div class="header-menu">
-                    <div class="search-box">
-                        <el-icon @click="openSearch">
-                            <Search />
-                        </el-icon>
-                        <el-input v-model="inputVal" placeholder="Pick a date" :suffix-icon="Search"
-                            :class="{ active: searchActive }" />
+                    <div class="search-box" :class="{ active: searchActive }">
+                        <el-button :icon="Search" size="small" class="header-button search-button" @click="openSearch" />
+                        <el-input v-model="inputVal" class="search-input" placeholder="Pick a date" :suffix-icon="Search" />
                     </div>
+                    <el-button :icon="Menu" size="small" class="header-button menu-button" />
                 </div>
             </div>
         </template>
@@ -43,7 +41,7 @@ const bookStore = usebookStore();
 const { currentTitle, parentId } = storeToRefs(bookStore);
 let oldTitle = currentTitle.value;
 const openSearch = () => {
-     searchActive.value = true;
+    searchActive.value = true;
 }
 const goBack = () => {
     if (router.currentRoute.value.fullPath !== "/") {
@@ -79,22 +77,7 @@ watch(currentTitle, (newVal, oldVal) => {
 
         .el-page-header__extra {
             flex: 1;
-            height: 100%;
-
-            .search-box {
-                position: relative;
-                width: 100%;
-                .el-input.el-input--suffix {
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    width: 0;
-                    &.active{
-                        width: 100%;
-                        left: 0;
-                    }
-                }
-            }
+            height: 100%
         }
     }
 
@@ -104,5 +87,51 @@ watch(currentTitle, (newVal, oldVal) => {
         align-items: center;
         width: 100%;
         height: 100%;
+        overflow: hidden;
+
+        .header-title {
+            position: inherit;
+            display: block;
+        }
+
+        .header-button {
+            padding: 6px;
+        }
+
+        &.active {
+            .header-title {
+                display: none;
+            }
+        }
+
+        .header-menu {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            overflow: hidden;
+            .search-box {
+                position: relative;
+
+                .search-input {
+                    position: absolute;
+                    transform: translateX(100%);
+                    transition: all 0.3s;
+                }
+
+                &.active {
+                    flex: 1;
+
+                    .search-button {
+                        display: none;
+                    }
+
+                    .search-input {
+                        position: inherit;
+                        transform: translateX(0);
+                    }
+                }
+            }
+        }
     }
-}</style>
+}
+</style>
