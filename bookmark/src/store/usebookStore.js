@@ -58,14 +58,24 @@ export const usebookStore = defineStore("bookmarks", () => {
         if (!id) return {};
         return allBookMarks.filter(item => item.id == id)[0];
     }
-    function getMark(id) {
-        if (!id) return {};
-        return currentMarks.value.filter(item => item.id == id)[0];
+    function getMark(str) {
+        if (!str) return {};
+        const isText = isNaN(str);
+        if (isText) {
+            const list = [];
+            allBookMarks.forEach(item => {
+                if (item.title.includes(str)) {
+                    list.push(item)
+                }
+            })
+            return list;
+        }
+        return currentMarks.value.filter(item => item.id == str)[0];
     }
     //获取当前展示书签列表
     function getCurrentMarks(id, initPage) {
         if (!id) return;
-       
+
         const folder = getFolder(id);
         currentMarks.value = folder.children;
         currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;

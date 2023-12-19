@@ -4,11 +4,12 @@
             <div class="header-extra" :class="{ active: searchActive }">
                 <span class="header-title">{{ currentTitle }}</span>
                 <div class="header-menu">
-                    <div class="search-box" :class="{ active: searchActive }"> 
-                        <el-input v-model.lazy="inputVal" class="search-input" placeholder="搜索书签" :suffix-icon="Search" clearable/>
+                    <div class="search-box" :class="{ active: searchActive }">
+                        <el-input v-model.lazy="inputVal" class="search-input" placeholder="搜索书签" :suffix-icon="Search"
+                            clearable @input="searchBook" />
                         <el-button :icon="Search" class="header-button search-button" circle @click="openSearch" />
                     </div>
-                    <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" />
+                    <!-- <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" /> -->
                 </div>
             </div>
         </template>
@@ -21,6 +22,7 @@ import { storeToRefs } from 'pinia';
 import { ElPageHeader, ElButton, ElInput } from 'element-plus';
 import { Search, Menu } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
+import { debounce } from '@/utils/index';
 const props = defineProps({
     height: { type: String, default: '60' },
 });
@@ -39,6 +41,12 @@ let oldTitle = currentTitle.value;
 const openSearch = () => {
     searchActive.value = true;
 }
+const searchBook = debounce(() => {
+    if(inputVal.value.trim()){
+        console.log(inputVal.value)
+        bookStore.currentMarks = bookStore.getMark(inputVal.value)
+    }
+}, 300)
 const openSetting = () => {
     console.log('openSetting')
 }
@@ -50,7 +58,7 @@ const goBack = () => {
         } else {
             bookStore.getCurrentMarks(parentId.value);
         }
-    }else{
+    } else {
         searchActive.value = false;
     }
 }
@@ -93,12 +101,11 @@ watch(currentTitle, (newVal, oldVal) => {
         overflow: hidden;
 
         .header-title {
-            position: inherit;
             display: block;
+            font-size: 1rem;
         }
 
         .header-button {
-            padding: 8px;
             border: none !important;
         }
 
@@ -120,16 +127,19 @@ watch(currentTitle, (newVal, oldVal) => {
                 position: relative;
                 overflow: hidden;
                 display: flex;
+
                 .search-input {
-                    transform: translateX(115%);
-                    transition: all 0.3s;   
+                    transform: translateX(150%);
+                    transition: all 0.3s;
                 }
 
                 &.active {
                     flex: 1;
+
                     .search-button {
                         display: none;
                     }
+
                     .search-input {
                         transform: translateX(0);
                     }
