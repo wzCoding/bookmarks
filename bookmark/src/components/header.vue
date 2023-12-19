@@ -4,11 +4,11 @@
             <div class="header-extra" :class="{ active: searchActive }">
                 <span class="header-title">{{ currentTitle }}</span>
                 <div class="header-menu">
-                    <div class="search-box" :class="{ active: searchActive }">
-                        <el-button :icon="Search" size="" class="header-button search-button" @click="openSearch" />
+                    <div class="search-box" :class="{ active: searchActive }"> 
                         <el-input v-model="inputVal" class="search-input" placeholder="Pick a date" :suffix-icon="Search" />
+                        <el-button :icon="Search" class="header-button search-button" circle @click="openSearch" />
                     </div>
-                    <el-button :icon="Menu" size="" class="header-button setting-button" @click="openSetting" />
+                    <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" />
                 </div>
             </div>
         </template>
@@ -125,24 +125,17 @@ watch(currentTitle, (newVal, oldVal) => {
                 overflow: hidden;
                 display: flex;
                 .search-input {
-                   
-                    transform: translateX(100%);
-                    transition: all 0.3s;
-                    //position: absolute;
-                    width: 0;
+                    transform: translateX(150%);
+                    transition: all 0.3s;   
                 }
 
                 &.active {
                     flex: 1;
-
                     .search-button {
                         display: none;
                     }
-
                     .search-input {
-                        position: inherit;
                         transform: translateX(0);
-                        width: 100%;
                     }
                 }
             }
