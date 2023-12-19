@@ -16,7 +16,7 @@ const props = defineProps({
 });
 const title = ref("");
 const bookStore = usebookStore();
-const targetNode = bookStore.getMark(props.id);
+const targetNode = bookStore.getNodeById(props.id);
 bookStore.currentTitle = "编辑书签";
 title.value = targetNode && targetNode.title ? targetNode.title : "--";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;

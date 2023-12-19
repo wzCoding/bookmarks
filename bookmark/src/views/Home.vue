@@ -33,7 +33,6 @@ const dynamicScroll = ref();
 const drag = ref();
 const {
     currentMarks,
-    currentTitle,
     currentPage,
     totalNum,
     pageSize,
@@ -52,7 +51,7 @@ const openBookMark = (param) => {
         openTabs(param);
     } else {
         bookStore.pageCache[param.parentId] = currentPage.value;
-        bookStore.getCurrentMarks(param.id, true);
+        bookStore.getCurrentNodes(param.id, true);
     }
 }
 

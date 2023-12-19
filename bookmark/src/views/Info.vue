@@ -28,10 +28,10 @@ const props = defineProps(({
 const bookStore = usebookStore();
 const router = useRouter();
 bookStore.currentTitle = "详细信息"
-const info = bookStore.getMark(props.id);
+const info = bookStore.getNodeById(props.id);
 const nodeClick = (id) => {
     if (id !== info.id) {
-        bookStore.getCurrentMarks(id, true);
+        bookStore.getCurrentNodes(id, true);
         router.push("/");
     } else {
         router.back();

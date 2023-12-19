@@ -46,9 +46,9 @@ const openSearch = () => {
 const searchBook = debounce(() => {
     if(inputVal.value.trim()){
         console.log(inputVal.value)
-        currentMarks.value = bookStore.getMark(inputVal.value)
+        currentMarks.value = bookStore.getNodeByTitle(inputVal.value);
     }
-}, 300)
+}, 500)
 const openSetting = () => {
     console.log('openSetting')
 }
@@ -58,7 +58,7 @@ const goBack = () => {
             currentTitle.value = oldTitle
             router.push('/');
         } else {
-            bookStore.getCurrentMarks(parentId.value);
+            bookStore.getCurrentNodes(parentId.value);
         }
     } else {
         currentMarks.value = oldMarks;

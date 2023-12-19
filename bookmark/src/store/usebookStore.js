@@ -58,16 +58,16 @@ export const usebookStore = defineStore("bookmarks", () => {
         if (!id) return {};
         return allBookMarks.filter(item => item.id == id)[0];
     }
-    function getMark(str) {
-        if (!str) return {};
-        const isText = isNaN(str);
-        if (isText) {
-            return allBookMarks.filter(item => item.title.includes(str));
-        }
-        return currentMarks.value.filter(item => item.id == str)[0];
+    function getNodeById(id) {
+        if (!id) return {};
+        return currentMarks.value.filter(item => item.id == id)[0];
+    }
+    function getNodeByTitle(title){
+        if(!title) return;
+        return allBookMarks.filter(item => item.title.includes(title));
     }
     //获取当前展示书签列表
-    function getCurrentMarks(id, initPage) {
+    function getCurrentNodes(id, initPage) {
         if (!id) return;
 
         const folder = getFolder(id);
@@ -107,8 +107,9 @@ export const usebookStore = defineStore("bookmarks", () => {
         pageCache,
         totalNum,
         totalPage,
-        getCurrentMarks,
-        getMark,
+        getCurrentNodes,
+        getNodeById,
+        getNodeByTitle,
         getAllNodes,
         sizeChange,
         pageChange
