@@ -5,10 +5,10 @@
                 <span class="header-title">{{ currentTitle }}</span>
                 <div class="header-menu">
                     <div class="search-box" :class="{ active: searchActive }">
-                        <el-button :icon="Search" size="small" class="header-button search-button" @click="openSearch" />
+                        <el-button :icon="Search" size="" class="header-button search-button" @click="openSearch" />
                         <el-input v-model="inputVal" class="search-input" placeholder="Pick a date" :suffix-icon="Search" />
                     </div>
-                    <el-button :icon="Menu" size="small" class="header-button menu-button" />
+                    <el-button :icon="Menu" size="" class="header-button menu-button" />
                 </div>
             </div>
         </template>
@@ -95,7 +95,8 @@ watch(currentTitle, (newVal, oldVal) => {
         }
 
         .header-button {
-            padding: 6px;
+            padding: 8px;
+            border: none !important;
         }
 
         &.active {
@@ -109,9 +110,11 @@ watch(currentTitle, (newVal, oldVal) => {
             justify-content: flex-end;
             align-items: center;
             overflow: hidden;
+            flex: 1;
+            padding-right: 0.5rem;
             .search-box {
                 position: relative;
-
+                overflow: hidden;
                 .search-input {
                     position: absolute;
                     transform: translateX(100%);
@@ -130,6 +133,11 @@ watch(currentTitle, (newVal, oldVal) => {
                         transform: translateX(0);
                     }
                 }
+            }
+            .menu-button{
+                position: relative;
+                margin-left: 0.5rem;
+                // top: 1px;
             }
         }
     }
