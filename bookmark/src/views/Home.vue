@@ -1,8 +1,8 @@
 <template>
     <div class="book-home" @[dynamicScroll]="onScroll">
-        <VueDraggable ref="drag" v-model="currentMarks" @end="onDragEnd" target=".book-transition" class="book-content">
+        <VueDraggable ref="drag" v-model="currentNodes" @end="onDragEnd" target=".book-transition" class="book-content">
             <TransitionGroup tag="div" name="fade" class="book-transition">
-                <BookMark v-for="bookmark in pageMarks" :key="bookmark.id" :bookmark="bookmark" @openUrl="openBookMark"
+                <BookMark v-for="bookmark in pageNodes" :key="bookmark.id" :bookmark="bookmark" @openUrl="openBookMark"
                     @openContextMenu="openMenu">
                 </BookMark>
             </TransitionGroup>
@@ -32,11 +32,11 @@ const router = useRouter();
 const dynamicScroll = ref();
 const drag = ref();
 const {
-    currentMarks,
+    currentNodes,
     currentPage,
     totalNum,
     pageSize,
-    pageMarks,
+    pageNodes,
 } = storeToRefs(bookStore);
 //分页回调方法
 const pageChange = (page) => {

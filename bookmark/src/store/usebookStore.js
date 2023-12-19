@@ -34,7 +34,7 @@ export const usebookStore = defineStore("bookmarks", () => {
     //书签展示相关
     const parentId = ref(defaultId);
     const currentTitle = ref(defaultShowTitle);
-    const currentMarks = ref(getFolder(defaultShowId).children);
+    const currentNodes = ref(getFolder(defaultShowId).children);
 
     //分页相关
     const pageSize = ref(defaultSize);
@@ -43,13 +43,13 @@ export const usebookStore = defineStore("bookmarks", () => {
         [defaultShowId]: defaultPage,
     })
     //当前分页的书签列表
-    const pageMarks = computed(() => {
+    const pageNodes = computed(() => {
         const startIndex = (currentPage.value - 1) * pageSize.value;
         const endIndex = startIndex + pageSize.value;
-        return currentMarks.value.slice(startIndex, endIndex);
+        return currentNodes.value.slice(startIndex, endIndex);
     });
     const totalNum = computed(() => {
-        return currentMarks.value.length;
+        return currentNodes.value.length;
     });
     const totalPage = computed(() => {
         return Math.ceil(totalNum.value / pageSize.value);
@@ -60,7 +60,7 @@ export const usebookStore = defineStore("bookmarks", () => {
     }
     function getNodeById(id) {
         if (!id) return {};
-        return currentMarks.value.filter(item => item.id == id)[0];
+        return currentNodes.value.filter(item => item.id == id)[0];
     }
     function getNodeByTitle(title){
         if(!title) return;
@@ -71,7 +71,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         if (!id) return;
 
         const folder = getFolder(id);
-        currentMarks.value = folder.children;
+        currentNodes.value = folder.children;
         currentTitle.value = (!folder.title && folder.id == '0') ? defaultTitle : folder.title;
         parentId.value = folder.parentId ? folder.parentId : defaultShowId;
         //初始化分页参数
@@ -99,9 +99,9 @@ export const usebookStore = defineStore("bookmarks", () => {
     }
     return {
         currentTitle,
-        currentMarks,
+        currentNodes,
         parentId,
-        pageMarks,
+        pageNodes,
         pageSize,
         currentPage,
         pageCache,

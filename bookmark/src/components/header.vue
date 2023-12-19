@@ -36,17 +36,17 @@ const inputVal = ref();
 const searchActive = ref(false);
 const router = useRouter();
 const bookStore = usebookStore();
-const { currentTitle,currentMarks, parentId } = storeToRefs(bookStore);
+const { currentTitle,currentNodes, parentId } = storeToRefs(bookStore);
 let oldTitle = currentTitle.value;
-let oldMarks = currentMarks.value;
+let oldMarks = currentNodes.value;
 const openSearch = () => {
     searchActive.value = true;
-    oldMarks = currentMarks.value;
+    oldMarks = currentNodes.value;
 }
 const searchBook = debounce(() => {
     if(inputVal.value.trim()){
         console.log(inputVal.value)
-        currentMarks.value = bookStore.getNodeByTitle(inputVal.value);
+        currentNodes.value = bookStore.getNodeByTitle(inputVal.value);
     }
 }, 500)
 const openSetting = () => {
@@ -61,7 +61,7 @@ const goBack = () => {
             bookStore.getCurrentNodes(parentId.value);
         }
     } else {
-        currentMarks.value = oldMarks;
+        currentNodes.value = oldMarks;
         searchActive.value = false;
         inputVal.value = '';
     }
