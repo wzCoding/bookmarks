@@ -5,7 +5,7 @@
                 <span class="header-title">{{ currentTitle }}</span>
                 <div class="header-menu">
                     <div class="search-box" :class="{ active: searchActive }"> 
-                        <el-input v-model="inputVal" class="search-input" placeholder="Pick a date" :suffix-icon="Search" />
+                        <el-input v-model.lazy="inputVal" class="search-input" placeholder="搜索书签" :suffix-icon="Search" clearable/>
                         <el-button :icon="Search" class="header-button search-button" circle @click="openSearch" />
                     </div>
                     <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" />
@@ -15,10 +15,10 @@
     </el-page-header>
 </template>
 <script setup>
-import { computed, watch, ref, onMounted } from 'vue';
+import { computed, watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { ElPageHeader, ElIcon, ElButton, ElInput } from 'element-plus';
+import { ElPageHeader, ElButton, ElInput } from 'element-plus';
 import { Search, Menu } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 const props = defineProps({
@@ -30,10 +30,6 @@ const headerStyle = computed(() => {
     }
 });
 const pageHeader = ref(null);
-onMounted(() => {
-    const el = pageHeader.value.$el.firstElementChild;
-    console.log(el.children)
-})
 const inputVal = ref();
 const searchActive = ref(false);
 const router = useRouter();
@@ -125,7 +121,7 @@ watch(currentTitle, (newVal, oldVal) => {
                 overflow: hidden;
                 display: flex;
                 .search-input {
-                    transform: translateX(150%);
+                    transform: translateX(115%);
                     transition: all 0.3s;   
                 }
 
