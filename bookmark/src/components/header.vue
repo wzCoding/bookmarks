@@ -8,7 +8,7 @@
                         <el-button :icon="Search" size="" class="header-button search-button" @click="openSearch" />
                         <el-input v-model="inputVal" class="search-input" placeholder="Pick a date" :suffix-icon="Search" />
                     </div>
-                    <el-button :icon="Menu" size="" class="header-button menu-button" />
+                    <el-button :icon="Menu" size="" class="header-button setting-button" @click="openSetting" />
                 </div>
             </div>
         </template>
@@ -43,12 +43,19 @@ let oldTitle = currentTitle.value;
 const openSearch = () => {
     searchActive.value = true;
 }
+const openSetting = () => {
+    console.log('openSetting')
+}
 const goBack = () => {
-    if (router.currentRoute.value.fullPath !== "/") {
-        currentTitle.value = oldTitle
-        router.push('/');
-    } else {
-        bookStore.getCurrentMarks(parentId.value);
+    if (!searchActive.value) {
+        if (router.currentRoute.value.fullPath !== "/") {
+            currentTitle.value = oldTitle
+            router.push('/');
+        } else {
+            bookStore.getCurrentMarks(parentId.value);
+        }
+    }else{
+        searchActive.value = false;
     }
 }
 watch(currentTitle, (newVal, oldVal) => {
@@ -112,13 +119,17 @@ watch(currentTitle, (newVal, oldVal) => {
             overflow: hidden;
             flex: 1;
             padding-right: 0.5rem;
+
             .search-box {
                 position: relative;
                 overflow: hidden;
+                display: flex;
                 .search-input {
-                    position: absolute;
+                   
                     transform: translateX(100%);
                     transition: all 0.3s;
+                    //position: absolute;
+                    width: 0;
                 }
 
                 &.active {
@@ -131,13 +142,13 @@ watch(currentTitle, (newVal, oldVal) => {
                     .search-input {
                         position: inherit;
                         transform: translateX(0);
+                        width: 100%;
                     }
                 }
             }
-            .menu-button{
-                position: relative;
-                margin-left: 0.5rem;
-                // top: 1px;
+
+            .setting-button {
+                margin-left: 0.25rem;
             }
         }
     }
