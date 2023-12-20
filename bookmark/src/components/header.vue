@@ -8,7 +8,7 @@
                         :suffix-icon="Search" clearable @input="searchBook" @clear="clearBook" />
                 </div>
                 <div class="header-menu">
-                    <el-button v-show="!searchActive" :icon="Search" circle class="header-button search-button"
+                    <el-button v-show="!searchActive && showSearchBtn" :icon="Search" circle class="header-button search-button"
                         @click="openSearch(searchInput)" />
                     <!-- <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" /> -->
                 </div>
@@ -71,8 +71,9 @@ const goBack = () => {
         clearBook();
     }
 }
+const showSearchBtn = computed(() => { return router.currentRoute.value.fullPath == "/" })
 watch(currentTitle, (newVal, oldVal) => {
-    oldTitle = oldVal;
+    oldTitle = oldVal
 })
 </script>
 <style lang="scss" scoped>

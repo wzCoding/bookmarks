@@ -19,8 +19,8 @@
                 <span>最近访问：{{ visitDate ? visitDate : createDate }}</span>
             </div>
         </div>
-        <el-button v-if="isFolder" type="default" size="small" class="card-button" @click="handleClick">打开</el-button>
-        <el-dropdown v-else type="default" size="small" trigger="click" split-button @command="onItemChange"
+        <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
+        <el-dropdown v-else type="primary" size="small" trigger="click" split-button @command="onItemChange"
             @click="handleClick">
             <el-icon>
                 <component :is="dropDownItems[openType].icon" />
