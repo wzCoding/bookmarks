@@ -95,8 +95,7 @@ if (allNodes) {
     align-items: flex-end;
     flex-direction: column;
     width: calc(100% - var(--padding) * 2);
-    transition: all 0.3s;
-
+    height: calc(100% - var(--padding) * 2);
     .create-title {
         background: #F0F2F5;
         padding: var(--padding);
