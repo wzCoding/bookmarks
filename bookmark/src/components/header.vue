@@ -2,13 +2,14 @@
     <el-page-header ref="pageHeader" title="返回" class="book-header" :style="headerStyle" @back="goBack">
         <template #extra>
             <div class="header-extra" :class="{ active: searchActive }">
-                <span class="header-title">{{ currentTitle }}</span>
+                <div class="header-search" :class="{ active: searchActive }">
+                    <span class="header-title">{{ currentTitle }}</span>
+                    <el-input v-model.lazy="inputVal" class="search-input" placeholder="搜索书签" :suffix-icon="Search"
+                        clearable @input="searchBook" />
+                </div>
                 <div class="header-menu">
-                    <div class="search-box" :class="{ active: searchActive }">
-                        <el-input v-model.lazy="inputVal" class="search-input" placeholder="搜索书签" :suffix-icon="Search"
-                            clearable @input="searchBook" />
-                        <el-button :icon="Search" class="header-button search-button" circle @click="openSearch" />
-                    </div>
+                    <el-button v-show="!searchActive" :icon="Search" circle class="header-button search-button"
+                        @click="openSearch" />
                     <!-- <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" /> -->
                 </div>
             </div>
@@ -36,7 +37,7 @@ const inputVal = ref();
 const searchActive = ref(false);
 const router = useRouter();
 const bookStore = usebookStore();
-const { currentTitle,currentNodes, parentId } = storeToRefs(bookStore);
+const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
 let oldTitle = currentTitle.value;
 let oldMarks = currentNodes.value;
 const openSearch = () => {
@@ -44,7 +45,7 @@ const openSearch = () => {
     oldMarks = currentNodes.value;
 }
 const searchBook = debounce(() => {
-    if(inputVal.value.trim()){
+    if (inputVal.value.trim()) {
         console.log(inputVal.value)
         currentNodes.value = bookStore.getNodeByTitle(inputVal.value);
     }
@@ -66,7 +67,7 @@ const goBack = () => {
         inputVal.value = '';
     }
 }
-watch(currentTitle, (newVal,oldVal) => {
+watch(currentTitle, (newVal, oldVal) => {
     oldTitle = oldVal;
 })
 </script>
@@ -104,18 +105,35 @@ watch(currentTitle, (newVal,oldVal) => {
         height: 100%;
         overflow: hidden;
 
-        .header-title {
-            display: block;
-            font-size: 1rem;
-        }
+        .header-search {
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            line-height: 2rem;
 
-        .header-button {
-            border: none !important;
-        }
+            &.active {
 
-        &.active {
+                .header-title {
+                    transform: translateX(-100%);
+                }
+
+                .search-input {
+                    transform: translateX(0);
+                }
+            }
+
             .header-title {
-                display: none;
+                display: block;
+                font-size: 1rem;
+                transition: all 0.3s;
+            }
+
+            .search-input {
+                position: absolute;
+                top: 0;
+                right: 0;
+                transform: translateX(100%);
+                transition: all 0.3s;
             }
         }
 
@@ -124,34 +142,11 @@ watch(currentTitle, (newVal,oldVal) => {
             justify-content: flex-end;
             align-items: center;
             overflow: hidden;
-            flex: 1;
             padding-right: 0.5rem;
 
-            .search-box {
-                position: relative;
-                overflow: hidden;
-                display: flex;
-
-                .search-input {
-                    transform: translateX(150%);
-                    transition: all 0.3s;
-                }
-
-                &.active {
-                    flex: 1;
-
-                    .search-button {
-                        display: none;
-                    }
-
-                    .search-input {
-                        transform: translateX(0);
-                    }
-                }
-            }
-
-            .setting-button {
-                margin-left: 0.25rem;
+            .header-button {
+                border: none !important;
+                margin-left: 0.25rem !important;
             }
         }
     }
