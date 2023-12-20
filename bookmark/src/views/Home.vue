@@ -9,7 +9,7 @@
                     </BookMark>
                 </TransitionGroup>
             </VueDraggable>
-            <BookFooter :page-size="pageSize" :current-page="currentPage" :total="totalNum" :locale="i18nStore.locale"
+            <BookFooter :page-size="pageSize" :current-page="currentPage" :total="currentTotal" :locale="i18nStore.locale"
                 @currentChange="pageChange" @sizeChange="sizeChange"></BookFooter>
         </div>
         <el-empty v-show="!currentNodes.length" class="book-empty" description="空空如也..." />
@@ -38,7 +38,7 @@ const drag = ref();
 const {
     currentNodes,
     currentPage,
-    totalNum,
+    currentTotal,
     pageSize,
     pageNodes,
 } = storeToRefs(bookStore);

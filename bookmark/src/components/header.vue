@@ -4,12 +4,12 @@
             <div class="header-extra" :class="{ active: searchActive }">
                 <div class="header-search" :class="{ active: searchActive }">
                     <span class="header-title">{{ currentTitle }}</span>
-                    <el-input ref="searchInput" v-model.lazy="inputVal" class="search-input" placeholder="搜索书签"
+                    <el-input ref="searchInput" v-model.lazy="searchText" :placeholder="searchTip" class="search-input"
                         :suffix-icon="Search" clearable @input="searchBook" @clear="clearBook" />
                 </div>
                 <div class="header-menu">
-                    <el-button v-show="!searchActive && showSearchBtn" :icon="Search" circle class="header-button search-button"
-                        @click="openSearch(searchInput)" />
+                    <el-button v-show="!searchActive && showSearch" :icon="Search" circle
+                        class="header-button search-button" @click="openSearch(searchInput)" />
                     <!-- <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" /> -->
                 </div>
             </div>
@@ -34,10 +34,12 @@ const headerStyle = computed(() => {
 });
 const pageHeader = ref(null);
 const searchInput = ref();
-const inputVal = ref();
+const searchText = ref();
 const searchActive = ref(false);
 const router = useRouter();
 const bookStore = usebookStore();
+const searchTip = `在 ${bookStore.total} 条书签中搜索`
+const showSearch = computed(() => { return router.currentRoute.value.fullPath == "/" })
 const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
 let oldTitle = currentTitle.value;
 let oldNodes = currentNodes.value;
@@ -47,13 +49,15 @@ const openSearch = (el) => {
     setTimeout(el.focus, 200);
 }
 const searchBook = debounce(() => {
-    if (inputVal.value.trim()) {
-        currentNodes.value = bookStore.getNodeByTitle(inputVal.value);
+    if (searchText.value.trim()) {
+        currentNodes.value = bookStore.getNodeByTitle(searchText.value);
+    }else {
+        clearBook()
     }
-}, 500)
+}, 300)
 const clearBook = () => {
     currentNodes.value = oldNodes;
-    inputVal.value = '';
+    searchText.value = '';
 }
 const openSetting = () => {
     console.log('setting')
@@ -71,9 +75,10 @@ const goBack = () => {
         clearBook();
     }
 }
-const showSearchBtn = computed(() => { return router.currentRoute.value.fullPath == "/" })
+
 watch(currentTitle, (newVal, oldVal) => {
     oldTitle = oldVal
+    searchActive.value = false;
 })
 </script>
 <style lang="scss" scoped>
