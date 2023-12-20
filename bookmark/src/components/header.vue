@@ -4,12 +4,12 @@
             <div class="header-extra" :class="{ active: searchActive }">
                 <div class="header-search" :class="{ active: searchActive }">
                     <span class="header-title">{{ currentTitle }}</span>
-                    <el-input v-model.lazy="inputVal" class="search-input" placeholder="搜索书签" :suffix-icon="Search"
-                        clearable @input="searchBook" />
+                    <el-input ref="searchInput" v-model.lazy="inputVal" class="search-input" placeholder="搜索书签"
+                        :suffix-icon="Search" clearable @input="searchBook" @clear="clearBook" />
                 </div>
                 <div class="header-menu">
                     <el-button v-show="!searchActive" :icon="Search" circle class="header-button search-button"
-                        @click="openSearch" />
+                        @click="openSearch(searchInput)" />
                     <!-- <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" /> -->
                 </div>
             </div>
@@ -33,25 +33,30 @@ const headerStyle = computed(() => {
     }
 });
 const pageHeader = ref(null);
+const searchInput = ref();
 const inputVal = ref();
 const searchActive = ref(false);
 const router = useRouter();
 const bookStore = usebookStore();
 const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
 let oldTitle = currentTitle.value;
-let oldMarks = currentNodes.value;
-const openSearch = () => {
+let oldNodes = currentNodes.value;
+const openSearch = (el) => {
     searchActive.value = true;
-    oldMarks = currentNodes.value;
+    oldNodes = currentNodes.value;
+    setTimeout(el.focus, 200);
 }
 const searchBook = debounce(() => {
     if (inputVal.value.trim()) {
-        console.log(inputVal.value)
         currentNodes.value = bookStore.getNodeByTitle(inputVal.value);
     }
 }, 500)
+const clearBook = () => {
+    currentNodes.value = oldNodes;
+    inputVal.value = '';
+}
 const openSetting = () => {
-    console.log('openSetting')
+    console.log('setting')
 }
 const goBack = () => {
     if (!searchActive.value) {
@@ -62,9 +67,8 @@ const goBack = () => {
             bookStore.getCurrentNodes(parentId.value);
         }
     } else {
-        currentNodes.value = oldMarks;
         searchActive.value = false;
-        inputVal.value = '';
+        clearBook();
     }
 }
 watch(currentTitle, (newVal, oldVal) => {
@@ -112,13 +116,14 @@ watch(currentTitle, (newVal, oldVal) => {
             line-height: 2rem;
 
             &.active {
-
                 .header-title {
                     transform: translateX(-100%);
                 }
 
                 .search-input {
                     transform: translateX(0);
+                    opacity: 1;
+                    pointer-events: auto;
                 }
             }
 
@@ -132,8 +137,11 @@ watch(currentTitle, (newVal, oldVal) => {
                 position: absolute;
                 top: 0;
                 right: 0;
-                transform: translateX(100%);
+                padding-right: 0.25rem;
+                opacity: 0;
+                transform: translateX(25%);
                 transition: all 0.3s;
+                pointer-events: none;
             }
         }
 
@@ -142,7 +150,6 @@ watch(currentTitle, (newVal, oldVal) => {
             justify-content: flex-end;
             align-items: center;
             overflow: hidden;
-            padding-right: 0.5rem;
 
             .header-button {
                 border: none !important;
