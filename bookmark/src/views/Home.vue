@@ -1,14 +1,18 @@
 <template>
     <div class="book-home" @[dynamicScroll]="onScroll">
-        <VueDraggable ref="drag" v-model="currentNodes" @end="onDragEnd" target=".book-transition" class="book-content">
-            <TransitionGroup tag="div" name="fade" class="book-transition">
-                <BookMark v-for="bookmark in pageNodes" :key="bookmark.id" :bookmark="bookmark" @openUrl="openBookMark"
-                    @openContextMenu="openMenu">
-                </BookMark>
-            </TransitionGroup>
-        </VueDraggable>
-        <BookFooter :page-size="pageSize" :current-page="currentPage" :total="totalNum" :locale="i18nStore.locale"
-            @currentChange="pageChange" @sizeChange="sizeChange"></BookFooter>
+        <div v-show="currentNodes.length" class="book-content">
+            <VueDraggable ref="drag" v-model="currentNodes" @end="onDragEnd" target=".book-transition"
+                class="book-draggable">
+                <TransitionGroup tag="div" name="fade" class="book-transition">
+                    <BookMark v-for="bookmark in pageNodes" :key="bookmark.id" :bookmark="bookmark" @openUrl="openBookMark"
+                        @openContextMenu="openMenu">
+                    </BookMark>
+                </TransitionGroup>
+            </VueDraggable>
+            <BookFooter :page-size="pageSize" :current-page="currentPage" :total="totalNum" :locale="i18nStore.locale"
+                @currentChange="pageChange" @sizeChange="sizeChange"></BookFooter>
+        </div>
+        <el-empty v-show="!currentNodes.length" class="book-empty" description="空空如也..." />
     </div>
 </template>
 
@@ -19,7 +23,7 @@ import { storeToRefs } from 'pinia';
 import { usebookStore } from '@/store/usebookStore';
 import { usei18nStore } from '@/store/usei18nStore';
 import { VueDraggable } from 'vue-draggable-plus';
-import { ElMessageBox, ElMessage } from 'element-plus';
+import { ElMessageBox, ElMessage, ElEmpty } from 'element-plus';
 import { openTabs } from '@/utils/index';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
@@ -96,7 +100,7 @@ const initContextMenu = (target, id) => {
     contextMenu.target = target ? target : null;
 }
 //在这里处理contextMenu点击事件
-const onContextMenuClick = (type,title) => {
+const onContextMenuClick = (type, title) => {
     if (type !== "delete") {
         router.push({
             name: type,
@@ -151,27 +155,35 @@ const onScroll = () => {
 .book-home {
     position: relative;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    overflow-y: auto;
-    overflow-x: hidden;
 
     .book-content {
-        position: inherit;
-        width: 100%;
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        .book-draggable {
+            width: 100%;
+
+            .book-transition {
+                width: calc(100% - 1rem);
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+                flex-wrap: wrap;
+                position: relative;
+                padding: var(--content-padding);
+                gap: var(--content-gap);
+            }
+        }
     }
 
-    .book-transition {
-        width: calc(100% - 1rem);
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        position: relative;
-        padding: var(--content-padding);
-        gap: var(--content-gap);
+    .book-empty {
+        height: 100%;
     }
 }
 </style>
