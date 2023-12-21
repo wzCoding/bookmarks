@@ -10,7 +10,7 @@
                 <div class="header-menu">
                     <el-button v-show="!searchActive && showSearch" :icon="Search" circle
                         class="header-button search-button" @click="openSearch(searchInput)" />
-                    <!-- <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" /> -->
+                    <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" />
                 </div>
             </div>
         </template>
