@@ -7,8 +7,8 @@
                     <el-input ref="searchInput" v-model.lazy="searchText" :placeholder="searchTip" class="search-input"
                         :suffix-icon="Search" clearable @input="searchBook" @clear="clearBook" />
                 </div>
-                <div class="header-menu">
-                    <el-button v-show="!searchActive && showSearch" :icon="Search" circle
+                <div class="header-menu" v-show="showMenu">
+                    <el-button  :icon="Search" circle v-show="!searchActive"
                         class="header-button search-button" @click="openSearch(searchInput)" />
                     <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" />
                 </div>
@@ -39,7 +39,7 @@ const searchActive = ref(false);
 const router = useRouter();
 const bookStore = usebookStore();
 const searchTip = `在 ${bookStore.total} 条书签中搜索`
-const showSearch = computed(() => { return router.currentRoute.value.fullPath == "/" })
+const showMenu = computed(() => { return router.currentRoute.value.fullPath == "/" })
 const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
 let oldTitle = currentTitle.value;
 let oldNodes = currentNodes.value;
