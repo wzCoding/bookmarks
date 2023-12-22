@@ -20,18 +20,18 @@ const targetNode = bookStore.getNodeById(props.id);
 bookStore.currentTitle = "编辑书签";
 title.value = targetNode && targetNode.title ? targetNode.title : "--";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
-
 const forms = reactive([
-    { label: "书签名称:", name: "title", placeholder: "", defaultValue: "", required: false, onInput: updateTitle }
+    { label: "书签位置:", name: "folder", placeholder: "", defaultValue: "", required: false },
+    { label: "书签顺序:", name: "order", placeholder: "", defaultValue: "0", required: false, }
 ])
 if (targetNode) {
-    forms[0].placeholder = targetNode.title;
+    forms.unshift({ label: "书签名称:", name: "title", placeholder: targetNode.title, defaultValue: "", required: false, onInput: updateTitle })
     if (!targetNode.children) {
-        forms.push({ label: "书签地址:", name: "url", placeholder: targetNode.url, defaultValue: "", required: false, validator: validateUrl })
+        forms.splice(1, 0, { label: "网址链接:", name: "url", placeholder: targetNode.url, defaultValue: "", required: false, validator: validateUrl })
     }
 }
 function updateTitle(param) {
-   title.value = param.title ? param.title : targetNode && targetNode.title;
+    title.value = param.title ? param.title : targetNode && targetNode.title;
 }
 async function validateUrl(rule, value, callback) {
     return new Promise((resolve, reject) => {
