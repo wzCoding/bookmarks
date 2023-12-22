@@ -59,12 +59,45 @@ export const usebookStore = defineStore("bookmarks", () => {
         if (!id) return {};
         return allBookMarks.filter(item => item.id == id)[0];
     }
+    function getTreeNodes() {
+        const list = [];
+        const result = [];
+        allBookMarks.forEach(item => {
+            if (item.children) {
+                const node = {
+                    title: item.title,
+                    id: item.id, 
+                }
+                if (item.parentId) {
+                    node.parentId = item.parentId;
+                    list.push(node);
+                }
+            }
+        });
+        const root = list.filter(item => item.parentId == defaultId);
+        const getTree = (item) => {
+            const childrens = list.filter(child => child.parentId == item.id);
+            if (childrens.length) {
+                item.children = childrens;
+                for (const child of childrens) {
+                    getTree(child);
+                }
+            }
+            if (item.parentId == defaultId) {
+                result.push(item);
+            }
+        }
+        for (const item of root) {
+            getTree(item);
+        }
+        return result
+    }
     function getNodeById(id) {
         if (!id) return {};
         return currentNodes.value.filter(item => item.id == id)[0];
     }
-    function getNodeByTitle(title){
-        if(!title) return;
+    function getNodeByTitle(title) {
+        if (!title) return;
         return allBookMarks.filter(item => item.title.includes(title));
     }
     //获取当前展示书签列表
@@ -113,6 +146,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         getNodeById,
         getNodeByTitle,
         getAllNodes,
+        getTreeNodes,
         sizeChange,
         pageChange
     }

@@ -1,6 +1,6 @@
 <template>
     <div class="bookmark-create">
-        <Title :title="targetNode.title"/>
+        <Title :title="targetNode.title" />
         <Forms :forms="forms" submit-text="添加" @submit="submitForm"></Forms>
     </div>
 </template>
@@ -17,9 +17,9 @@ const props = defineProps({
 const bookStore = usebookStore();
 bookStore.currentTitle = "添加书签";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
-const allNodes = bookStore.getAllNodes(props.id).reverse();
-const targetNode = allNodes[allNodes.length - 1];
+const targetNode = bookStore.getNodeById(props.id);
 const urlIndex = 2;
+console.log(bookStore.getTreeNodes())
 const forms = reactive([
     {
         label: "书签类型:",
@@ -41,8 +41,10 @@ const forms = reactive([
         label: "添加位置:",
         name: "id",
         placeholder: "请选择添加位置",
-        type: "select",
-        options: [],
+        type: "treeSelect",
+        tree: bookStore.getTreeNodes(),
+        defaultValue: targetNode.id,
+        props: { label: "title" },
         show: true,
         required: true,
         requireMessage: "请选择添加位置"
@@ -75,16 +77,16 @@ function submitForm(param) {
     //     }
     // })
 }
-if (allNodes) {
-    const index = forms.length - 1;
-    forms[index].defaultValue = allNodes[allNodes.length - 1].id;
-    allNodes.forEach(item => {
-        forms[index].options.push({
-            label: item.title,
-            value: item.id
-        })
-    })
-}
+// if (allNodes) {
+//     const index = forms.length - 1;
+//     forms[index].defaultValue = allNodes[allNodes.length - 1].id;
+//     allNodes.forEach(item => {
+//         forms[index].options.push({
+//             label: item.title,
+//             value: item.id
+//         })
+//     })
+// }
 </script>
 <style lang="scss" scoped>
 .bookmark-create {
@@ -96,6 +98,7 @@ if (allNodes) {
     flex-direction: column;
     width: calc(100% - var(--padding) * 2);
     height: calc(100% - var(--padding) * 2);
+
     .create-title {
         background: #F0F2F5;
         padding: var(--padding);

@@ -13,6 +13,11 @@
                         :value="option.value" />
                 </el-select>
             </template>
+            <template v-if="item.type == 'treeSelect'">
+                <el-tree-select ref="treeSelect" v-model="form[item.name]" :props="item.props" node-key="id"
+                    :data="item.tree" :default-expand-all="true" :expand-on-click-node="false" check-strictly
+                    :render-after-expand="false" check-on-click-node @node-click="handleNode"/>
+            </template>
         </el-form-item>
     </el-form>
     <div v-if="submit" class="form-button">
@@ -22,7 +27,7 @@
 </template>
 <script setup>
 import { ref, reactive } from 'vue';
-import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElOption } from 'element-plus';
+import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElTreeSelect, ElOption } from 'element-plus';
 const props = defineProps({
     forms: { type: Array, default: () => [] },
     position: { type: String, default: 'top' },
@@ -35,6 +40,7 @@ const FormEl = ref();
 const form = reactive({});
 const rules = reactive({});
 const formOptions = reactive([]);
+const treeSelect = ref()
 if (props.forms.length) {
     props.forms.forEach(item => {
         item.show = item.show === undefined ? true : item.show;
@@ -45,12 +51,16 @@ if (props.forms.length) {
         formOptions.push(item);
     });
 }
+
 function handleInput(el, callback) {
     callback && callback(form)
 }
 async function handleSelect(el, callback) {
     await el.clearValidate("type")
     callback && callback(form)
+}
+function handleNode() {
+    treeSelect.value[0].blur()
 }
 async function submitForm(el) {
     if (!el) return;
