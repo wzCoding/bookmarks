@@ -14,6 +14,50 @@ function debounce(func, delay = 1000) {
         }, delay)
     }
 }
+//展开树结构
+function expandTree(tree, result = []) {
+    for (const item of tree) {
+        result.push(item);
+        if (item.children) {
+            expandTree(item.children, result);
+        }
+    }
+    return result;
+}
+//根据指定的key字段获取树结构
+function getTreeByKey(list, rootId, key) {
+    const nodes = [];
+    const result = [];
+    list.forEach(item => {
+        if (item[key]) {
+            const node = {
+                title: item.title,
+                id: item.id,
+            }
+            if (item.parentId) {
+                node.parentId = item.parentId;
+                nodes.push(node);
+            }
+        }
+    });
+    const root = nodes.filter(item => item.parentId == rootId);
+    const getTree = (item) => {
+        const childrens = nodes.filter(child => child.parentId == item.id);
+        if (childrens.length) {
+            item.children = childrens;
+            for (const child of childrens) {
+                getTree(child);
+            }
+        }
+        if (item.parentId == rootId) {
+            result.push(item);
+        }
+    }
+    for (const item of root) {
+        getTree(item);
+    }
+    return result
+}
 //设置localStorage缓存
 function setLocalCache(key, data) {
     const cache = window.localStorage.getItem(key);
@@ -144,6 +188,8 @@ function openTabs(option) {
 }
 export {
     debounce,
+    expandTree,
+    getTreeByKey,
     setLocalCache,
     getLocalCache,
     getCurrentTab,

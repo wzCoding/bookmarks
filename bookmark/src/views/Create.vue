@@ -29,7 +29,6 @@ bookStore.currentTitle = "添加书签";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const targetNode = bookStore.getNodeById(props.id);
 const urlIndex = 2;
-console.log(bookStore.getTreeNodes())
 const forms = reactive([
     {
         label: "书签类型:",
@@ -52,7 +51,7 @@ const forms = reactive([
         name: "id",
         placeholder: "请选择添加位置",
         type: "treeSelect",
-        tree: bookStore.getTreeNodes(),
+        tree: bookStore.getTreeNodes("children"),
         defaultValue: targetNode.id,
         props: { label: "title" },
         show: true,
