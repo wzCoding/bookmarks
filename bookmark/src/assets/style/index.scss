@@ -28,9 +28,9 @@ body {
     #app {
         --card-columns: 2; // 卡片列数
         --extra-space: 0.625rem; // 额外空间
-        .book-footer{
+        .book-footer {
             .el-pagination__sizes,
-            .el-pagination__jump{
+            .el-pagination__jump {
                 display: none !important;
             }
         }
@@ -60,11 +60,28 @@ body {
         --extra-space: 1rem;
     }
 }
-
+.custom-tree-node {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .tree-node-label {
+        padding-left: 0.25rem;
+    }
+}
 //element-plus样式修改
-.el-popper[role='tooltip'] {
+.el-popper[role="tooltip"] {
     max-width: 20rem;
-    &.el-select__popper{
+    &.el-select__popper {
         max-width: 100%;
+    }
+}
+
+.el-form {
+    width: 100%;
+    padding: 0.5rem 0;
+
+    .el-select,
+    .el-input-number {
+        width: 100%;
     }
 }

@@ -23,6 +23,9 @@
                     </template>
                 </el-tree-select>
             </template>
+            <template v-if="item.type == 'number'">
+                <el-input-number v-model="form[item.name]" :min="item.min" :max="item.max" />
+            </template>
         </el-form-item>
     </el-form>
     <div v-if="submit" class="form-button">
@@ -32,7 +35,7 @@
 </template>
 <script setup>
 import { ref, reactive } from 'vue';
-import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElTreeSelect, ElOption } from 'element-plus';
+import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElTreeSelect, ElOption, ElInputNumber } from 'element-plus';
 const props = defineProps({
     forms: { type: Array, default: () => [] },
     position: { type: String, default: 'top' },
@@ -51,8 +54,8 @@ if (props.forms.length) {
         item.show = item.show === undefined ? true : item.show;
         item.required = item.required === undefined ? false : item.required;
         item.type = item.type === undefined ? 'input' : item.type;
-        form[item.name] = item.defaultValue ? item.defaultValue : '';
-        rules[item.name] = [{ required: item.required, message: item.requireMessage, validator: item.validator, trigger: 'blur' }];
+        form[item.name] = item.defaultValue === undefined ? '' : item.defaultValue;
+        rules[item.name] = [{ required: item.required, message: item.requireMessage, validator: item.validator, trigger: 'blur'}];
         formOptions.push(item);
     });
 }
@@ -82,9 +85,3 @@ function resetForm(el) {
     emit('reset', form);
 }
 </script>
-<style lang="scss" scoped>
-.el-form {
-    width: 100%;
-    padding: 0.5rem 0;
-}
-</style>

@@ -1,15 +1,15 @@
 import { computed, reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import { getTreeByKey,expandTree } from "@/utils";
-let allBookMarks = [];
+let allNodes = [];
 
 //获取书签tree
 function getTree(result) {
     if (result) {
-        allBookMarks = expandTree(result);
+        allNodes = expandTree(result);
     } else {
         const data = require('../../public/background/data.json');
-        allBookMarks = expandTree(data);
+        allNodes = expandTree(data);
     }
 }
 getTree();
@@ -39,7 +39,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         const endIndex = startIndex + pageSize.value;
         return currentNodes.value.slice(startIndex, endIndex);
     });
-    const total = allBookMarks.length;
+    const total = allNodes.length;
     const currentTotal = computed(() => {
         return currentNodes.value.length;
     });
@@ -48,18 +48,18 @@ export const usebookStore = defineStore("bookmarks", () => {
     });
     function getFolder(id) {
         if (!id) return {};
-        return allBookMarks.filter(item => item.id == id)[0];
+        return allNodes.filter(item => item.id == id)[0];
     }
     function getTreeNodes(key) {
-        return getTreeByKey(allBookMarks, defaultId, key);
+        return getTreeByKey(allNodes, defaultId, key);
     }
     function getNodeById(id) {
         if (!id) return {};
-        return currentNodes.value.filter(item => item.id == id)[0];
+        return allNodes.filter(item => item.id == id)[0];
     }
     function getNodeByTitle(title) {
         if (!title) return;
-        return allBookMarks.filter(item => item.title.includes(title));
+        return allNodes.filter(item => item.title.includes(title));
     }
     //获取当前展示书签列表
     function getCurrentNodes(id, initPage) {
@@ -79,7 +79,7 @@ export const usebookStore = defineStore("bookmarks", () => {
     }
     function getAllNodes(id, result = []) {
         if (!id) return [];
-        const node = allBookMarks.filter(item => item.id == id)[0];
+        const node = allNodes.filter(item => item.id == id)[0];
         if (node && node.parentId) {
             result.push({ title: node.title, id: node.id, type: node.children ? 'folder' : 'bookmark' });
             getAllNodes(node.parentId, result)

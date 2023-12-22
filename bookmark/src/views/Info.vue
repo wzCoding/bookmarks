@@ -104,8 +104,6 @@ if (info) {
         padding: calc(var(--padding) / 2) 0;
         gap: var(--padding);
         :deep(.el-form) {
-            width: 100%;
-
             .el-input.is-disabled {
                 cursor: text;
                 .el-input__inner {

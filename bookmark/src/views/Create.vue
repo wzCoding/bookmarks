@@ -86,16 +86,6 @@ function submitForm(param) {
     //     }
     // })
 }
-// if (allNodes) {
-//     const index = forms.length - 1;
-//     forms[index].defaultValue = allNodes[allNodes.length - 1].id;
-//     allNodes.forEach(item => {
-//         forms[index].options.push({
-//             label: item.title,
-//             value: item.id
-//         })
-//     })
-// }
 </script>
 <style lang="scss" scoped>
 .bookmark-create {
@@ -117,22 +107,5 @@ function submitForm(param) {
         width: calc(100% - var(--padding) * 2);
     }
 
-    :deep(.el-form.el-form--label-top) {
-        width: 100%;
-        padding: 0.5rem 0;
-
-        .el-select {
-            width: 100%;
-        }
-    }
-}
-.custom-tree-node {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-
-    .tree-node-label {
-        padding-left: 0.25rem;
-    }
 }
 </style>
