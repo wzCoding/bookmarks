@@ -11,11 +11,12 @@
                 </div>
             </template>
         </Forms>
+        <el-alert class="page-info" title="书签顺序" type="info" :description="desc" show-icon />
     </div>
 </template>
 <script setup>
 import { reactive, ref } from 'vue';
-import { ElMessage, ElIcon } from 'element-plus';
+import { ElMessage, ElIcon,ElAlert } from 'element-plus';
 import { Folder } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { updateBookMark } from '@/utils/index';
@@ -25,6 +26,7 @@ const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
 const title = ref("");
+const desc = "书签顺序从0开始，数字越小越靠前，数字最大为书签所在文件夹下书签数量";
 const bookStore = usebookStore();
 const targetNode = bookStore.getNodeById(props.id);
 const parentNode = bookStore.getNodeById(targetNode.parentId);
@@ -43,6 +45,7 @@ if (targetNode) {
             tree: bookStore.getTreeNodes("children"),
             defaultValue: parentNode.id,
             props: { label: "title" },
+            nodeClick:(form)=>{console.log(form)}
         },
         {
             label: "书签顺序:",
@@ -113,8 +116,11 @@ function resetForm() {
     width: calc(100% - var(--padding) * 2);
     height: calc(100% - var(--padding) * 2);
 
-    .el-select {
-        width: 100%;
+    .page-info{
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 </style>

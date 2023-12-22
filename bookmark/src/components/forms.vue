@@ -1,36 +1,40 @@
 <template>
-    <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
-        <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show" :label="item.label" :prop="item.name">
-            <template v-if="item.type == 'input'">
-                <el-input v-model.lazy="form[item.name]" :placeholder="item.placeholder"
-                    :disabled="item.disable ? item.disable : false" clearable
-                    @input="item.onInput ? handleInput(FormEl, item.onInput) : ''" />
-            </template>
-            <template v-if="item.type == 'select'">
-                <el-select v-model="form[item.name]" :placeholder="item.placeholder"
-                    @change="item.onChange ? handleSelect(FormEl, item.onChange) : ''">
-                    <el-option v-for="option in item.options" :key="option.value" :label="option.label"
-                        :value="option.value" />
-                </el-select>
-            </template>
-            <template v-if="item.type == 'treeSelect'">
-                <el-tree-select ref="treeSelect" v-model="form[item.name]" :props="item.props" node-key="id"
-                    :data="item.tree" :default-expand-all="true" :expand-on-click-node="false" check-strictly
-                    :render-after-expand="false" check-on-click-node @node-click="handleNode">
-                    <!-- 动态插槽 -->
-                    <template v-for="(value, name) in $slots" #[name]="{ node }">
-                        <slot :name="name" v-bind="{ node }"></slot>
-                    </template>
-                </el-tree-select>
-            </template>
-            <template v-if="item.type == 'number'">
-                <el-input-number v-model="form[item.name]" :min="item.min" :max="item.max" />
-            </template>
-        </el-form-item>
-    </el-form>
-    <div v-if="submit" class="form-button">
-        <el-button round type="primary" @click="submitForm(FormEl)">{{ submitText }}</el-button>
-        <el-button round @click="resetForm(FormEl)">{{ resetText }}</el-button>
+    <div class="page-form">
+        <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
+            <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show" :label="item.label"
+                :prop="item.name">
+                <template v-if="item.type == 'input'">
+                    <el-input v-model.lazy="form[item.name]" :placeholder="item.placeholder"
+                        :disabled="item.disable ? item.disable : false" clearable
+                        @input="item.onInput ? handleInput(FormEl, item.onInput) : ''" />
+                </template>
+                <template v-if="item.type == 'select'">
+                    <el-select v-model="form[item.name]" :placeholder="item.placeholder"
+                        @change="item.onChange ? handleSelect(FormEl, item.onChange) : ''">
+                        <el-option v-for="option in item.options" :key="option.value" :label="option.label"
+                            :value="option.value" />
+                    </el-select>
+                </template>
+                <template v-if="item.type == 'treeSelect'">
+                    <el-tree-select ref="treeSelect" v-model="form[item.name]" :props="item.props" node-key="id"
+                        :data="item.tree" :default-expand-all="true" :expand-on-click-node="false" check-strictly
+                        :render-after-expand="false" check-on-click-node
+                        @node-click="item.nodeClick ? handleNode(FormEl, item.nodeClick) : ''">
+                        <!-- 动态插槽 -->
+                        <template v-for="(value, name) in $slots" #[name]="{ node }">
+                            <slot :name="name" v-bind="{ node }"></slot>
+                        </template>
+                    </el-tree-select>
+                </template>
+                <template v-if="item.type == 'number'">
+                    <el-input-number v-model="form[item.name]" :min="item.min" :max="item.max" />
+                </template>
+            </el-form-item>
+        </el-form>
+        <div v-if="submit" class="form-button">
+            <el-button round type="primary" @click="submitForm(FormEl)">{{ submitText }}</el-button>
+            <el-button round @click="resetForm(FormEl)">{{ resetText }}</el-button>
+        </div>
     </div>
 </template>
 <script setup>
@@ -55,7 +59,7 @@ if (props.forms.length) {
         item.required = item.required === undefined ? false : item.required;
         item.type = item.type === undefined ? 'input' : item.type;
         form[item.name] = item.defaultValue === undefined ? '' : item.defaultValue;
-        rules[item.name] = [{ required: item.required, message: item.requireMessage, validator: item.validator, trigger: 'blur'}];
+        rules[item.name] = [{ required: item.required, message: item.requireMessage, validator: item.validator, trigger: 'blur' }];
         formOptions.push(item);
     });
 }
@@ -67,8 +71,9 @@ async function handleSelect(el, callback) {
     await el.clearValidate("type")
     callback && callback(form)
 }
-function handleNode() {
-    treeSelect.value[0].blur()
+function handleNode(el,callback) {
+    treeSelect.value[0].blur();
+    callback && callback(form)
 }
 async function submitForm(el) {
     if (!el) return;
@@ -85,3 +90,14 @@ function resetForm(el) {
     emit('reset', form);
 }
 </script>
+<style lang="scss" scoped>
+.page-form {
+    width: 100%;
+
+    .form-button {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+}
+</style>
