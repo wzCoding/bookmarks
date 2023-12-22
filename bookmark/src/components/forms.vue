@@ -28,6 +28,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElTreeSelect, ElOption } from 'element-plus';
+import { Folder } from '@element-plus/icons-vue';
 const props = defineProps({
     forms: { type: Array, default: () => [] },
     position: { type: String, default: 'top' },
@@ -37,10 +38,10 @@ const props = defineProps({
 });
 const emit = defineEmits(['submit', 'reset']);
 const FormEl = ref();
+const treeSelect = ref();
 const form = reactive({});
 const rules = reactive({});
 const formOptions = reactive([]);
-const treeSelect = ref()
 if (props.forms.length) {
     props.forms.forEach(item => {
         item.show = item.show === undefined ? true : item.show;
