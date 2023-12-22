@@ -1,12 +1,22 @@
 <template>
     <div class="bookmark-create">
         <Title :title="targetNode.title" />
-        <Forms :forms="forms" submit-text="添加" @submit="submitForm"></Forms>
+        <Forms :forms="forms" submit-text="添加" @submit="submitForm">
+            <template #default="{ node }">
+                <div class="custom-tree-node">
+                    <el-icon>
+                        <Folder />
+                    </el-icon>
+                    <span class="tree-node-label">{{ node.label }}</span>
+                </div>
+            </template>
+        </Forms>
     </div>
 </template>
 <script setup>
 import { reactive } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElIcon } from 'element-plus';
+import { Folder } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { createBookMark } from '@/utils/index';
 import Forms from '@/components/forms.vue';
@@ -115,6 +125,15 @@ function submitForm(param) {
         .el-select {
             width: 100%;
         }
+    }
+}
+.custom-tree-node {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .tree-node-label {
+        padding-left: 0.25rem;
     }
 }
 </style>

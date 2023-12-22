@@ -16,7 +16,12 @@
             <template v-if="item.type == 'treeSelect'">
                 <el-tree-select ref="treeSelect" v-model="form[item.name]" :props="item.props" node-key="id"
                     :data="item.tree" :default-expand-all="true" :expand-on-click-node="false" check-strictly
-                    :render-after-expand="false" check-on-click-node @node-click="handleNode"/>
+                    :render-after-expand="false" check-on-click-node @node-click="handleNode">
+                    <!-- 动态插槽 -->
+                    <template v-for="(value, name) in $slots" #[name]="{ node }">
+                        <slot :name="name" v-bind="{ node }"></slot>
+                    </template>
+                </el-tree-select>
             </template>
         </el-form-item>
     </el-form>
@@ -28,7 +33,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElTreeSelect, ElOption } from 'element-plus';
-import { Folder } from '@element-plus/icons-vue';
 const props = defineProps({
     forms: { type: Array, default: () => [] },
     position: { type: String, default: 'top' },
