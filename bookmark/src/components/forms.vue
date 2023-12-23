@@ -17,9 +17,8 @@
                 </template>
                 <template v-if="item.type == 'treeSelect'">
                     <el-tree-select ref="treeSelect" v-model="form[item.name]" :props="item.props" node-key="id"
-                        :data="item.tree" :default-expand-all="true" :expand-on-click-node="false" check-strictly
-                        :render-after-expand="false" check-on-click-node
-                        @node-click="item.nodeClick ? handleNode(FormEl, item.nodeClick) : ''">
+                        :data="item.tree" :default-expand-all="true" :expand-on-click-node="false"
+                        :render-after-expand="false" @node-click="(node) => { handleNode(node, item.nodeClick) }">
                         <!-- 动态插槽 -->
                         <template v-for="(value, name) in $slots" #[name]="{ node }">
                             <slot :name="name" v-bind="{ node }"></slot>
@@ -71,9 +70,11 @@ async function handleSelect(el, callback) {
     await el.clearValidate("type")
     callback && callback(form)
 }
-function handleNode(el,callback) {
+function handleNode(node, callback) {
     treeSelect.value[0].blur();
-    callback && callback(form)
+    form.id = node.id;
+    form.index = 0;
+    callback && callback(form.id);
 }
 async function submitForm(el) {
     if (!el) return;

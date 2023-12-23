@@ -16,7 +16,7 @@
 </template>
 <script setup>
 import { reactive, ref } from 'vue';
-import { ElMessage, ElIcon,ElAlert } from 'element-plus';
+import { ElMessage, ElIcon, ElAlert } from 'element-plus';
 import { Folder } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { updateBookMark } from '@/utils/index';
@@ -26,15 +26,16 @@ const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
 const title = ref("");
-const desc = "书签顺序从0开始，数字越小越靠前，数字最大为书签所在文件夹下书签数量";
+const desc = "书签顺序从0开始，数字越小越靠前";
 const bookStore = usebookStore();
 const targetNode = bookStore.getNodeById(props.id);
-const parentNode = bookStore.getNodeById(targetNode.parentId);
 bookStore.currentTitle = "编辑书签";
 title.value = targetNode && targetNode.title ? targetNode.title : "--";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const forms = reactive([]);
+const maxIndex = ref(0);
 if (targetNode) {
+    updateMaxIndex(targetNode.parentId);
     forms.push(
         { label: "书签名称:", name: "title", placeholder: targetNode.title, defaultValue: "", onInput: updateTitle },
         {
@@ -43,9 +44,9 @@ if (targetNode) {
             placeholder: "请选择书签位置",
             type: "treeSelect",
             tree: bookStore.getTreeNodes("children"),
-            defaultValue: parentNode.id,
+            defaultValue: targetNode.parentId,
             props: { label: "title" },
-            nodeClick:(form)=>{console.log(form)}
+            nodeClick: updateMaxIndex
         },
         {
             label: "书签顺序:",
@@ -54,7 +55,7 @@ if (targetNode) {
             type: "number",
             defaultValue: 0,
             min: 0,
-            max: parentNode.children.length,
+            max: maxIndex,
             requireMessage: "请设置有效的顺序",
             validator: validateParam
         },
@@ -76,10 +77,14 @@ if (targetNode) {
 function updateTitle(param) {
     title.value = param.title ? param.title : targetNode && targetNode.title;
 }
+function updateMaxIndex(id) {
+    const node = bookStore.getNodeById(id);
+    maxIndex.value = node.children.length;
+}
 async function validateParam(rule, value, callback) {
     return new Promise((resolve, reject) => {
         if (rule.field == 'index') {
-            value ? (value > 0 && value <= parentNode.children.length ? resolve() : reject(rule.message)) : resolve()
+            value ? (value > 0 && value <= forms[forms.length - 1].max ? resolve() : reject(rule.message)) : resolve()
         }
         if (rule.field == 'url') {
             value ? (regExp.test(value) ? resolve() : reject(rule.message)) : resolve()
@@ -116,7 +121,7 @@ function resetForm() {
     width: calc(100% - var(--padding) * 2);
     height: calc(100% - var(--padding) * 2);
 
-    .page-info{
+    .page-info {
         position: absolute;
         bottom: 0;
         left: 50%;
