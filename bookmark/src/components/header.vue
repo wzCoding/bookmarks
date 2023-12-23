@@ -10,17 +10,15 @@
                 <div class="header-menu" v-show="showMenu">
                     <el-button :icon="Search" circle v-show="!searchActive" class="header-button search-button"
                         @click="openSearch(searchInput)" />
-                    <el-dropdown trigger="click">
+                    <el-dropdown trigger="click" @command="onItemChange">
                         <el-button :icon="Menu" circle class="header-button setting-button" />
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item v-for="item in menus" :key="item.type">
-                                    <div>
-                                        <el-icon>
-                                            <component :is="item.icon"></component>
-                                        </el-icon>
-                                        <span>{{ item.label }}</span>
-                                    </div>
+                                <el-dropdown-item v-for="item in menus" :key="item.type" :command="item.type">
+                                    <el-icon>
+                                        <component :is="item.icon"></component>
+                                    </el-icon>
+                                    <span>{{ item.label }}</span>
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -35,7 +33,7 @@ import { computed, watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { ElPageHeader, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
-import { Search, Menu, Pointer, Setting } from '@element-plus/icons-vue';
+import { Search, Menu, Link, Setting } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { debounce } from '@/utils/index';
 const props = defineProps({
@@ -60,7 +58,7 @@ let oldNodes = currentNodes.value;
 const menus = [
     {
         label: "最近使用",
-        icon: Pointer,
+        icon: Link,
         type: "recent"
     },
     {
@@ -69,6 +67,9 @@ const menus = [
         type: "setting"
     }
 ]
+const onItemChange = (command) =>{
+    console.log(command)
+}
 const openSearch = (el) => {
     searchActive.value = true;
     oldNodes = currentNodes.value;
