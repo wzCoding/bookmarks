@@ -1,6 +1,6 @@
 <template>
     <div class="bookmark-info">
-        <Title :title="info && info.title ? info.title : '--'"/>
+        <Title :title="info && info.title ? info.title : '--'" />
         <div class="info-content">
             <Forms :forms="contents" :submit="false"></Forms>
         </div>
@@ -40,7 +40,7 @@ const nodeClick = (id) => {
 let contents = [];
 let allNodes = [];
 if (info) {
-    allNodes = bookStore.getAllNodes(info.id,[],true).reverse();
+    allNodes = bookStore.getAllNodes(info.id, [], true).reverse();
     contents = [
         {
             label: "书签类型:",
@@ -66,6 +66,13 @@ if (info) {
             label: "链接地址:",
             name: "url",
             defaultValue: info.url,
+            disable: true
+        })
+    } else {
+        contents.splice(1, 0, {
+            label: "书签数量:",
+            name: "total",
+            defaultValue: info.id == "1" ? bookStore.total : info.children.length,
             disable: true
         })
     }
@@ -103,9 +110,11 @@ if (info) {
         align-items: flex-start;
         padding: calc(var(--padding) / 2) 0;
         gap: var(--padding);
+
         :deep(.el-form) {
             .el-input.is-disabled {
                 cursor: text;
+
                 .el-input__inner {
                     cursor: text;
                 }

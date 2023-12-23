@@ -8,9 +8,23 @@
                         :suffix-icon="Search" clearable @input="searchBook" @clear="clearBook" />
                 </div>
                 <div class="header-menu" v-show="showMenu">
-                    <el-button  :icon="Search" circle v-show="!searchActive"
-                        class="header-button search-button" @click="openSearch(searchInput)" />
-                    <el-button :icon="Menu" circle class="header-button setting-button" @click="openSetting" />
+                    <el-button :icon="Search" circle v-show="!searchActive" class="header-button search-button"
+                        @click="openSearch(searchInput)" />
+                    <el-dropdown trigger="click">
+                        <el-button :icon="Menu" circle class="header-button setting-button" />
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item v-for="item in menus" :key="item.type">
+                                    <div>
+                                        <el-icon>
+                                            <component :is="item.icon"></component>
+                                        </el-icon>
+                                        <span>{{ item.label }}</span>
+                                    </div>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
                 </div>
             </div>
         </template>
@@ -20,8 +34,8 @@
 import { computed, watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { ElPageHeader, ElButton, ElInput } from 'element-plus';
-import { Search, Menu } from '@element-plus/icons-vue';
+import { ElPageHeader, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
+import { Search, Menu, Pointer, Setting } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { debounce } from '@/utils/index';
 const props = defineProps({
@@ -43,6 +57,18 @@ const showMenu = computed(() => { return router.currentRoute.value.fullPath == "
 const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
 let oldTitle = currentTitle.value;
 let oldNodes = currentNodes.value;
+const menus = [
+    {
+        label: "最近使用",
+        icon: Pointer,
+        type: "recent"
+    },
+    {
+        label: "设置",
+        icon: Setting,
+        type: "setting"
+    }
+]
 const openSearch = (el) => {
     searchActive.value = true;
     oldNodes = currentNodes.value;
@@ -51,7 +77,7 @@ const openSearch = (el) => {
 const searchBook = debounce(() => {
     if (searchText.value.trim()) {
         currentNodes.value = bookStore.getNodeByTitle(searchText.value);
-    }else {
+    } else {
         clearBook()
     }
 }, 300)
