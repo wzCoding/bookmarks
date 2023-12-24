@@ -44,12 +44,14 @@ import { computed, onMounted, ref } from 'vue';
 import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
 import { setLocalCache, getLocalCache, getDate, faviconURL } from '@/utils/index';
+import { locale } from '@/utils/locale';
 const props = defineProps({
     bookmark: {
         type: Object,
         default: () => { return {} }
     }
 });
+console.log(locale)
 const emit = defineEmits(['openUrl', 'openContextMenu']);
 
 const cacheKey = "bookmark-open";

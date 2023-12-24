@@ -21,7 +21,7 @@ import { createVNode, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usebookStore } from '@/store/usebookStore';
-import { usei18nStore } from '@/store/usei18nStore';
+import { useLocaleStore } from '@/store/useLocaleStore';
 import { VueDraggable } from 'vue-draggable-plus';
 import { ElMessageBox, ElMessage, ElEmpty } from 'element-plus';
 import { openTabs } from '@/utils/index';
@@ -30,7 +30,7 @@ import BookFooter from '@/components/footer.vue';
 import ContextMenuTemplate from '@/components/contextMenu.vue';
 
 let contextMenu = null;
-const i18nStore = usei18nStore();
+const i18nStore = useLocaleStore();
 const bookStore = usebookStore();
 const router = useRouter();
 const dynamicScroll = ref();

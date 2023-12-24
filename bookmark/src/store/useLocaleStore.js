@@ -7,7 +7,7 @@ const ZH_CN = 'zh-cn'
 const EN = 'en'
 console.log(zhCn)
 console.log(en)
-export const usei18nStore = defineStore('i18n', () => {
+export const useLocaleStore = defineStore('i18n', () => {
     const language = ref(getCache() || ZH_CN);
     const locale = computed(() => (language.value === ZH_CN ? zhCn : en))
     function toggle() {
