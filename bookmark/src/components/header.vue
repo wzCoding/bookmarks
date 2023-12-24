@@ -69,6 +69,9 @@ const menus = [
 ]
 const onItemChange = (command) =>{
     console.log(command)
+    if(command == "setting"){
+        router.push("/setting");
+    }
 }
 const openSearch = (el) => {
     searchActive.value = true;

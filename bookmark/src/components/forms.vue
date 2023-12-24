@@ -28,6 +28,12 @@
                 <template v-if="item.type == 'number'">
                     <el-input-number v-model="form[item.name]" :min="item.min" :max="item.max" />
                 </template>
+                <template v-if="item.type == 'radio'">
+                    <el-radio-group v-model="form[item.name]">
+                        <el-radio v-for="radio in item.options" :key="radio.value" :label="radio.label" size="large">{{
+                            radio.label }}</el-radio>
+                    </el-radio-group>
+                </template>
             </el-form-item>
         </el-form>
         <div v-if="submit" class="form-button">
@@ -38,7 +44,7 @@
 </template>
 <script setup>
 import { ref, reactive } from 'vue';
-import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElTreeSelect, ElOption, ElInputNumber } from 'element-plus';
+import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElTreeSelect, ElOption, ElInputNumber, ElRadioGroup, ElRadio } from 'element-plus';
 const props = defineProps({
     forms: { type: Array, default: () => [] },
     position: { type: String, default: 'top' },

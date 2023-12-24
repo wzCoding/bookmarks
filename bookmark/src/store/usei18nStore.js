@@ -1,12 +1,12 @@
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-import en from 'element-plus/dist/locale/en.mjs'
+import { zhCn,en } from '@/utils/locale'
 import { defineStore } from 'pinia'
 import { ref,computed } from 'vue'
 
 const cacheKey = "bookmark-lang"
 const ZH_CN = 'zh-cn'
 const EN = 'en'
-
+console.log(zhCn)
+console.log(en)
 export const usei18nStore = defineStore('i18n', () => {
     const language = ref(getCache() || ZH_CN);
     const locale = computed(() => (language.value === ZH_CN ? zhCn : en))
@@ -14,11 +14,13 @@ export const usei18nStore = defineStore('i18n', () => {
         language.value = language.value === ZH_CN ? EN : ZH_CN
         setCache(language.value)
     }
+   
+    console.log(language.value)
     function setCache(lang) {
-        localStorage.setItem(cacheKey, lang)
+        window.localStorage.setItem(cacheKey, lang)
     }
     function getCache() {
-        return localStorage.getItem(cacheKey)
+        return window.localStorage.getItem(cacheKey)
     }
     return {
         locale,
