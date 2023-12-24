@@ -4,12 +4,12 @@
             <VueDraggable ref="drag" v-model="currentNodes" @end="onDragEnd" target=".book-transition"
                 class="book-draggable">
                 <TransitionGroup tag="div" name="fade" class="book-transition">
-                    <BookMark v-for="bookmark in pageNodes" :key="bookmark.id" :bookmark="bookmark" @openUrl="openBookMark"
+                    <BookMark v-for="bookmark in pageNodes" :key="bookmark.id" :bookmark="bookmark" :locale="locale" @openUrl="openBookMark"
                         @openContextMenu="openMenu">
                     </BookMark>
                 </TransitionGroup>
             </VueDraggable>
-            <BookFooter :page-size="pageSize" :current-page="currentPage" :total="currentTotal" :locale="i18nStore.locale"
+            <BookFooter :page-size="pageSize" :current-page="currentPage" :total="currentTotal" :locale="locale"
                 @currentChange="pageChange" @sizeChange="sizeChange"></BookFooter>
         </div>
         <el-empty v-show="!currentNodes.length" class="book-empty" description="空空如也..." />
@@ -30,8 +30,8 @@ import BookFooter from '@/components/footer.vue';
 import ContextMenuTemplate from '@/components/contextMenu.vue';
 
 let contextMenu = null;
-const i18nStore = useLocaleStore();
 const bookStore = usebookStore();
+const localeStore = useLocaleStore();
 const router = useRouter();
 const dynamicScroll = ref();
 const drag = ref();
@@ -42,7 +42,7 @@ const {
     pageSize,
     pageNodes,
 } = storeToRefs(bookStore);
-//分页回调方法
+const { locale } = storeToRefs(localeStore);
 const pageChange = (page) => {
     bookStore.pageChange(page);
 }

@@ -13,10 +13,10 @@
         </div>
         <div class="bookmark-content">
             <div v-if="isFolder" class="bookmark-info">
-                <span>最近修改：{{ modifyDate }}</span>
+                <span>{{ locale.el.bookmarkCard.recentlyModified }}：{{ modifyDate }}</span>
             </div>
             <div v-else class="bookmark-info">
-                <span>最近访问：{{ visitDate ? visitDate : createDate }}</span>
+                <span>{{ locale.el.bookmarkCard.recentlyVisited }}：{{ visitDate ? visitDate : createDate }}</span>
             </div>
         </div>
         <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
@@ -25,7 +25,7 @@
             <el-icon>
                 <component :is="dropDownItems[openType].icon" />
             </el-icon>
-            <span :open-type="openType">打开</span>
+            <span :open-type="openType">{{ locale.el.bookmarkCard.openButtonText }}</span>
             <template #dropdown>
                 <el-dropdown-menu>
                     <el-dropdown-item v-for="item in dropDownItems" :key="item.id" :command="item.id">
@@ -44,16 +44,18 @@ import { computed, onMounted, ref } from 'vue';
 import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
 import { setLocalCache, getLocalCache, getDate, faviconURL } from '@/utils/index';
-import { locale } from '@/utils/locale';
 const props = defineProps({
     bookmark: {
         type: Object,
         default: () => { return {} }
+    },
+    locale: {
+        type: Object,
+        default: () => { return {} }
     }
 });
-console.log(locale)
-const emit = defineEmits(['openUrl', 'openContextMenu']);
 
+const emit = defineEmits(['openUrl', 'openContextMenu']);
 const cacheKey = "bookmark-open";
 const noTip = ref(true);
 const tip = ref("");
@@ -65,19 +67,19 @@ const visitDate = getDate(props.bookmark.dateLastUsed);
 const iconUrl = "" //本地开发使用
 const dropDownItems = [
     {
-        label: "当前页",
+        label: props.locale.el.bookmarkCard.currentPage,
         icon: HomeFilled,
         type: "_self",
         id: 0
     },
     {
-        label: "新页签",
+        label: props.locale.el.bookmarkCard.newPage,
         icon: ChromeFilled,
         type: "_blank",
         id: 1
     },
     {
-        label: "新窗口",
+        label: props.locale.el.bookmarkCard.newWindow,
         icon: Promotion,
         type: "_window",
         id: 2
