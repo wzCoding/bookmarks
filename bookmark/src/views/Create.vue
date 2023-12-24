@@ -45,7 +45,7 @@ const forms = reactive([
         onChange: typeChange
     },
     { label: "书签名称:", name: "title", placeholder: "请输入书签名称", type: "input", show: true, required: true, requireMessage: "请输入书签名称" },
-    { label: "书签地址:", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址", validator: validateUrl },
+    { label: "网址链接:", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址", validator: validateUrl },
     {
         label: "添加位置:",
         name: "id",
