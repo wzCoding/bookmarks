@@ -1,37 +1,45 @@
 <template>
     <div class="bookmark-setting">
-        <Forms :forms="settings" submit-text="保存" @submit="submitSetting"></Forms>
+        <Forms :forms="settings" locale-key="settingPage" submit-text="保存" @submit="submitSetting"></Forms>
     </div>
 </template>
 <script setup>
 import Forms from '@/components/forms.vue';
 import { usebookStore } from '@/store/usebookStore';
+import { useLocaleStore } from '@/store/useLocaleStore';
+import { reactive } from 'vue';
 const bookStore = usebookStore();
-bookStore.currentTitle = "书签设置"
-const settings = [
+const localeStore = useLocaleStore();
+bookStore.currentTitle = localeStore.locale.el.settingPage.pageTitle;
+console.log(localeStore.locale.value)
+const settings = reactive([
     {
-        label: "主题:",
+        label: "theme",
         name: "theme",
         type: "select",
-        defaultValue: "light",
+        defaultValue: "default",
         options: [
-            { label: "默认", value: "light" },
-            { label: "暗黑", value: "dark" }
+            { label: "defaultTheme", value: "default" },
+            { label: "darkTheme", value: "dark" }
         ]
     },
     {
-        label: "语言:",
-        name: "lang",
+        label: "language",
+        name: "language",
         type: "select",
-        defaultValue: "zh-cn",
+        defaultValue: "zhCn",
         options: [
-            { label: "中文", value: "zh-cn" },
-            { label: "英文", value: "en" }
+            { label: "defaultLanguage", value: "zhCn" },
+            { label: "enLanguage", value: "en" }
         ]
     }
-]
+])
+
 const submitSetting = (form) => {
-   console.log(form)
+    console.log(form)
+    localeStore.toggle(form.language)
+    bookStore.currentTitle = localeStore.locale.el.settingPage.pageTitle;
+
 }
 </script>
 <style lang="scss" scoped>

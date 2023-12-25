@@ -19,7 +19,7 @@
                 <span>{{ locale.el.bookmarkCard.recentlyVisited }}：{{ visitDate ? visitDate : createDate }}</span>
             </div>
         </div>
-        <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">打开</el-button>
+        <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">{{ locale.el.bookmarkCard.openButtonText }}</el-button>
         <el-dropdown v-else type="primary" size="small" trigger="click" split-button @command="onItemChange"
             @click="handleClick">
             <el-icon>

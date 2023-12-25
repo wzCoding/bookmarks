@@ -1,7 +1,7 @@
 <template>
     <div class="page-form">
         <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
-            <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show" :label="item.label"
+            <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show" :label="locale.el[localeKey][item.label]"
                 :prop="item.name">
                 <template v-if="item.type == 'input'">
                     <el-input v-model.lazy="form[item.name]" :placeholder="item.placeholder"
@@ -11,8 +11,8 @@
                 <template v-if="item.type == 'select'">
                     <el-select v-model="form[item.name]" :placeholder="item.placeholder"
                         @change="item.onChange ? handleSelect(FormEl, item.onChange) : ''">
-                        <el-option v-for="option in item.options" :key="option.value" :label="option.label"
-                            :value="option.value" />
+                        <el-option v-for="option in item.options" :key="locale.el[localeKey][option.value]" :label="locale.el[localeKey][option.label]"
+                            :value="locale.el[localeKey][option.value]" />
                     </el-select>
                 </template>
                 <template v-if="item.type == 'treeSelect'">
@@ -44,13 +44,16 @@
 </template>
 <script setup>
 import { ref, reactive } from 'vue';
+import { useLocaleStore } from '@/store/useLocaleStore';
 import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElTreeSelect, ElOption, ElInputNumber, ElRadioGroup, ElRadio } from 'element-plus';
+import { storeToRefs } from 'pinia';
 const props = defineProps({
     forms: { type: Array, default: () => [] },
     position: { type: String, default: 'top' },
     submit: { type: Boolean, default: true },
     submitText: { type: String, default: '提交' },
-    resetText: { type: String, default: '重置' }
+    resetText: { type: String, default: '重置' },
+    localeKey: { type: String, default: '' }
 });
 const emit = defineEmits(['submit', 'reset']);
 const FormEl = ref();
@@ -58,6 +61,8 @@ const treeSelect = ref();
 const form = reactive({});
 const rules = reactive({});
 const formOptions = reactive([]);
+const localeStore = useLocaleStore();
+const { locale } = storeToRefs(localeStore);
 if (props.forms.length) {
     props.forms.forEach(item => {
         item.show = item.show === undefined ? true : item.show;
