@@ -2,9 +2,6 @@ export const locales = {
     "zhCn": {
         name: "zhCn",
         el: {
-            back: "返回",
-            bookmarksBar: "书签栏",
-            otherBookmarks: "其他书签",
             pagination: {
                 "goto": "前往",
                 "pagesize": "条/页",
@@ -17,6 +14,12 @@ export const locales = {
                 "prevPages": "向前 {pager} 页",
                 "nextPages": "向后 {pager} 页",
                 "deprecationWarning": "你使用了一些已被废弃的用法，请参考 el-pagination 的官方文档"
+            },
+            bookmarkHeader:{
+                "back": "返回",
+                "searchTip": "搜索书签",
+                "recentlyUsed":"最近使用",
+                "settings":"设置",
             },
             bookmarkCard: {
                 "openButtonText": "打开",
@@ -85,9 +88,6 @@ export const locales = {
     "en": {
         name: "en",
         el: {
-            back: "back",
-            bookmarksBar: "Bookmarks Bar",
-            otherBookmarks: "Other Bookmarks",
             pagination: {
                 "goto": "Go to",
                 "pagesize": "/page",
@@ -100,6 +100,12 @@ export const locales = {
                 "prevPages": "Previous {pager} pages",
                 "nextPages": "Next {pager} pages",
                 "deprecationWarning": "Deprecated usages detected, please refer to the el-pagination documentation for more details"
+            },
+            bookmarkHeader:{
+                "back": "back",
+                "searchTip": "Search bookmarks",
+                "recentlyUsed":"Recently Used",
+                "settings":"Settings",
             },
             bookmarkCard: {
                 "openButtonText": "open",

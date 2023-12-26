@@ -38,7 +38,7 @@ const settings = reactive([
 const submitSetting = (form) => {
     console.log(form)
     localeStore.toggle(form.language)
-    bookStore.currentTitle = localeStore.locale.settingPage.pageTitle;
+    //bookStore.currentTitle = localeStore.locale.settingPage.pageTitle;
 
 }
 </script>

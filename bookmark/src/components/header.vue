@@ -1,5 +1,6 @@
 <template>
-    <el-page-header ref="pageHeader" title="返回" class="book-header" :style="headerStyle" @back="goBack">
+    <el-page-header ref="pageHeader" :title="locale.bookmarkHeader.back" class="book-header" :style="headerStyle"
+        @back="goBack">
         <template #extra>
             <div class="header-extra" :class="{ active: searchActive }">
                 <div class="header-search" :class="{ active: searchActive }">
@@ -29,12 +30,13 @@
     </el-page-header>
 </template>
 <script setup>
-import { computed, watch, ref } from 'vue';
+import { computed, watch, ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { ElPageHeader, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
 import { Search, Menu, Link, Setting } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
+import { useLocaleStore } from '@/store/useLocaleStore';
 import { debounce } from '@/utils/index';
 const props = defineProps({
     height: { type: String, default: '60' },
@@ -50,26 +52,28 @@ const searchText = ref();
 const searchActive = ref(false);
 const router = useRouter();
 const bookStore = usebookStore();
-const searchTip = `在 ${bookStore.total} 条书签中搜索`
+const localeStore = useLocaleStore();
 const showMenu = computed(() => { return router.currentRoute.value.fullPath == "/" })
 const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
+const { locale } = storeToRefs(localeStore);
+const searchTip = locale.value.bookmarkHeader.searchTip;
 let oldTitle = currentTitle.value;
 let oldNodes = currentNodes.value;
-const menus = [
+const menus = computed(()=>[
     {
-        label: "最近使用",
+        label: locale.value.bookmarkHeader.recentlyUsed,
         icon: Link,
         type: "recent"
     },
     {
-        label: "设置",
+        label: locale.value.bookmarkHeader.settings,
         icon: Setting,
         type: "setting"
     }
-]
-const onItemChange = (command) =>{
+])
+const onItemChange = (command) => {
     console.log(command)
-    if(command == "setting"){
+    if (command == "setting") {
         router.push("/setting");
     }
 }
