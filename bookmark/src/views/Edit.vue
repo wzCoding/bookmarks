@@ -26,7 +26,7 @@ import Title from '@/components/title.vue';
 const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
-const page = "editPage"
+const page = "edit"
 const title = ref("");
 const bookStore = usebookStore();
 const localeStore = useLocaleStore();

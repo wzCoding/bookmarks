@@ -15,11 +15,11 @@ export const locales = {
                 "nextPages": "向后 {pager} 页",
                 "deprecationWarning": "你使用了一些已被废弃的用法，请参考 el-pagination 的官方文档"
             },
-            bookmarkHeader:{
+            bookmarkHeader: {
                 "back": "返回",
                 "searchTip": "搜索书签",
-                "recentlyUsed":"最近使用",
-                "settings":"设置",
+                "recentlyUsed": "最近使用",
+                "settings": "设置",
             },
             bookmarkCard: {
                 "openButtonText": "打开",
@@ -29,7 +29,7 @@ export const locales = {
                 "recentlyModified": "最近修改",
                 "recentlyVisited": "最近访问",
             },
-            infoPage: {
+            info: {
                 "details": "详细信息",
                 "bookmarkType": "书签类型",
                 "bookmarkNumber": "书签数量",
@@ -39,7 +39,7 @@ export const locales = {
                 "websiteLink": "网址链接",
                 "bookmarkFolder": "书签文件夹",
             },
-            editPage: {
+            edit: {
                 "bookmarkName": "书签名称",
                 "websiteLink": "网址链接",
                 "bookmarkLocation": "书签位置",
@@ -50,7 +50,7 @@ export const locales = {
                     { "title": "书签顺序", "text": "书签顺序从0开始，数字越小越靠前" }
                 ]
             },
-            createPage: {
+            create: {
                 "pageTitle": "添加书签",
                 "bookmarkType": "书签类型",
                 "websiteLink": "网址链接",
@@ -61,14 +61,14 @@ export const locales = {
                 "submitText": "添加",
                 "resetText": "重置",
             },
-            deletePage: {
+            delete: {
                 "pageTitle": "删除书签",
                 "tip": "确定要删除书签 {bookmark} 吗?",
                 "confirmButtonText": "确认",
                 "cancelButtonText": "取消",
                 "deleteSuccess": "删除成功",
             },
-            settingPage: {
+            setting: {
                 "pageTitle": "书签设置",
                 "theme": "主题",
                 "defaultTheme": "默认",
@@ -101,11 +101,11 @@ export const locales = {
                 "nextPages": "Next {pager} pages",
                 "deprecationWarning": "Deprecated usages detected, please refer to the el-pagination documentation for more details"
             },
-            bookmarkHeader:{
+            bookmarkHeader: {
                 "back": "back",
                 "searchTip": "Search bookmarks",
-                "recentlyUsed":"Recently Used",
-                "settings":"Settings",
+                "recentlyUsed": "Recently Used",
+                "settings": "Settings",
             },
             bookmarkCard: {
                 "openButtonText": "open",
@@ -115,7 +115,7 @@ export const locales = {
                 "recentlyModified": "Recently Modified",
                 "recentlyVisited": "Recently Visited",
             },
-            infoPage: {
+            info: {
                 "pageTitle": "Details",
                 "bookmarkType": "Bookmark Type",
                 "bookmarkNumber": "Number of Bookmarks  in Folder",
@@ -125,7 +125,7 @@ export const locales = {
                 "websiteLink": "Website Link",
                 "bookmarkFolder": "Folder",
             },
-            editPage: {
+            edit: {
                 "pageTitle": "Edit Bookmark",
                 "bookmarkName": "Bookmark Name",
                 "websiteLink": "Website Link",
@@ -137,7 +137,7 @@ export const locales = {
                     { "title": "Order of Bookmark", "text": "The order of bookmark starts from 0, the smaller the number, the higher it is." }
                 ]
             },
-            createPage: {
+            create: {
                 "pageTitle": "Add Bookmark",
                 "bookmarkType": "Bookmark Type",
                 "websiteLink": "Website Link",
@@ -148,14 +148,14 @@ export const locales = {
                 "submitText": "Add",
                 "resetText": "Reset",
             },
-            deletePage: {
+            delete: {
                 "pageTitle": "Delete bookmark",
                 "tip": "Are you sure you want to delete the bookmark {bookmark}?",
                 "confirmButtonText": "Confirm",
                 "cancelButtonText": "Cancel",
                 "deleteSuccess": "Delete Successfully",
             },
-            settingPage: {
+            setting: {
                 "pageTitle": "Settings",
                 "theme": "Theme",
                 "defaultTheme": "Default",

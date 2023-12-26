@@ -11,7 +11,6 @@ import { reactive } from 'vue';
 const bookStore = usebookStore();
 const localeStore = useLocaleStore();
 bookStore.currentTitle = localeStore.locale.settingPage.pageTitle;
-console.log(localeStore.locale.value)
 const settings = reactive([
     {
         label: "theme",

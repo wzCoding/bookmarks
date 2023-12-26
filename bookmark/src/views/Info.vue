@@ -26,7 +26,7 @@ import Title from '@/components/title.vue';
 const props = defineProps(({
     id: { type: String, default: "0", required: true }
 }));
-const page = "infoPage";
+const page = "info";
 const bookStore = usebookStore();
 const localeStore = useLocaleStore();
 const router = useRouter();

@@ -25,7 +25,7 @@ import Title from '@/components/title.vue';
 const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
-const page = "createPage"
+const page = "create"
 const bookStore = usebookStore();
 const localeStore = useLocaleStore();
 bookStore.currentTitle =  localeStore.locale[page].pageTitle

@@ -110,7 +110,13 @@ const goBack = () => {
     }
 }
 
+const pageTitle = computed(()=>{
+    const name = router.currentRoute.value.name;
+    return locale.value[name].pageTitle
+})
+
 watch(currentTitle, (newVal, oldVal) => {
+    console.log(pageTitle.value)
     oldTitle = oldVal
     searchActive.value = false;
 })
