@@ -1,7 +1,7 @@
 <template>
     <div class="bookmark-edit">
         <Title :title="title" @update:title="updateTitle" />
-        <Forms :forms="forms" submit-text="更新" @submit="submitForm" @reset="resetForm">
+        <Forms :forms="forms" locale-key="editPage" submit-text="更新" @submit="submitForm" @reset="resetForm">
             <template #default="{ node }">
                 <div class="custom-tree-node">
                     <el-icon>
@@ -37,9 +37,9 @@ const maxIndex = ref(0);
 if (targetNode) {
     updateMaxIndex(targetNode.parentId);
     forms.push(
-        { label: "书签名称:", name: "title", placeholder: targetNode.title, defaultValue: "", onInput: updateTitle },
+        { label: "bookmarkName", name: "title", placeholder: targetNode.title, defaultValue: "", onInput: updateTitle },
         {
-            label: "书签位置:",
+            label: "bookmarkLocation",
             name: "id",
             placeholder: "请选择书签位置",
             type: "treeSelect",
@@ -49,7 +49,7 @@ if (targetNode) {
             nodeClick: updateMaxIndex
         },
         {
-            label: "书签顺序:",
+            label: "bookmarkOrder",
             name: "index",
             placeholder: "",
             type: "number",
@@ -65,7 +65,7 @@ if (targetNode) {
             1,
             0,
             {
-                label: "网址链接:",
+                label: "websiteLink",
                 name: "url",
                 placeholder: targetNode.url,
                 defaultValue: "",

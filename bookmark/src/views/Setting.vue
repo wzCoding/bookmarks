@@ -1,6 +1,6 @@
 <template>
     <div class="bookmark-setting">
-        <Forms :forms="settings" locale-key="settingPage" submit-text="保存" @submit="submitSetting"></Forms>
+        <Forms :forms="settings" locale-key="settingPage" @submit="submitSetting"></Forms>
     </div>
 </template>
 <script setup>
@@ -10,7 +10,7 @@ import { useLocaleStore } from '@/store/useLocaleStore';
 import { reactive } from 'vue';
 const bookStore = usebookStore();
 const localeStore = useLocaleStore();
-bookStore.currentTitle = localeStore.locale.el.settingPage.pageTitle;
+bookStore.currentTitle = localeStore.locale.settingPage.pageTitle;
 console.log(localeStore.locale.value)
 const settings = reactive([
     {
@@ -38,7 +38,7 @@ const settings = reactive([
 const submitSetting = (form) => {
     console.log(form)
     localeStore.toggle(form.language)
-    bookStore.currentTitle = localeStore.locale.el.settingPage.pageTitle;
+    bookStore.currentTitle = localeStore.locale.settingPage.pageTitle;
 
 }
 </script>

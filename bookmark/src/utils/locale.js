@@ -41,8 +41,8 @@ export const locales = {
                 "websiteLink": "网址链接",
                 "bookmarkLocation": "书签位置",
                 "bookmarkOrder": "书签顺序",
-                "updateButtonText": "更新",
-                "resetButtonText": "重置",
+                "submitText": "更新",
+                "resetText": "重置",
                 "tips": [
                     { "title": "书签顺序", "text": "书签顺序从0开始，数字越小越靠前" }
                 ]
@@ -55,8 +55,8 @@ export const locales = {
                 "bookmarkName": "书签名称",
                 "bookmarkLocation": "书签位置",
                 "addLocation": "添加位置",
-                "addButtonText": "添加",
-                "resetButtonText": "重置",
+                "submitText": "添加",
+                "resetText": "重置",
             },
             deletePage: {
                 "pageTitle": "删除书签",
@@ -73,8 +73,8 @@ export const locales = {
                 "language": "语言",
                 "defaultLanguage": "简体中文",
                 "enLanguage": "English",
-                "saveButtonText": "保存",
-                "resetButtonText": "重置",
+                "submitText": "保存",
+                "resetText": "重置",
                 "default": "Default",
                 "dark": "Dark",
                 "zhCn": "zhCn",
@@ -125,8 +125,8 @@ export const locales = {
                 "websiteLink": "Website Link",
                 "bookmarkLocation": "Bookmark Location",
                 "bookmarkOrder": "Order of Bookmark",
-                "updateButtonText": "Update",
-                "resetButtonText": "Reset",
+                "submitText": "Update",
+                "resetText": "Reset",
                 "tips": [
                     { "title": "Bookmark Order", "text": "The order of bookmark starts from 0, the smaller the number, the higher it is." }
                 ]
@@ -139,8 +139,8 @@ export const locales = {
                 "bookmarkName": "Bookmark Name",
                 "bookmarkLocation": "Bookmark Location",
                 "addLocation": "Add Location",
-                "addButtonText": "Add",
-                "resetButtonText": "Reset",
+                "submitText": "Add",
+                "resetText": "Reset",
             },
             deletePage: {
                 "pageTitle": "Delete bookmark",
@@ -157,8 +157,8 @@ export const locales = {
                 "language": "Language",
                 "defaultLanguage": "简体中文",
                 "enLanguage": "English",
-                "saveButtonText": "Save",
-                "resetButtonText": "Reset",
+                "submitText": "Save",
+                "resetText": "Reset",
                 "default": "Default",
                 "dark": "Dark",
                 "zhCn": "zhCn",

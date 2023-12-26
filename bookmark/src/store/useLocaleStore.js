@@ -7,7 +7,7 @@ const defaultLang = "zhCn"
 export const useLocaleStore = defineStore('locale', () => {
     console.log(getCache())
     const language = ref(getCache() ? getCache() : defaultLang);
-    const locale = computed(() => locales[language.value])
+    const locale = computed(() => locales[language.value].el)
     console.log(locale.value)
     function toggle(lang) {
         language.value = lang

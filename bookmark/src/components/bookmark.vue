@@ -13,19 +13,19 @@
         </div>
         <div class="bookmark-content">
             <div v-if="isFolder" class="bookmark-info">
-                <span>{{ locale.el.bookmarkCard.recentlyModified }}：{{ modifyDate }}</span>
+                <span>{{ locale.bookmarkCard.recentlyModified }}：{{ modifyDate }}</span>
             </div>
             <div v-else class="bookmark-info">
-                <span>{{ locale.el.bookmarkCard.recentlyVisited }}：{{ visitDate ? visitDate : createDate }}</span>
+                <span>{{ locale.bookmarkCard.recentlyVisited }}：{{ visitDate ? visitDate : createDate }}</span>
             </div>
         </div>
-        <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">{{ locale.el.bookmarkCard.openButtonText }}</el-button>
+        <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">{{ locale.bookmarkCard.openButtonText }}</el-button>
         <el-dropdown v-else type="primary" size="small" trigger="click" split-button @command="onItemChange"
             @click="handleClick">
             <el-icon>
                 <component :is="dropDownItems[openType].icon" />
             </el-icon>
-            <span :open-type="openType">{{ locale.el.bookmarkCard.openButtonText }}</span>
+            <span :open-type="openType">{{ locale.bookmarkCard.openButtonText }}</span>
             <template #dropdown>
                 <el-dropdown-menu>
                     <el-dropdown-item v-for="item in dropDownItems" :key="item.id" :command="item.id">
@@ -67,19 +67,19 @@ const visitDate = getDate(props.bookmark.dateLastUsed);
 const iconUrl = "" //本地开发使用
 const dropDownItems = [
     {
-        label: props.locale.el.bookmarkCard.currentPage,
+        label: props.locale.bookmarkCard.currentPage,
         icon: HomeFilled,
         type: "_self",
         id: 0
     },
     {
-        label: props.locale.el.bookmarkCard.newPage,
+        label: props.locale.bookmarkCard.newPage,
         icon: ChromeFilled,
         type: "_blank",
         id: 1
     },
     {
-        label: props.locale.el.bookmarkCard.newWindow,
+        label: props.locale.bookmarkCard.newWindow,
         icon: Promotion,
         type: "_window",
         id: 2
