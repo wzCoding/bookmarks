@@ -1,7 +1,7 @@
 <template>
     <div class="bookmark-edit">
         <Title :title="title" @update:title="updateTitle" />
-        <Forms :forms="forms" locale-key="editPage" submit-text="更新" @submit="submitForm" @reset="resetForm">
+        <Forms :forms="forms" :locale-key="page" @submit="submitForm" @reset="resetForm">
             <template #default="{ node }">
                 <div class="custom-tree-node">
                     <el-icon>
@@ -11,7 +11,7 @@
                 </div>
             </template>
         </Forms>
-        <el-alert class="page-info" title="书签顺序" type="info" :description="desc" show-icon />
+        <el-alert class="page-info" type="info" :title="tipTitle" :description="tipDesc" show-icon />
     </div>
 </template>
 <script setup>
@@ -19,21 +19,25 @@ import { reactive, ref } from 'vue';
 import { ElMessage, ElIcon, ElAlert } from 'element-plus';
 import { Folder } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
+import { useLocaleStore } from '@/store/useLocaleStore';
 import { updateBookMark } from '@/utils/index';
 import Forms from '@/components/forms.vue';
 import Title from '@/components/title.vue';
 const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
+const page = "editPage"
 const title = ref("");
-const desc = "书签顺序从0开始，数字越小越靠前";
 const bookStore = usebookStore();
+const localeStore = useLocaleStore();
 const targetNode = bookStore.getNodeById(props.id);
-bookStore.currentTitle = "编辑书签";
+bookStore.currentTitle = localeStore.locale[page].pageTitle
 title.value = targetNode && targetNode.title ? targetNode.title : "--";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const forms = reactive([]);
 const maxIndex = ref(0);
+const tipTitle = localeStore.locale[page].tips[0].title
+const tipDesc = localeStore.locale[page].tips[0].text
 if (targetNode) {
     updateMaxIndex(targetNode.parentId);
     forms.push(

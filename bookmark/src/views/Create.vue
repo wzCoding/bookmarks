@@ -1,7 +1,7 @@
 <template>
     <div class="bookmark-create">
         <Title :title="targetNode.title" />
-        <Forms :forms="forms" submit-text="添加" @submit="submitForm">
+        <Forms :forms="forms" :locale-key="page" @submit="submitForm">
             <template #default="{ node }">
                 <div class="custom-tree-node">
                     <el-icon>
@@ -18,36 +18,39 @@ import { reactive } from 'vue';
 import { ElMessage, ElIcon } from 'element-plus';
 import { Folder } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
+import { useLocaleStore } from '@/store/useLocaleStore';
 import { createBookMark } from '@/utils/index';
 import Forms from '@/components/forms.vue';
 import Title from '@/components/title.vue';
 const props = defineProps({
     id: { type: String, default: "0", required: true }
 });
+const page = "createPage"
 const bookStore = usebookStore();
-bookStore.currentTitle = "添加书签";
+const localeStore = useLocaleStore();
+bookStore.currentTitle =  localeStore.locale[page].pageTitle
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const targetNode = bookStore.getNodeById(props.id);
 const urlIndex = 2;
 const forms = reactive([
     {
-        label: "书签类型:",
+        label: "bookmarkType",
         name: "type",
         placeholder: "请选择书签类型",
         type: "select",
         options: [
-            { label: "书签文件夹", value: "folder" },
-            { label: "网址链接", value: "url" }
+            { label: localeStore.locale[page]["bookmarkFolder"], value: "folder" },
+            { label: localeStore.locale[page]["websiteLink"], value: "url" }
         ],
         show: true,
         required: true,
         requireMessage: "请选择书签类型",
         onChange: typeChange
     },
-    { label: "书签名称:", name: "title", placeholder: "请输入书签名称", type: "input", show: true, required: true, requireMessage: "请输入书签名称" },
-    { label: "网址链接:", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址", validator: validateUrl },
+    { label: "bookmarkName", name: "title", placeholder: "请输入书签名称", type: "input", show: true, required: true, requireMessage: "请输入书签名称" },
+    { label: "websiteLink", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址", validator: validateUrl },
     {
-        label: "添加位置:",
+        label: "bookmarkLocation",
         name: "id",
         placeholder: "请选择添加位置",
         type: "treeSelect",

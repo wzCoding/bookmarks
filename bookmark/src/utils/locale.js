@@ -112,12 +112,12 @@ export const locales = {
             infoPage: {
                 "pageTitle": "Details",
                 "bookmarkType": "Bookmark Type",
-                "bookmarkNumber": "Number of Bookmarks",
+                "bookmarkNumber": "Number of Bookmarks  in Folder",
                 "bookmarkAddDate": "Bookmark Add Date",
                 "recentlyVisited": "Recently Visited",
                 "recentlyModified": "Recently Modified",
                 "websiteLink": "Website Link",
-                "bookmarkFolder": "Bookmark Folder",
+                "bookmarkFolder": "Folder",
             },
             editPage: {
                 "pageTitle": "Edit Bookmark",
@@ -128,14 +128,14 @@ export const locales = {
                 "submitText": "Update",
                 "resetText": "Reset",
                 "tips": [
-                    { "title": "Bookmark Order", "text": "The order of bookmark starts from 0, the smaller the number, the higher it is." }
+                    { "title": "Order of Bookmark", "text": "The order of bookmark starts from 0, the smaller the number, the higher it is." }
                 ]
             },
             createPage: {
                 "pageTitle": "Add Bookmark",
                 "bookmarkType": "Bookmark Type",
                 "websiteLink": "Website Link",
-                "bookmarkFolder": "Bookmark Folder",
+                "bookmarkFolder": "Folder",
                 "bookmarkName": "Bookmark Name",
                 "bookmarkLocation": "Bookmark Location",
                 "addLocation": "Add Location",
@@ -150,7 +150,7 @@ export const locales = {
                 "deleteSuccess": "Delete Successfully",
             },
             settingPage: {
-                "pageTitle": "BookMark Setting",
+                "pageTitle": "Settings",
                 "theme": "Theme",
                 "defaultTheme": "Default",
                 "darkTheme": "Dark",
