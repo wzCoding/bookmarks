@@ -5,6 +5,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
+
     component: Home
   },
   {
@@ -22,7 +23,7 @@ const routes = [
   {
     path: '/create/bookmark-:id',
     name: 'create',
-    props:true,
+    props: true,
     component: () => import(/* webpackChunkName: "Create" */ '../views/Create.vue')
   },
   {

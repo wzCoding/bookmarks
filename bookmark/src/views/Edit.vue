@@ -31,7 +31,6 @@ const title = ref("");
 const bookStore = usebookStore();
 const localeStore = useLocaleStore();
 const targetNode = bookStore.getNodeById(props.id);
-bookStore.currentTitle = localeStore.locale[page].pageTitle
 title.value = targetNode && targetNode.title ? targetNode.title : "--";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const forms = reactive([]);

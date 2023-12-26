@@ -28,7 +28,6 @@ const props = defineProps({
 const page = "create"
 const bookStore = usebookStore();
 const localeStore = useLocaleStore();
-bookStore.currentTitle =  localeStore.locale[page].pageTitle
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const targetNode = bookStore.getNodeById(props.id);
 const urlIndex = 2;

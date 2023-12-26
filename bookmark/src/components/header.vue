@@ -4,7 +4,7 @@
         <template #extra>
             <div class="header-extra" :class="{ active: searchActive }">
                 <div class="header-search" :class="{ active: searchActive }">
-                    <span class="header-title">{{ currentTitle }}</span>
+                    <span class="header-title">{{ pageTitle }}</span>
                     <el-input ref="searchInput" v-model.lazy="searchText" :placeholder="searchTip" class="search-input"
                         :suffix-icon="Search" clearable @input="searchBook" @clear="clearBook" />
                 </div>
@@ -30,7 +30,7 @@
     </el-page-header>
 </template>
 <script setup>
-import { computed, watch, ref, reactive } from 'vue';
+import { computed, watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { ElPageHeader, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
@@ -109,14 +109,15 @@ const goBack = () => {
         clearBook();
     }
 }
-
 const pageTitle = computed(()=>{
-    const name = router.currentRoute.value.name;
-    return locale.value[name].pageTitle
+    const path = router.currentRoute.value.fullPath;
+    if(path == '/'){
+        return currentTitle.value;
+    }
+    return locale.value[router.currentRoute.value.name].pageTitle
 })
 
 watch(currentTitle, (newVal, oldVal) => {
-    console.log(pageTitle.value)
     oldTitle = oldVal
     searchActive.value = false;
 })

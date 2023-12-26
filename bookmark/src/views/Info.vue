@@ -30,7 +30,6 @@ const page = "info";
 const bookStore = usebookStore();
 const localeStore = useLocaleStore();
 const router = useRouter();
-bookStore.currentTitle = localeStore.locale[page].pageTitle;
 const info = bookStore.getNodeById(props.id);
 const nodeClick = (id) => {
     if (id !== info.id) {
