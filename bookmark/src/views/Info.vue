@@ -2,7 +2,7 @@
     <div class="bookmark-info">
         <Title :title="info && info.title ? info.title : '--'" />
         <div class="info-content">
-            <Forms :forms="contents" :submit="false"></Forms>
+            <Forms :forms="contents" :locale-key="page" :submit="false"></Forms>
         </div>
         <div class="show-node">
             <el-timeline>
@@ -18,6 +18,7 @@
 <script setup>
 import { ElTimeline, ElTimelineItem, ElLink } from 'element-plus';
 import { usebookStore } from '@/store/usebookStore';
+import { useLocaleStore } from '@/store/useLocaleStore';
 import { getDate } from '@/utils/index';
 import { useRouter } from 'vue-router';
 import Forms from '@/components/forms.vue';
@@ -25,9 +26,11 @@ import Title from '@/components/title.vue';
 const props = defineProps(({
     id: { type: String, default: "0", required: true }
 }));
+const page = "infoPage";
 const bookStore = usebookStore();
+const localeStore = useLocaleStore();
 const router = useRouter();
-bookStore.currentTitle = "详细信息"
+bookStore.currentTitle = localeStore.locale[page].pageTitle;
 const info = bookStore.getNodeById(props.id);
 const nodeClick = (id) => {
     if (id !== info.id) {
@@ -43,19 +46,19 @@ if (info) {
     allNodes = bookStore.getAllNodes(info.id, [], true).reverse();
     contents = [
         {
-            label: "书签类型:",
+            label: "bookmarkType",
             name: "type",
-            defaultValue: info.children ? "书签文件夹" : "网址链接",
+            defaultValue: info.children ? "bookmarkFolder" : "websiteLink",
             disable: true
         },
         {
-            label: "添加日期:",
+            label: "bookmarkAddDate",
             name: "dateAdded",
             defaultValue: getDate(info.dateAdded),
             disable: true
         },
         {
-            label: info.children ? "修改日期:" : "最近访问:",
+            label: info.children ? "recentlyModified" : "recentlyVisited",
             name: "dateLastModified",
             defaultValue: info.children ? getDate(info.dateLastModified) : (getDate(info.dateLastUsed) ? getDate(info.dateLastUsed) : getDate(info.dateAdded)),
             disable: true
@@ -63,14 +66,14 @@ if (info) {
     ]
     if (!info.children) {
         contents.push({
-            label: "链接地址:",
+            label: "websiteLink",
             name: "url",
             defaultValue: info.url,
             disable: true
         })
     } else {
         contents.splice(1, 0, {
-            label: "书签数量:",
+            label: "bookmarkNumber",
             name: "total",
             defaultValue: info.id == "1" ? bookStore.total : info.children.length,
             disable: true
