@@ -21,6 +21,12 @@ export const locales = {
                 "recentlyUsed": "最近使用",
                 "settings": "设置",
             },
+            context:{
+                "details": "详细信息",
+                "edit": "编辑书签",
+                "delete": "删除书签",
+                "add": "添加书签",
+            },
             bookmarkCard: {
                 "openButtonText": "打开",
                 "currentPage": "当前页",
@@ -106,6 +112,12 @@ export const locales = {
                 "searchTip": "Search bookmarks",
                 "recentlyUsed": "Recently Used",
                 "settings": "Settings",
+            },
+            context:{
+                "info": "info",
+                "edit": "Edit",
+                "delete": "Delete",
+                "add": "Add",
             },
             bookmarkCard: {
                 "openButtonText": "open",

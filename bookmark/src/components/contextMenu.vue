@@ -15,6 +15,8 @@
 import { computed, ref } from 'vue';
 import { ElIcon, ClickOutside as vClickOutside } from 'element-plus';
 import { InfoFilled, Management, DeleteFilled, CirclePlusFilled } from '@element-plus/icons-vue';
+import { useLocaleStore } from '@/store/useLocaleStore';
+const page = "context"
 const menuWidth = "112px"
 const menuHeight = "144px"
 const props = defineProps({
@@ -23,21 +25,22 @@ const props = defineProps({
     target: { type: Object, default: () => { return {} } }
 });
 const emits = defineEmits(['openContextMenu', 'destroyContextMenu', 'contextMenuClick']);
+const localeStore = useLocaleStore();
 const showMenu = ref(false);
 const timer = ref(null);
 const width = Number(menuWidth.replace("px", ""));
 const height = Number(menuHeight.replace("px", ""));
 const menuList = [
-    { label: "详细信息", icon: InfoFilled, type: "info" },
-    { label: "编辑书签", icon: Management, type: "edit" },
+    { label: localeStore.locale[page].info, icon: InfoFilled, type: "info" },
+    { label: localeStore.locale[page].edit, icon: Management, type: "edit" },
 ];
 if (props.target.children) {
-    menuList.push({ label: "添加书签", icon: CirclePlusFilled, type: "create" })
+    menuList.push({ label: localeStore.locale[page].add, icon: CirclePlusFilled, type: "create" })
     if (props.target.children.length === 0) {
-        menuList.push({ label: "删除书签", icon: DeleteFilled, type: "delete" })
+        menuList.push({ label: localeStore.locale[page].delete, icon: DeleteFilled, type: "delete" })
     }
 } else {
-    menuList.push({ label: "删除书签", icon: DeleteFilled, type: "delete" })
+    menuList.push({ label: localeStore.locale[page].delete, icon: DeleteFilled, type: "delete" })
 }
 const styles = computed(() => {
     return {
