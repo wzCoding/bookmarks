@@ -1,5 +1,5 @@
 <template>
-    <div class="bookmark-create">
+    <div class="bookmark-page bookmark-create">
         <Title :title="targetNode.title" />
         <Forms :forms="forms" :locale-key="page" @submit="submitForm">
             <template #default="{ node }">
@@ -31,6 +31,7 @@ const localeStore = useLocaleStore();
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const targetNode = bookStore.getNodeById(props.id);
 const urlIndex = 2;
+console.log(localeStore.locale.el[page]["bookmarkFolder"])
 const forms = reactive([
     {
         label: "bookmarkType",
@@ -38,8 +39,8 @@ const forms = reactive([
         placeholder: "请选择书签类型",
         type: "select",
         options: [
-            { label: localeStore.locale.el[page]["bookmarkFolder"], value: "folder" },
-            { label: localeStore.locale.el[page]["websiteLink"], value: "url" }
+            { label: "bookmarkFolder", value: "folder" },
+            { label: "websiteLink", value: "url" }
         ],
         show: true,
         required: true,
@@ -78,8 +79,16 @@ function typeChange(form) {
     forms[urlIndex].required = forms[urlIndex].show = form.type === "url";
 }
 function submitForm(param) {
-    console.log(param)
-    // createBookMark(option, (res) => {
+    const options = {
+        index: param.index ? param.index : 0,
+        parentId: param.parentId ? param.parentId : "1",
+        title: param.title ? param.title : "",
+    }
+    if (param.url) {
+        options.url = param.url
+    }
+    console.log(options)
+    // createBookMark(options, (res) => {
     //     if (res) {
     //         ElMessage({
     //             type: 'success',
@@ -89,25 +98,3 @@ function submitForm(param) {
     // })
 }
 </script>
-<style lang="scss" scoped>
-.bookmark-create {
-    --padding: 1.25rem;
-    padding: 1.25rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
-    flex-direction: column;
-    width: calc(100% - var(--padding) * 2);
-    height: calc(100% - var(--padding) * 2);
-
-    .create-title {
-        background: #F0F2F5;
-        padding: var(--padding);
-        cursor: pointer;
-        border-radius: 4px;
-        font-size: 1rem;
-        width: calc(100% - var(--padding) * 2);
-    }
-
-}
-</style>

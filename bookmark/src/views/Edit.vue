@@ -1,5 +1,5 @@
 <template>
-    <div class="bookmark-edit">
+    <div class="bookmark-page bookmark-edit">
         <Title :title="title" @update:title="updateTitle" />
         <Forms :forms="forms" :locale-key="page" @submit="submitForm" @reset="resetForm">
             <template #default="{ node }">
@@ -20,7 +20,7 @@ import { ElMessage, ElIcon, ElAlert } from 'element-plus';
 import { Folder } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { useLocaleStore } from '@/store/useLocaleStore';
-import { updateBookMark } from '@/utils/index';
+import { updateBookMark, moveBookMark } from '@/utils/index';
 import Forms from '@/components/forms.vue';
 import Title from '@/components/title.vue';
 const props = defineProps({
@@ -43,7 +43,7 @@ if (targetNode) {
         { label: "bookmarkName", name: "title", placeholder: targetNode.title, defaultValue: "", onInput: updateTitle },
         {
             label: "bookmarkLocation",
-            name: "id",
+            name: "parentId",
             placeholder: "请选择书签位置",
             type: "treeSelect",
             tree: bookStore.getTreeNodes("children"),
@@ -56,7 +56,7 @@ if (targetNode) {
             name: "index",
             placeholder: "",
             type: "number",
-            defaultValue: 0,
+            defaultValue: targetNode.index,
             min: 0,
             max: maxIndex,
             requireMessage: "请设置有效的顺序",
@@ -100,35 +100,32 @@ async function validateParam(rule, value, callback) {
 }
 function submitForm(param) {
     console.log(param)
-    // updateBookMark(option, (res) => {
-    //     if (res) {
-    //         ElMessage({
-    //             type: 'success',
-    //             message: `更新书签 '${option.title}' 成功`,
-    //         })
-    //     }
-    // })
+    const options={};
+    const moveOptions = {
+        index: param.index,
+        parentId: param.parentId,
+    };
+    param.title ? options.title = param.title : null;
+    param.url ? options.url = param.url : null;
+    Promise.all([
+        updateBookMark(props.id, options),
+        moveBookMark(props.id, moveOptions)
+    ]).then(res => {
+        ElMessage({
+            type: 'success',
+            message: `更新书签 '${param.title}' 成功`,
+        })
+    })
 }
 function resetForm() {
     title.value = targetNode && targetNode.title;
 }
 </script>
 <style lang="scss" scoped>
-.bookmark-edit {
-    --padding: 1.25rem;
-    padding: var(--padding);
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
-    flex-direction: column;
-    width: calc(100% - var(--padding) * 2);
-    height: calc(100% - var(--padding) * 2);
-
-    .page-info {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-    }
+.page-info {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 </style>

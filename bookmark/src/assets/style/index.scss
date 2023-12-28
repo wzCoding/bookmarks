@@ -22,7 +22,16 @@ body {
     --content-gap: 0.6rem; // 内容区gap
     --rest-space: calc(100% - (var(--card-columns) - 1) * var(--content-gap) - var(--content-padding) * 2); // 剩余空间
 }
-
+.bookmark-page {
+    --padding: 1.25rem;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    flex-direction: column;
+    width: calc(100% - var(--padding) * 2);
+    height: calc(100% - var(--padding) * 2);
+}
 // 响应式样式
 @media screen and (max-width: 578px) and (min-width: 320px) {
     #app {

@@ -1,5 +1,5 @@
 <template>
-    <div class="bookmark-setting">
+    <div class="bookmark-page bookmark-setting">
         <Forms :forms="settings" locale-key="setting" @submit="submitSetting"></Forms>
     </div>
 </template>
@@ -34,19 +34,10 @@ const settings = reactive([
 
 const submitSetting = (form) => {
     console.log(form)
-    const loading = ElLoading.service({lock:true})
-    setTimeout(()=>{
+    const loading = ElLoading.service({ lock: true })
+    setTimeout(() => {
         localeStore.toggle(form.language)
         loading.close()
-    },1000)
+    }, 1000)
 }
 </script>
-<style lang="scss" scoped>
-.bookmark-setting {
-    --padding: 1.25rem;
-    width: calc(100% - 2 * var(--padding));
-    height: calc(100% - 2 * var(--padding));
-    background-color: #fff;
-    padding: var(--padding);
-}
-</style>

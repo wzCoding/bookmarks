@@ -11,8 +11,8 @@
                 <template v-if="item.type == 'select'">
                     <el-select v-model="form[item.name]" :placeholder="item.placeholder"
                         @change="item.onChange ? handleSelect(FormEl, item.onChange) : ''">
-                        <el-option v-for="option in item.options" :key="locale.el[localeKey][option.value]" :label="locale.el[localeKey][option.label]"
-                            :value="locale.el[localeKey][option.value]" />
+                        <el-option v-for="option in item.options" :key="option.value" :label="locale.el[localeKey][option.label]"
+                            :value="option.value" />
                     </el-select>
                 </template>
                 <template v-if="item.type == 'treeSelect'">

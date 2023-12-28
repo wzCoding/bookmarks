@@ -1,5 +1,5 @@
 <template>
-    <div class="bookmark-info">
+    <div class="bookmark-page bookmark-info">
         <Title :title="info && info.title ? info.title : '--'" />
         <div class="info-content">
             <Forms :forms="contents" :locale-key="page" :submit="false"></Forms>
@@ -82,28 +82,11 @@ if (info) {
 </script>
 <style lang="scss" scoped>
 .bookmark-info {
-    --padding: 1.25rem;
-    width: calc(100% - 2 * var(--padding));
-    height: calc(100% - 2 * var(--padding));
     background-color: #fff;
-    padding: var(--padding);
     color: #666;
     overflow-y: auto;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
     align-items: stretch;
-
-    .info-title {
-        background: #F0F2F5;
-        padding: var(--padding);
-        cursor: pointer;
-        border-radius: 4px;
-        font-size: 1rem;
-        width: calc(100% - var(--padding) * 2);
-        color: #333;
-    }
 
     .info-content {
         display: flex;

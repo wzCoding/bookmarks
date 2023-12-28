@@ -124,29 +124,17 @@ function getCurrentTab(callback) {
 }
 
 //修改bookmark
-function updateBookMark(option, callback) {
-    if (!option) return;
-    const id = option.id;
-    const details = {
-        title: option.title ? option.title : "",
-        url: option.url ? option.url : ""
-    }
-    chrome.bookmarks.update(id, details, (res) => {
+function updateBookMark(id,options, callback) {
+    if (!options) return;
+    chrome.bookmarks.update(id, options, (res) => {
         callback && callback(res);
     })
 }
 
 //创建bookmark
-function createBookMark(option, callback) {
-    if (!option) return;
-    const id = option.id;
-    const details = {
-        index: option.index ? option.index : 0,
-        parentId: option.parentId ? option.parentId : "1",
-        title: option.title ? option.title : "",
-        url: option.url ? option.url : "",
-    }
-    chrome.bookmarks.create(details, (res) => {
+function createBookMark(options, callback) {
+    if (!options) return;
+    chrome.bookmarks.create(options, (res) => {
         callback && callback(res);
     })
 }
