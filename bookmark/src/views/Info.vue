@@ -47,7 +47,7 @@ if (info) {
         {
             label: "bookmarkType",
             name: "type",
-            defaultValue: info.children ? localeStore.locale[page]['bookmarkFolder'] : localeStore.locale[page]['websiteLink'],
+            defaultValue: info.children ? localeStore.locale.el[page]['bookmarkFolder'] : localeStore.locale.el[page]['websiteLink'],
             disable: true
         },
         {

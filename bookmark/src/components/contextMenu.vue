@@ -31,16 +31,16 @@ const timer = ref(null);
 const width = Number(menuWidth.replace("px", ""));
 const height = Number(menuHeight.replace("px", ""));
 const menuList = [
-    { label: localeStore.locale[page].info, icon: InfoFilled, type: "info" },
-    { label: localeStore.locale[page].edit, icon: Management, type: "edit" },
+    { label: localeStore.locale.el[page].info, icon: InfoFilled, type: "info" },
+    { label: localeStore.locale.el[page].edit, icon: Management, type: "edit" },
 ];
 if (props.target.children) {
-    menuList.push({ label: localeStore.locale[page].create, icon: CirclePlusFilled, type: "create" })
+    menuList.push({ label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create" })
     if (props.target.children.length === 0) {
-        menuList.push({ label: localeStore.locale[page].delete, icon: DeleteFilled, type: "delete" })
+        menuList.push({ label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete" })
     }
 } else {
-    menuList.push({ label: localeStore.locale[page].delete, icon: DeleteFilled, type: "delete" })
+    menuList.push({ label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete" })
 }
 const styles = computed(() => {
     return {

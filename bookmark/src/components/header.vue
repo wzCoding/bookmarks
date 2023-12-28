@@ -1,5 +1,5 @@
 <template>
-    <el-page-header ref="pageHeader" :title="locale.bookmarkHeader.back" class="book-header" :style="headerStyle"
+    <el-page-header ref="pageHeader" :title="locale.el.bookmarkHeader.back" class="book-header" :style="headerStyle"
         @back="goBack">
         <template #extra>
             <div class="header-extra" :class="{ active: searchActive }">
@@ -56,17 +56,17 @@ const localeStore = useLocaleStore();
 const showMenu = computed(() => { return router.currentRoute.value.fullPath == "/" })
 const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
 const { locale } = storeToRefs(localeStore);
-const searchTip = locale.value.bookmarkHeader.searchTip;
+const searchTip = locale.value.el.bookmarkHeader.searchTip;
 let oldTitle = currentTitle.value;
 let oldNodes = currentNodes.value;
 const menus = computed(()=>[
     {
-        label: locale.value.bookmarkHeader.recentlyUsed,
+        label: locale.value.el.bookmarkHeader.recentlyUsed,
         icon: Link,
         type: "recent"
     },
     {
-        label: locale.value.bookmarkHeader.settings,
+        label: locale.value.el.bookmarkHeader.settings,
         icon: Setting,
         type: "setting"
     }
@@ -114,7 +114,7 @@ const pageTitle = computed(()=>{
     if(path == '/'){
         return currentTitle.value;
     }
-    return locale.value[router.currentRoute.value.name].pageTitle
+    return locale.value.el[router.currentRoute.value.name].pageTitle
 })
 
 watch(currentTitle, (newVal, oldVal) => {

@@ -35,8 +35,8 @@ title.value = targetNode && targetNode.title ? targetNode.title : "--";
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const forms = reactive([]);
 const maxIndex = ref(0);
-const tipTitle = localeStore.locale[page].tips[0].title
-const tipDesc = localeStore.locale[page].tips[0].text
+const tipTitle = localeStore.locale.el[page].tips[0].title
+const tipDesc = localeStore.locale.el[page].tips[0].text
 if (targetNode) {
     updateMaxIndex(targetNode.parentId);
     forms.push(

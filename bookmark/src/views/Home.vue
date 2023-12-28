@@ -4,7 +4,7 @@
             <VueDraggable ref="drag" v-model="currentNodes" @end="onDragEnd" target=".book-transition"
                 class="book-draggable">
                 <TransitionGroup tag="div" name="fade" class="book-transition">
-                    <BookMark v-for="bookmark in pageNodes" :key="bookmark.id" :bookmark="bookmark" :locale="locale" @openUrl="openBookMark"
+                    <BookMark v-for="bookmark in pageNodes" :key="bookmark.id" :bookmark="bookmark" :locale="locale.el" @openUrl="openBookMark"
                         @openContextMenu="openMenu">
                     </BookMark>
                 </TransitionGroup>

@@ -38,8 +38,8 @@ const forms = reactive([
         placeholder: "请选择书签类型",
         type: "select",
         options: [
-            { label: localeStore.locale[page]["bookmarkFolder"], value: "folder" },
-            { label: localeStore.locale[page]["websiteLink"], value: "url" }
+            { label: localeStore.locale.el[page]["bookmarkFolder"], value: "folder" },
+            { label: localeStore.locale.el[page]["websiteLink"], value: "url" }
         ],
         show: true,
         required: true,
