@@ -2,6 +2,7 @@ export const locales = {
     "zhCn": {
         name: "zhCn",
         el: {
+            emptyText:"空空如也...",
             pagination: {
                 "goto": "前往",
                 "pagesize": "条/页",
@@ -94,6 +95,7 @@ export const locales = {
     "en": {
         name: "en",
         el: {
+            emptyText:"Nothing Here...",
             pagination: {
                 "goto": "Go to",
                 "pagesize": "/page",

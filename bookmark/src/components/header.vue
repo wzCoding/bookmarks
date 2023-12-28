@@ -56,7 +56,7 @@ const localeStore = useLocaleStore();
 const showMenu = computed(() => { return router.currentRoute.value.fullPath == "/" })
 const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
 const { locale } = storeToRefs(localeStore);
-const searchTip = locale.value.el.bookmarkHeader.searchTip;
+const searchTip = computed(()=>{return locale.value.el.bookmarkHeader.searchTip});
 let oldTitle = currentTitle.value;
 let oldNodes = currentNodes.value;
 const menus = computed(()=>[
@@ -73,6 +73,7 @@ const menus = computed(()=>[
 ])
 const onItemChange = (command) => {
     console.log(command)
+    searchActive.value = false;
     if (command == "setting") {
         router.push("/setting");
     }

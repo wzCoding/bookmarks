@@ -12,7 +12,7 @@
             <BookFooter :page-size="pageSize" :current-page="currentPage" :total="currentTotal" :locale="locale"
                 @currentChange="pageChange" @sizeChange="sizeChange"></BookFooter>
         </div>
-        <el-empty v-show="!currentNodes.length" class="book-empty" description="空空如也..." />
+        <el-empty v-show="!currentNodes.length" class="book-empty" :description="locale.el.emptyText" />
     </div>
 </template>
 
