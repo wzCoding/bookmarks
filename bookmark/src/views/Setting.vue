@@ -5,10 +5,9 @@
 </template>
 <script setup>
 import Forms from '@/components/forms.vue';
-import { usebookStore } from '@/store/usebookStore';
 import { useLocaleStore } from '@/store/useLocaleStore';
 import { reactive } from 'vue';
-const bookStore = usebookStore();
+import { ElLoading } from 'element-plus';
 const localeStore = useLocaleStore();
 const settings = reactive([
     {
@@ -25,7 +24,7 @@ const settings = reactive([
         label: "language",
         name: "language",
         type: "select",
-        defaultValue: "zhCn",
+        defaultValue: localeStore.language ? localeStore.language : "zhCn",
         options: [
             { label: "defaultLanguage", value: "zhCn" },
             { label: "enLanguage", value: "en" }
@@ -35,7 +34,11 @@ const settings = reactive([
 
 const submitSetting = (form) => {
     console.log(form)
-    localeStore.toggle(form.language)
+    const loading = ElLoading.service({lock:true})
+    setTimeout(()=>{
+        localeStore.toggle(form.language)
+        loading.close()
+    },1000)
 }
 </script>
 <style lang="scss" scoped>

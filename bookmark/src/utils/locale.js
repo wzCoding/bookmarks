@@ -22,10 +22,10 @@ export const locales = {
                 "settings": "设置",
             },
             context:{
-                "details": "详细信息",
+                "info": "详细信息",
                 "edit": "编辑书签",
                 "delete": "删除书签",
-                "add": "添加书签",
+                "create": "添加书签",
             },
             bookmarkCard: {
                 "openButtonText": "打开",
@@ -114,10 +114,10 @@ export const locales = {
                 "settings": "Settings",
             },
             context:{
-                "info": "info",
+                "info": "Details",
                 "edit": "Edit",
                 "delete": "Delete",
-                "add": "Add",
+                "create": "Add",
             },
             bookmarkCard: {
                 "openButtonText": "open",

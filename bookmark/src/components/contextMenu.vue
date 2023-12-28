@@ -35,7 +35,7 @@ const menuList = [
     { label: localeStore.locale[page].edit, icon: Management, type: "edit" },
 ];
 if (props.target.children) {
-    menuList.push({ label: localeStore.locale[page].add, icon: CirclePlusFilled, type: "create" })
+    menuList.push({ label: localeStore.locale[page].create, icon: CirclePlusFilled, type: "create" })
     if (props.target.children.length === 0) {
         menuList.push({ label: localeStore.locale[page].delete, icon: DeleteFilled, type: "delete" })
     }

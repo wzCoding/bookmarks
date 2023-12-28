@@ -20,6 +20,7 @@ export const useLocaleStore = defineStore('locale', () => {
         return window.localStorage.getItem(cacheKey)
     }
     return {
+        language,
         locale,
         toggle
     }
