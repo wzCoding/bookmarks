@@ -17,8 +17,8 @@ import { ElIcon, ClickOutside as vClickOutside } from 'element-plus';
 import { InfoFilled, Management, DeleteFilled, CirclePlusFilled } from '@element-plus/icons-vue';
 import { useLocaleStore } from '@/store/useLocaleStore';
 const page = "context"
-const menuWidth = "112px"
-const menuHeight = "144px"
+const itemWidth = "112px"
+const itemHeight = "36px"
 const props = defineProps({
     xAxis: { type: Number, default: 0 },
     yAxis: { type: Number, default: 0 },
@@ -28,20 +28,24 @@ const emits = defineEmits(['openContextMenu', 'destroyContextMenu', 'contextMenu
 const localeStore = useLocaleStore();
 const showMenu = ref(false);
 const timer = ref(null);
-const width = Number(menuWidth.replace("px", ""));
-const height = Number(menuHeight.replace("px", ""));
 const menuList = [
     { label: localeStore.locale.el[page].info, icon: InfoFilled, type: "info" },
-    { label: localeStore.locale.el[page].edit, icon: Management, type: "edit" },
 ];
-if (props.target.children) {
-    menuList.push({ label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create" })
-    if (props.target.children.length === 0) {
+if (!["1", "2"].includes(props.target.id)) {
+    menuList.push({ label: localeStore.locale.el[page].edit, icon: Management, type: "edit" })
+    if (props.target.children) {
+        menuList.push({ label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create" })
+        if (props.target.children.length === 0) {
+            menuList.push({ label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete" })
+        }
+    } else {
         menuList.push({ label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete" })
     }
-} else {
-    menuList.push({ label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete" })
+}else{
+    menuList.push({ label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create" })
 }
+const width = Number(itemWidth.replace("px", ""));
+const height = Number(itemHeight.replace("px", "")) * menuList.length;
 const styles = computed(() => {
     return {
         left: document.documentElement.clientWidth - props.xAxis < width ? `${props.xAxis - width}px` : `${props.xAxis}px`,
@@ -63,7 +67,7 @@ const onClickOutside = () => {
 }
 const startTimer = () => {
     clearTimer();
-    timer.value = setTimeout(closeMenu, 2000)
+    //timer.value = setTimeout(closeMenu, 2000)
 }
 const clearTimer = () => {
     clearTimeout(timer.value)
@@ -96,12 +100,12 @@ defineExpose({ showMenu, closeMenu });
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
-    width: v-bind(menuWidth);
-    height: v-bind(menuHeight);
     box-sizing: border-box;
     padding: 0.5rem;
 
     .menu-item {
+        width: v-bind(itemWidth);
+        height: v-bind(itemHeight);
         font-size: 0.85rem;
         color: #999;
         cursor: pointer;
@@ -111,6 +115,8 @@ defineExpose({ showMenu, closeMenu });
         transition: all 0.1s;
         width: 100%;
         padding: 0.5rem;
+        box-sizing: border-box;
+        border-radius: 0.5rem;
         .menu-label {
             padding-left: 0.5rem;
         }
@@ -120,4 +126,5 @@ defineExpose({ showMenu, closeMenu });
             background-color: #409eff33;
         }
     }
-}</style>
+}
+</style>
