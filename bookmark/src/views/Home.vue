@@ -4,8 +4,8 @@
             <VueDraggable ref="drag" v-model="currentNodes" @end="onDragEnd" target=".book-transition"
                 class="book-draggable">
                 <TransitionGroup tag="div" name="fade" class="book-transition">
-                    <BookMark v-for="bookmark in pageNodes" :key="bookmark.id" :bookmark="bookmark" :locale="locale.el" @openUrl="openBookMark"
-                        @openContextMenu="openMenu">
+                    <BookMark v-for="bookmark in pageNodes" :key="bookmark.id" :bookmark="bookmark" :locale="locale.el"
+                        @openUrl="openBookMark" @openContextMenu="openMenu">
                     </BookMark>
                 </TransitionGroup>
             </VueDraggable>
@@ -109,14 +109,16 @@ const onContextMenuClick = (type, title) => {
             }
         })
     } else {
-        ElMessageBox.confirm(`确定删除书签 '${title}' 吗？`, "提示", {
-            confirmButtonText: '确认',
-            cancelButtonText: '取消',
+        const deleteLocale = localeStore.locale.el.delete;
+        const tip = deleteLocale.tip.replace("{bookmark}", title);
+        ElMessageBox.confirm(tip, deleteLocale.pageTitle, {
+            confirmButtonText: deleteLocale.confirmText,
+            cancelButtonText: deleteLocale.cancelText,
             type: 'warning',
         }).then(() => {
             ElMessage({
                 type: 'success',
-                message: `删除书签 '${title}' 成功`,
+                message: deleteLocale.successTip,
             })
         }).catch(error => {
             console.log(error)

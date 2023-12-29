@@ -31,7 +31,6 @@ const localeStore = useLocaleStore();
 const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 const targetNode = bookStore.getNodeById(props.id);
 const urlIndex = 2;
-console.log(localeStore.locale.el[page]["bookmarkFolder"])
 const forms = reactive([
     {
         label: "bookmarkType",
@@ -88,13 +87,13 @@ function submitForm(param) {
         options.url = param.url
     }
     console.log(options)
-    // createBookMark(options, (res) => {
-    //     if (res) {
-    //         ElMessage({
-    //             type: 'success',
-    //             message: `更新书签 '${option.title}' 成功`,
-    //         })
-    //     }
-    // })
+    createBookMark(options, (res) => {
+        if (res) {
+            ElMessage({
+                type: 'success',
+                message: localeStore.locale.el[page].successTip,
+            })
+        }
+    })
 }
 </script>

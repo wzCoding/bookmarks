@@ -113,7 +113,7 @@ function submitForm(param) {
     ]).then(res => {
         ElMessage({
             type: 'success',
-            message: `更新书签 '${param.title}' 成功`,
+            message:  localeStore.locale.el[page].successTip,
         })
     })
 }

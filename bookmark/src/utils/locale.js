@@ -2,7 +2,7 @@ export const locales = {
     "zhCn": {
         name: "zhCn",
         el: {
-            emptyText:"空空如也...",
+            emptyText: "空空如也...",
             pagination: {
                 "goto": "前往",
                 "pagesize": "条/页",
@@ -22,7 +22,7 @@ export const locales = {
                 "recentlyUsed": "最近使用",
                 "settings": "设置",
             },
-            context:{
+            context: {
                 "info": "详细信息",
                 "edit": "编辑书签",
                 "delete": "删除书签",
@@ -55,7 +55,8 @@ export const locales = {
                 "resetText": "重置",
                 "tips": [
                     { "title": "书签顺序", "text": "书签顺序从0开始，数字越小越靠前" }
-                ]
+                ],
+                "successTip": "更新成功"
             },
             create: {
                 "pageTitle": "添加书签",
@@ -67,13 +68,17 @@ export const locales = {
                 "addLocation": "添加位置",
                 "submitText": "添加",
                 "resetText": "重置",
+                "typeTip": "请选择书签类型",
+                "nameTip": "请输入书签名称",
+                "urlTip": "请输入网址链接",
+                "successTip": "添加成功"
             },
             delete: {
                 "pageTitle": "删除书签",
                 "tip": "确定要删除书签 {bookmark} 吗?",
-                "confirmButtonText": "确认",
-                "cancelButtonText": "取消",
-                "deleteSuccess": "删除成功",
+                "confirmText": "确认",
+                "cancelText": "取消",
+                "successTip": "删除成功",
             },
             setting: {
                 "pageTitle": "书签设置",
@@ -95,7 +100,7 @@ export const locales = {
     "en": {
         name: "en",
         el: {
-            emptyText:"Nothing Here...",
+            emptyText: "Nothing Here...",
             pagination: {
                 "goto": "Go to",
                 "pagesize": "/page",
@@ -115,7 +120,7 @@ export const locales = {
                 "recentlyUsed": "Recently Used",
                 "settings": "Settings",
             },
-            context:{
+            context: {
                 "info": "Details",
                 "edit": "Edit",
                 "delete": "Delete",
@@ -149,7 +154,8 @@ export const locales = {
                 "resetText": "Reset",
                 "tips": [
                     { "title": "Order of Bookmark", "text": "The order of bookmark starts from 0, the smaller the number, the higher it is." }
-                ]
+                ],
+                "successTip": "update completed"
             },
             create: {
                 "pageTitle": "Add Bookmark",
@@ -161,13 +167,17 @@ export const locales = {
                 "addLocation": "Add Location",
                 "submitText": "Add",
                 "resetText": "Reset",
+                "typeTip": "Please select a bookmark type",
+                "nameTip": "Please enter the bookmark name",
+                "urlTip": "Please enter the URL link",
+                "successTip": "Added successfully"
             },
             delete: {
                 "pageTitle": "Delete bookmark",
                 "tip": "Are you sure you want to delete the bookmark {bookmark}?",
-                "confirmButtonText": "Confirm",
-                "cancelButtonText": "Cancel",
-                "deleteSuccess": "Delete Successfully",
+                "confirmText": "Confirm",
+                "cancelText": "Cancel",
+                "successTip": "Delete Successfully",
             },
             setting: {
                 "pageTitle": "Settings",
