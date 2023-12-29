@@ -1,18 +1,18 @@
-import { computed, reactive, ref } from "vue";
+import { computed, nextTick, reactive, ref } from "vue";
 import { defineStore } from "pinia";
-import { getTreeByKey,expandTree } from "@/utils";
-let allNodes = [];
+import { getTreeByKey, expandTree } from "@/utils";
 
 //获取书签tree
-function getTree(result) {
-    if (result) {
-        allNodes = expandTree(result);
-    } else {
-        const data = require('../../public/background/data.json');
-        allNodes = expandTree(data);
-    }
+// function getTree(result) {
+//   const data = require('../../public/background/data.json');
+//   allNodes = expandTree(data);
+// }
+//getTree();
+
+async function getTree() {
+    return await chrome.bookmarks.getTree();
 }
-getTree();
+const allNodes = expandTree(await getTree());
 
 const defaultTitle = "我的书签";
 const defaultId = "0";

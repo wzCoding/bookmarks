@@ -1,5 +1,5 @@
 <template>
-    <div class="bookmark-card" :class="`bookmark-${bookmark.index}`" @contextmenu="handleContextMenu">
+    <div class="bookmark-card" :id="bookmark.id" @contextmenu="handleContextMenu">
         <div class="bookmark-header">
             <div class="bookmark-icon">
                 <img v-if="isFolder" src="../assets/icon/folder.png" alt="bookmark-icon">
@@ -63,8 +63,8 @@ const openType = ref(1);
 const createDate = getDate(props.bookmark.dateAdded);
 const modifyDate = getDate(props.bookmark.dateGroupModified);
 const visitDate = getDate(props.bookmark.dateLastUsed);
-//const iconUrl = faviconURL(props.bookmark.url); //打包之前放开
-const iconUrl = "" //本地开发使用
+const iconUrl = faviconURL(props.bookmark.url); //打包之前放开
+//const iconUrl = "" //本地开发使用
 const dropDownItems = [
     {
         label: props.locale.bookmarkCard.currentPage,

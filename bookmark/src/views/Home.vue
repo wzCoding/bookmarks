@@ -24,7 +24,7 @@ import { usebookStore } from '@/store/usebookStore';
 import { useLocaleStore } from '@/store/useLocaleStore';
 import { VueDraggable } from 'vue-draggable-plus';
 import { ElMessageBox, ElMessage, ElEmpty } from 'element-plus';
-import { openTabs } from '@/utils/index';
+import { moveBookMark, openTabs } from '@/utils/index';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
 import ContextMenuTemplate from '@/components/contextMenu.vue';
@@ -41,6 +41,7 @@ const {
     currentTotal,
     pageSize,
     pageNodes,
+    parentId
 } = storeToRefs(bookStore);
 const { locale } = storeToRefs(localeStore);
 const pageChange = (page) => {
@@ -128,7 +129,11 @@ const onContextMenuClick = (type, title) => {
 
 //拖拽结束调用chrome Api跟新书签
 const onDragEnd = (e) => {
-    console.log(e)
+    const options = {
+        index: e.newIndex,
+        parentId: parentId.value,
+    };
+    moveBookMark(e.item.id, options)
 }
 //监听页面滚动事件，关闭contextMenu
 const onScroll = () => {

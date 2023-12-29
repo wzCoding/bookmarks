@@ -124,7 +124,7 @@ function getCurrentTab(callback) {
 }
 
 //修改bookmark
-function updateBookMark(id,options, callback) {
+function updateBookMark(id, options, callback) {
     if (!options) return;
     chrome.bookmarks.update(id, options, (res) => {
         callback && callback(res);
@@ -148,14 +148,9 @@ function removeBookMark(id, callback) {
 }
 
 //移动bookmark
-function moveBookMark(option, callback) {
-    if (!option) return;
-    const id = option.id;
-    const details = {
-        index: option.index ? option.index : 0,
-        parentId: option.parentId ? option.parentId : "1",
-    }
-    chrome.bookmarks.move(id, details, (res) => {
+function moveBookMark(id, options, callback) {
+    if (!options) return;
+    chrome.bookmarks.move(id, options, (res) => {
         callback && callback(res);
     })
 }
