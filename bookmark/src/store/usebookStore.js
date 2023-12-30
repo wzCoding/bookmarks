@@ -17,7 +17,7 @@ const defaultSize = 8;
 const defaultPage = 1;
 const tree = expandTree(await getTree());
 export const usebookStore = defineStore("bookmarks", () => {
-    const allNodes = tree;
+    let allNodes = tree;
     //书签展示相关
     const parentId = ref(defaultId);
     const currentTitle = ref(defaultShowTitle);
@@ -42,7 +42,10 @@ export const usebookStore = defineStore("bookmarks", () => {
     const totalPage = computed(() => {
         return Math.ceil(currentTotal.value / pageSize.value);
     });
-    
+    function initNodes(nodes,id){
+        allNodes = nodes;
+        currentNodes.value = getFolder(id).children;
+    }
     function getFolder(id) {
         if (!id) return {};
         return allNodes.filter(item => item.id == id)[0];
@@ -101,6 +104,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         pageNodes,
         total,
         allNodes,
+        initNodes,
         getCurrentNodes,
         getNodeById,
         getNodeByTitle,

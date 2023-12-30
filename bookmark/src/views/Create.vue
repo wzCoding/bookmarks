@@ -15,7 +15,7 @@
 </template>
 <script setup>
 import { reactive } from 'vue';
-import { ElMessage, ElIcon } from 'element-plus';
+import { ElMessage, ElLoading, ElIcon } from 'element-plus';
 import { Folder } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { useLocaleStore } from '@/store/useLocaleStore';
@@ -78,6 +78,7 @@ function typeChange(form) {
     forms[urlIndex].required = forms[urlIndex].show = form.type === "url";
 }
 function submitForm(param) {
+    const loading = ElLoading.service({ lock: true })
     const options = {
         index: param.index ? param.index : 0,
         parentId: param.parentId ? param.parentId : "1",
@@ -86,13 +87,15 @@ function submitForm(param) {
     if (param.url) {
         options.url = param.url
     }
-    console.log(options)
     createBookMark(options, (res) => {
         if (res) {
-            ElMessage({
-                type: 'success',
-                message: localeStore.locale.el[page].successTip,
-            })
+            setTimeout(() => {
+                ElMessage({
+                    type: 'success',
+                    message: localeStore.locale.el[page].successTip,
+                })
+                loading.close()
+            }, 1000)
         }
     })
 }

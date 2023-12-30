@@ -16,8 +16,8 @@
 </template>
 <script setup>
 import { reactive, ref } from 'vue';
-import { ElMessage, ElIcon, ElAlert } from 'element-plus';
-import { ChromeFilled, Folder } from '@element-plus/icons-vue';
+import { ElMessage, ElLoading, ElIcon, ElAlert } from 'element-plus';
+import { Folder } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { useLocaleStore } from '@/store/useLocaleStore';
 import { updateBookMark, moveBookMark, expandTree } from '@/utils/index';
@@ -98,7 +98,8 @@ async function validateParam(rule, value, callback) {
         callback && callback(new Error(err));
     })
 }
-async function submitForm(param) {
+function submitForm(param) {
+    const loading = ElLoading.service({ lock: true })
     const options = {};
     const moveOptions = {
         index: param.index,
@@ -111,13 +112,15 @@ async function submitForm(param) {
         moveBookMark(props.id, moveOptions)
     ]).then(res => {
         chrome.bookmarks.getTree().then(result => {
-            bookStore.allNodes = expandTree(result)
-            console.log(bookStore.allNodes)
+            bookStore.initNodes(expandTree(result), targetNode.parentId)
         })
-        ElMessage({
-            type: 'success',
-            message: localeStore.locale.el[page].successTip,
-        })
+        setTimeout(() => {
+            ElMessage({
+                type: 'success',
+                message: localeStore.locale.el[page].successTip,
+            })
+            loading.close()
+        }, 1000)
     })
 }
 function resetForm() {
