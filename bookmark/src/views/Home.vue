@@ -131,7 +131,7 @@ const onContextMenuClick = (type, title) => {
 const onDragEnd = (e) => {
     const options = {
         index: e.newIndex,
-        parentId: parentId.value,
+        parentId: bookStore.getNodeById(e.item.id).parentId,
     };
     moveBookMark(e.item.id, options)
 }

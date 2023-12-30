@@ -17,10 +17,10 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { ElMessage, ElIcon, ElAlert } from 'element-plus';
-import { Folder } from '@element-plus/icons-vue';
+import { ChromeFilled, Folder } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { useLocaleStore } from '@/store/useLocaleStore';
-import { updateBookMark, moveBookMark } from '@/utils/index';
+import { updateBookMark, moveBookMark, expandTree } from '@/utils/index';
 import Forms from '@/components/forms.vue';
 import Title from '@/components/title.vue';
 const props = defineProps({
@@ -98,9 +98,8 @@ async function validateParam(rule, value, callback) {
         callback && callback(new Error(err));
     })
 }
-function submitForm(param) {
-    console.log(param)
-    const options={};
+async function submitForm(param) {
+    const options = {};
     const moveOptions = {
         index: param.index,
         parentId: param.parentId,
@@ -111,9 +110,13 @@ function submitForm(param) {
         updateBookMark(props.id, options),
         moveBookMark(props.id, moveOptions)
     ]).then(res => {
+        chrome.bookmarks.getTree().then(result => {
+            bookStore.allNodes = expandTree(result)
+            console.log(bookStore.allNodes)
+        })
         ElMessage({
             type: 'success',
-            message:  localeStore.locale.el[page].successTip,
+            message: localeStore.locale.el[page].successTip,
         })
     })
 }

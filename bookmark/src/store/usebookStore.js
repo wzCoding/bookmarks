@@ -1,6 +1,6 @@
 import { computed, nextTick, reactive, ref } from "vue";
 import { defineStore } from "pinia";
-import { getTreeByKey, expandTree } from "@/utils";
+import { getTree, getTreeByKey, expandTree } from "@/utils";
 
 //获取书签tree
 // function getTree(result) {
@@ -9,19 +9,15 @@ import { getTreeByKey, expandTree } from "@/utils";
 // }
 //getTree();
 
-async function getTree() {
-    return await chrome.bookmarks.getTree();
-}
-const allNodes = expandTree(await getTree());
-
 const defaultTitle = "我的书签";
 const defaultId = "0";
 const defaultShowTitle = "书签栏"
 const defaultShowId = "1";
 const defaultSize = 8;
 const defaultPage = 1;
-
+const tree = expandTree(await getTree());
 export const usebookStore = defineStore("bookmarks", () => {
+    const allNodes = tree;
     //书签展示相关
     const parentId = ref(defaultId);
     const currentTitle = ref(defaultShowTitle);
@@ -46,6 +42,7 @@ export const usebookStore = defineStore("bookmarks", () => {
     const totalPage = computed(() => {
         return Math.ceil(currentTotal.value / pageSize.value);
     });
+    
     function getFolder(id) {
         if (!id) return {};
         return allNodes.filter(item => item.id == id)[0];
@@ -103,6 +100,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         parentId,
         pageNodes,
         total,
+        allNodes,
         getCurrentNodes,
         getNodeById,
         getNodeByTitle,

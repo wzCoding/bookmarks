@@ -122,10 +122,14 @@ function getCurrentTab(callback) {
         callback && callback(tab);
     });
 }
-
+//获取bookmark
+async function getTree() {
+    return await chrome.bookmarks.getTree();
+}
 //修改bookmark
 function updateBookMark(id, options, callback) {
     if (!options) return;
+    console.log(options)
     chrome.bookmarks.update(id, options, (res) => {
         callback && callback(res);
     })
@@ -134,6 +138,7 @@ function updateBookMark(id, options, callback) {
 //创建bookmark
 function createBookMark(options, callback) {
     if (!options) return;
+    console.log(options)
     chrome.bookmarks.create(options, (res) => {
         callback && callback(res);
     })
@@ -150,6 +155,7 @@ function removeBookMark(id, callback) {
 //移动bookmark
 function moveBookMark(id, options, callback) {
     if (!options) return;
+    console.log(options)
     chrome.bookmarks.move(id, options, (res) => {
         callback && callback(res);
     })
@@ -178,6 +184,7 @@ export {
     getCurrentTab,
     getDate,
     getIconUrl,
+    getTree,
     updateBookMark,
     createBookMark,
     removeBookMark,

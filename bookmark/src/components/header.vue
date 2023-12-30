@@ -102,6 +102,7 @@ const goBack = () => {
         if (router.currentRoute.value.fullPath !== "/") {
             currentTitle.value = oldTitle
             router.push('/');
+            console.log(bookStore.allNodes)
         } else {
             bookStore.getCurrentNodes(parentId.value);
         }
