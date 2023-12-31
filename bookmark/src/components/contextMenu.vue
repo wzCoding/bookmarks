@@ -93,8 +93,9 @@ defineExpose({ showMenu, closeMenu });
 .context-menu {
     position: absolute;
     z-index: 1000;
-    background-color: #fff;
-    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    box-shadow: 0 2px 12px 0 var(--context-shadow-color);
     border-radius: 1rem;
     display: flex;
     justify-content: space-around;

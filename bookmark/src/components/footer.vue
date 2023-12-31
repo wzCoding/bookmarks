@@ -39,5 +39,13 @@ const handleSizeChange = (size) => {
     display: flex;
     justify-content: center;
     align-items: center;
+    :deep(.el-pagination){
+        .el-pagination__sizes .el-input__wrapper{
+            background-color: var(--bg-color);
+        }
+        .el-input__inner{
+            color: var(--text-color);
+        }
+    }
 }
 </style>

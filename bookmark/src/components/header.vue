@@ -56,10 +56,10 @@ const localeStore = useLocaleStore();
 const showMenu = computed(() => { return router.currentRoute.value.fullPath == "/" })
 const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
 const { locale } = storeToRefs(localeStore);
-const searchTip = computed(()=>{return locale.value.el.bookmarkHeader.searchTip});
+const searchTip = computed(() => { return locale.value.el.bookmarkHeader.searchTip });
 let oldTitle = currentTitle.value;
 let oldNodes = currentNodes.value;
-const menus = computed(()=>[
+const menus = computed(() => [
     {
         label: locale.value.el.bookmarkHeader.recentlyUsed,
         icon: Link,
@@ -110,9 +110,9 @@ const goBack = () => {
         clearBook();
     }
 }
-const pageTitle = computed(()=>{
+const pageTitle = computed(() => {
     const path = router.currentRoute.value.fullPath;
-    if(path == '/'){
+    if (path == '/') {
         return currentTitle.value;
     }
     return locale.value.el[router.currentRoute.value.name].pageTitle
@@ -128,7 +128,8 @@ watch(currentTitle, (newVal, oldVal) => {
     --padding: 0.75rem;
     z-index: 3;
     position: fixed;
-    background-color: #fff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
     padding: 0 var(--padding);
     width: calc(100% - var(--padding) * 2);
@@ -146,6 +147,14 @@ watch(currentTitle, (newVal, oldVal) => {
         .el-page-header__extra {
             flex: 1;
             height: 100%
+        }
+
+        .el-input__wrapper {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .el-input__inner {
+            color: var(--text-color);
         }
     }
 
@@ -202,6 +211,8 @@ watch(currentTitle, (newVal, oldVal) => {
             .header-button {
                 border: none !important;
                 margin-left: 0.25rem !important;
+                background-color: var(--bg-color);
+                color: var(--text-color);
             }
         }
     }

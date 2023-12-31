@@ -63,8 +63,8 @@ const openType = ref(1);
 const createDate = getDate(props.bookmark.dateAdded);
 const modifyDate = getDate(props.bookmark.dateGroupModified);
 const visitDate = getDate(props.bookmark.dateLastUsed);
-const iconUrl = faviconURL(props.bookmark.url); //打包之前放开
-//const iconUrl = "" //本地开发使用
+//const iconUrl = faviconURL(props.bookmark.url); //打包之前放开
+const iconUrl = "" //本地开发使用
 const dropDownItems = [
     {
         label: props.locale.bookmarkCard.currentPage,
@@ -124,9 +124,10 @@ const handleContextMenu = (e) => {
 <style lang="scss" scoped>
 .bookmark-card {
     --icon-size: 2rem;
-    background-color: #f9f9f9;
+    background-color: var(--card-bg-color);
+    color:var(--card-text-color);
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px var(--card-shadow-color);
     padding: .5rem;
     width: calc(var(--rest-space) / var(--card-columns) - var(--extra-space));
     transition: all 0.3s ease;
@@ -134,7 +135,7 @@ const handleContextMenu = (e) => {
 
     &:hover,
     &.active {
-        box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 6px 2px var(--context-shadow-color);
     }
 
     .fade-enter-active,
@@ -169,7 +170,7 @@ const handleContextMenu = (e) => {
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.1) inset;
+            box-shadow: 0 0 8px 2px var(--context-shadow-color) inset;
             border-radius: 50%;
 
             img {
@@ -199,7 +200,7 @@ const handleContextMenu = (e) => {
             align-items: flex-start;
             flex-direction: column;
             gap: 0.25rem;
-            color: #999;
+            color:var(--card-info-color);
             font-size: 0.75rem;
         }
     }

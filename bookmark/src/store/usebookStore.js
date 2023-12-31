@@ -1,13 +1,13 @@
-import { computed, nextTick, reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { defineStore } from "pinia";
 import { getTree, getTreeByKey, expandTree } from "@/utils";
 
 //获取书签tree
-// function getTree(result) {
-//   const data = require('../../public/background/data.json');
-//   allNodes = expandTree(data);
-// }
-//getTree();
+function getData() {
+  const data = require('../../public/background/data.json');
+  return expandTree(data);
+}
+
 
 const defaultTitle = "我的书签";
 const defaultId = "0";
@@ -15,7 +15,8 @@ const defaultShowTitle = "书签栏"
 const defaultShowId = "1";
 const defaultSize = 8;
 const defaultPage = 1;
-const tree = expandTree(await getTree());
+// const tree = expandTree(await getTree());
+const tree = getData();
 export const usebookStore = defineStore("bookmarks", () => {
     let allNodes = tree;
     //书签展示相关
@@ -92,20 +93,20 @@ export const usebookStore = defineStore("bookmarks", () => {
     function pageChange(page) {
         currentPage.value = page < 1 ? 1 : (page > totalPage.value ? totalPage.value : page);
     }
-    //监听添加书签事件
-    chrome.bookmarks.onCreated.addListener((id, node) => {
-        console.log("onCreate", id)
-        chrome.bookmarks.getTree().then(result => {
-            initNodes(expandTree(result), node.parentId);
-        })
-    })
-    //监听删除书签事件
-    chrome.bookmarks.onRemoved.addListener((id, removeNode) => {
-        console.log("onRemove", id)
-        chrome.bookmarks.getTree().then(result => {
-            initNodes(expandTree(result), removeNode.parentId);
-        })
-    })
+    ////监听添加书签事件
+    // chrome.bookmarks.onCreated.addListener((id, node) => {
+    //     console.log("onCreate", id)
+    //     chrome.bookmarks.getTree().then(result => {
+    //         initNodes(expandTree(result), node.parentId);
+    //     })
+    // })
+    ////监听删除书签事件
+    // chrome.bookmarks.onRemoved.addListener((id, removeNode) => {
+    //     console.log("onRemove", id)
+    //     chrome.bookmarks.getTree().then(result => {
+    //         initNodes(expandTree(result), removeNode.parentId);
+    //     })
+    // })
     return {
         currentTitle,
         currentNodes,

@@ -167,7 +167,7 @@ const onScroll = () => {
 .book-home {
     position: relative;
     height: 100%;
-
+    background-color: var(--bg-color);
     .book-content {
         position: relative;
         height: 100%;

@@ -11,16 +11,6 @@ import { ElLoading } from 'element-plus';
 const localeStore = useLocaleStore();
 const settings = reactive([
     {
-        label: "theme",
-        name: "theme",
-        type: "select",
-        defaultValue: "default",
-        options: [
-            { label: "defaultTheme", value: "default" },
-            { label: "darkTheme", value: "dark" }
-        ]
-    },
-    {
         label: "language",
         name: "language",
         type: "select",
