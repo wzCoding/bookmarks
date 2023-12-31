@@ -43,11 +43,11 @@ const forms = reactive([
         ],
         show: true,
         required: true,
-        requireMessage:  localeStore.locale.el[page].typePlaceholder,
+        requireMessage: localeStore.locale.el[page].typePlaceholder,
         onChange: typeChange
     },
-    { label: "bookmarkName", name: "title", placeholder:  localeStore.locale.el[page].namePlaceholder, type: "input", show: true, required: true, requireMessage:  localeStore.locale.el[page].namePlaceholder },
-    { label: "websiteLink", name: "url", placeholder:  localeStore.locale.el[page].urlPlaceholder, type: "input", show: true, required: true, requireMessage: localeStore.locale.el[page].urlPlaceholder, validator: validateUrl },
+    { label: "bookmarkName", name: "title", placeholder: localeStore.locale.el[page].namePlaceholder, type: "input", show: true, required: true, requireMessage: localeStore.locale.el[page].namePlaceholder },
+    { label: "websiteLink", name: "url", placeholder: localeStore.locale.el[page].urlPlaceholder, type: "input", show: true, required: true, requireMessage: localeStore.locale.el[page].urlPlaceholder, validator: validateUrl },
     {
         label: "bookmarkLocation",
         name: "id",
