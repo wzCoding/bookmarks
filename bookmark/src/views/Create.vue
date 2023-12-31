@@ -35,7 +35,7 @@ const forms = reactive([
     {
         label: "bookmarkType",
         name: "type",
-        placeholder: "请选择书签类型",
+        placeholder: localeStore.locale.el[page].typePlaceholder,
         type: "select",
         options: [
             { label: "bookmarkFolder", value: "folder" },
@@ -43,22 +43,20 @@ const forms = reactive([
         ],
         show: true,
         required: true,
-        requireMessage: "请选择书签类型",
+        requireMessage:  localeStore.locale.el[page].typePlaceholder,
         onChange: typeChange
     },
-    { label: "bookmarkName", name: "title", placeholder: "请输入书签名称", type: "input", show: true, required: true, requireMessage: "请输入书签名称" },
-    { label: "websiteLink", name: "url", placeholder: "请输入书签链接地址", type: "input", show: true, required: true, requireMessage: "请输入有效的url地址", validator: validateUrl },
+    { label: "bookmarkName", name: "title", placeholder:  localeStore.locale.el[page].namePlaceholder, type: "input", show: true, required: true, requireMessage:  localeStore.locale.el[page].namePlaceholder },
+    { label: "websiteLink", name: "url", placeholder:  localeStore.locale.el[page].urlPlaceholder, type: "input", show: true, required: true, requireMessage: localeStore.locale.el[page].urlPlaceholder, validator: validateUrl },
     {
         label: "bookmarkLocation",
         name: "id",
-        placeholder: "请选择添加位置",
         type: "treeSelect",
         tree: bookStore.getTreeNodes("children"),
         defaultValue: targetNode.id,
         props: { label: "title" },
         show: true,
         required: true,
-        requireMessage: "请选择添加位置"
     }
 ])
 async function validateUrl(rule, value, callback) {

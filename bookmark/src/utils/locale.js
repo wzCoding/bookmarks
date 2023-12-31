@@ -71,7 +71,10 @@ export const locales = {
                 "typeTip": "请选择书签类型",
                 "nameTip": "请输入书签名称",
                 "urlTip": "请输入网址链接",
-                "successTip": "添加成功"
+                "successTip": "添加成功",
+                "typePlaceholder": "请选择书签类型",
+                "namePlaceholder": "请输入书签名称",
+                "urlPlaceholder": "请输入网址链接"
             },
             delete: {
                 "pageTitle": "删除书签",
@@ -170,7 +173,10 @@ export const locales = {
                 "typeTip": "Please select a bookmark type",
                 "nameTip": "Please enter the bookmark name",
                 "urlTip": "Please enter the URL link",
-                "successTip": "Added successfully"
+                "successTip": "Added successfully",
+                "typePlaceholder": "Please enter the URL link",
+                "namePlaceholder": "Please enter the bookmark name",
+                "urlPlaceholder": "Please enter the URL link"
             },
             delete: {
                 "pageTitle": "Delete bookmark",
