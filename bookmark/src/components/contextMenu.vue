@@ -41,7 +41,7 @@ if (!["1", "2"].includes(props.target.id)) {
     } else {
         menuList.push({ label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete" })
     }
-}else{
+} else {
     menuList.push({ label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create" })
 }
 const width = Number(itemWidth.replace("px", ""));
@@ -59,7 +59,7 @@ const closeMenu = () => {
 }
 const onItemClick = (e) => {
     const type = e.currentTarget.dataset.type;
-    emits('contextMenuClick', type, props.target.title)
+    emits('contextMenuClick', type, props.target.title, props.target.id)
     closeMenu()
 }
 const onClickOutside = () => {
@@ -117,6 +117,7 @@ defineExpose({ showMenu, closeMenu });
         padding: 0.5rem;
         box-sizing: border-box;
         border-radius: 0.5rem;
+
         .menu-label {
             padding-left: 0.5rem;
         }

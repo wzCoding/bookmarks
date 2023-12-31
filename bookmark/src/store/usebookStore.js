@@ -42,7 +42,7 @@ export const usebookStore = defineStore("bookmarks", () => {
     const totalPage = computed(() => {
         return Math.ceil(currentTotal.value / pageSize.value);
     });
-    function initNodes(nodes,id){
+    function initNodes(nodes, id) {
         allNodes = nodes;
         currentNodes.value = getFolder(id).children;
     }
@@ -92,6 +92,20 @@ export const usebookStore = defineStore("bookmarks", () => {
     function pageChange(page) {
         currentPage.value = page < 1 ? 1 : (page > totalPage.value ? totalPage.value : page);
     }
+    //监听添加书签事件
+    chrome.bookmarks.onCreated.addListener((id, node) => {
+        console.log("onCreate", id)
+        chrome.bookmarks.getTree().then(result => {
+            initNodes(expandTree(result), node.parentId);
+        })
+    })
+    //监听删除书签事件
+    chrome.bookmarks.onRemoved.addListener((id, removeNode) => {
+        console.log("onRemove", id)
+        chrome.bookmarks.getTree().then(result => {
+            initNodes(expandTree(result), removeNode.parentId);
+        })
+    })
     return {
         currentTitle,
         currentNodes,
@@ -114,3 +128,4 @@ export const usebookStore = defineStore("bookmarks", () => {
         pageChange
     }
 })
+

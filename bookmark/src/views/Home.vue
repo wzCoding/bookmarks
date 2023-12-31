@@ -24,7 +24,7 @@ import { usebookStore } from '@/store/usebookStore';
 import { useLocaleStore } from '@/store/useLocaleStore';
 import { VueDraggable } from 'vue-draggable-plus';
 import { ElMessageBox, ElMessage, ElEmpty } from 'element-plus';
-import { moveBookMark, openTabs } from '@/utils/index';
+import { removeBookMark, moveBookMark, openTabs, expandTree } from '@/utils/index';
 import BookMark from '@/components/bookmark.vue';
 import BookFooter from '@/components/footer.vue';
 import ContextMenuTemplate from '@/components/contextMenu.vue';
@@ -41,7 +41,6 @@ const {
     currentTotal,
     pageSize,
     pageNodes,
-    parentId
 } = storeToRefs(bookStore);
 const { locale } = storeToRefs(localeStore);
 const pageChange = (page) => {
@@ -66,7 +65,7 @@ const openMenu = (e, bookmark) => {
         contextMenu.closeMenu();
     }
     contextMenu = createContextMenu(e.clientX, e.clientY, bookmark);
-    initContextMenu(e.currentTarget, bookmark.id);
+    initContextMenu(e.currentTarget);
 }
 //创建右键contextMenu
 const createContextMenu = (x, y, bookmark) => {
@@ -94,32 +93,37 @@ const createContextMenu = (x, y, bookmark) => {
     }
 }
 //在这里初始化部分书签参数
-const initContextMenu = (target, id) => {
+const initContextMenu = (target) => {
     dynamicScroll.value = target ? "scroll" : null;
-    contextMenu.id = target ? id : null;
     target ? target.classList.toggle("active") : contextMenu.target.classList.toggle("active");
     contextMenu.target = target ? target : null;
 }
 //在这里处理contextMenu点击事件
-const onContextMenuClick = (type, title) => {
+const onContextMenuClick = (type, title, id) => {
     if (type !== "delete") {
         router.push({
             name: type,
             params: {
-                id: contextMenu.id,
+                id: id,
             }
         })
     } else {
         const deleteLocale = localeStore.locale.el.delete;
         const tip = deleteLocale.tip.replace("{bookmark}", title);
+        const parentId = bookStore.getNodeById(id).parentId;
         ElMessageBox.confirm(tip, deleteLocale.pageTitle, {
             confirmButtonText: deleteLocale.confirmText,
             cancelButtonText: deleteLocale.cancelText,
             type: 'warning',
         }).then(() => {
-            ElMessage({
-                type: 'success',
-                message: deleteLocale.successTip,
+            removeBookMark(id, (res) => {
+                chrome.bookmarks.getTree().then(result => {
+                    bookStore.initNodes(expandTree(result), parentId)
+                })
+                ElMessage({
+                    type: 'success',
+                    message: deleteLocale.successTip,
+                })
             })
         }).catch(error => {
             console.log(error)
@@ -141,6 +145,7 @@ const onScroll = () => {
         contextMenu.closeMenu();
     }
 }
+
 </script>
 <style lang="scss" scoped>
 .fade-move,
