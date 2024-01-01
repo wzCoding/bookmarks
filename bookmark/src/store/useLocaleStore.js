@@ -2,24 +2,33 @@ import { locales } from '@/utils/locale'
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-const cacheKey = "bookmark-locale"
+const languageKey = "bookmark-language"
+const themeKey = "bookmark-theme"
 const defaultLang = "zhCn"
+const defaultTheme = "default"
 export const useLocaleStore = defineStore('locale', () => {
-    const language = ref(getCache() ? getCache() : defaultLang);
+    const theme = ref(getCache(themeKey) ? getCache(themeKey) : defaultTheme)
+    const language = ref(getCache(languageKey) ? getCache(languageKey) : defaultLang);
     const locale = computed(() => locales[language.value])
-    function toggle(lang) {
+    function toggleLanguage(lang) {
         language.value = lang
-        setCache(language.value)
+        setCache(languageKey, language.value)
     }
-    function setCache(lang) {
-        window.localStorage.setItem(cacheKey, lang)
+    function toggleTheme(name) {
+        theme.value = name
+        setCache(themeKey, theme.value)
     }
-    function getCache() {
-        return window.localStorage.getItem(cacheKey)
+    function setCache(key, value) {
+        window.localStorage.setItem(key, value)
+    }
+    function getCache(key) {
+        return window.localStorage.getItem(key)
     }
     return {
         language,
+        theme,
         locale,
-        toggle
+        toggleLanguage,
+        toggleTheme
     }
 })

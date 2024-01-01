@@ -11,6 +11,16 @@ import { ElLoading } from 'element-plus';
 const localeStore = useLocaleStore();
 const settings = reactive([
     {
+        label: "theme",
+        name: "theme",
+        type: "select",
+        defaultValue: localeStore.theme ? localeStore.theme : "default",
+        options: [
+            { label: "defaultTheme", value: "default" },
+            { label: "darkTheme", value: "dark" }
+        ]
+    },
+    {
         label: "language",
         name: "language",
         type: "select",
@@ -23,11 +33,29 @@ const settings = reactive([
 ])
 
 const submitSetting = (form) => {
-    console.log(form)
     const loading = ElLoading.service({ lock: true })
-    setTimeout(() => {
-        localeStore.toggle(form.language)
-        loading.close()
-    }, 1000)
+    new Promise((resolve, reject) => {
+        const task = []
+        if (form.theme !== localeStore.theme) {
+            task.push({ name: "toggleTheme", value: form.theme })
+        }
+        if (form.language !== localeStore.language) {
+            task.push({ name: "toggleLanguage", value: form.language })
+        }
+        if (task.length) {
+            resolve(task)
+        } else {
+            reject()
+        }
+    }).then(res => {
+        setTimeout(() => {
+            loading.close()
+            for (const task of res) {
+                localeStore[task.name](task.value)
+            }
+        }, 1000)
+    }).catch(err => {
+        console.log(err)
+    })
 }
 </script>
