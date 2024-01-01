@@ -39,12 +39,29 @@ const handleSizeChange = (size) => {
     display: flex;
     justify-content: center;
     align-items: center;
-    :deep(.el-pagination){
-        .el-pagination__sizes .el-input__wrapper{
+
+    :deep(.el-pagination) {
+
+        .el-pagination__sizes .el-input__wrapper,
+        .el-pagination__jump .el-input__wrapper {
             background-color: var(--bg-color);
         }
-        .el-input__inner{
+
+        .el-input__inner {
             color: var(--text-color);
+        }
+
+        .btn-prev:disabled,
+        .btn-next:disabled {
+            background-color: var(--el-pagination-disabled-color) !important;
+        }
+
+        .el-pager li.number {
+            background-color: var(--el-pagination-btn-bg-color);
+        }
+
+        .el-pager li.number.is-active {
+            background-color: var(--el-color-primary);
         }
     }
 }

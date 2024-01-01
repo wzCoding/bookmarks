@@ -1,8 +1,8 @@
 <template>
     <div class="page-form">
         <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
-            <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show" :label="locale.el[localeKey][item.label]"
-                :prop="item.name">
+            <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show"
+                :label="locale.el[localeKey][item.label]" :prop="item.name">
                 <template v-if="item.type == 'input'">
                     <el-input v-model.lazy="form[item.name]" :placeholder="item.placeholder"
                         :disabled="item.disable ? item.disable : false" clearable
@@ -11,8 +11,8 @@
                 <template v-if="item.type == 'select'">
                     <el-select v-model="form[item.name]" :placeholder="item.placeholder"
                         @change="item.onChange ? handleSelect(FormEl, item.onChange) : ''">
-                        <el-option v-for="option in item.options" :key="option.value" :label="locale.el[localeKey][option.label]"
-                            :value="option.value" />
+                        <el-option v-for="option in item.options" :key="option.value"
+                            :label="locale.el[localeKey][option.label]" :value="option.value" />
                     </el-select>
                 </template>
                 <template v-if="item.type == 'treeSelect'">
@@ -108,6 +108,29 @@ function resetForm(el) {
         display: flex;
         justify-content: flex-end;
         align-items: center;
+    }
+
+    :deep(.el-form.el-form--default) {
+        .el-form-item__content {
+            .el-input:not(.is-disabled) {
+                .el-input__wrapper {
+                    background-color: var(--el-input-bg-theme-color);
+                }
+            }
+
+            .el-input-number {
+
+                .el-input-number__decrease,
+                .el-input-number__increase {
+                    background-color: var(--el-input-number-bg-color);
+                }
+            }
+
+            .el-input__inner {
+                color: var(--text-color);
+            }
+
+        }
     }
 }
 </style>
