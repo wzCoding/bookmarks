@@ -95,7 +95,11 @@ const goBack = () => {
     if (!searchActive.value) {
         if (router.currentRoute.value.fullPath !== "/") {
             currentTitle.value = oldTitle
-            router.push('/');
+            if (router.currentRoute.value.fullPath == "/recent") {
+                router.back()
+            } else {
+                router.push('/');
+            }
         } else {
             bookStore.getCurrentNodes(parentId.value);
         }
