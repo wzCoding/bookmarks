@@ -33,7 +33,7 @@
 import { computed, watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { ElPageHeader, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
+import { ElPageHeader, ElLoading, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
 import { Search, Menu, Link, Setting } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { useLocaleStore } from '@/store/useLocaleStore';
@@ -72,11 +72,8 @@ const menus = computed(() => [
     }
 ])
 const onItemChange = (command) => {
-    console.log(command)
     searchActive.value = false;
-    if (command == "setting") {
-        router.push("/setting");
-    }
+    router.push(`/${command}`);
 }
 const openSearch = (el) => {
     searchActive.value = true;
@@ -93,9 +90,6 @@ const searchBook = debounce(() => {
 const clearBook = () => {
     currentNodes.value = oldNodes;
     searchText.value = '';
-}
-const openSetting = () => {
-    console.log('setting')
 }
 const goBack = () => {
     if (!searchActive.value) {
@@ -153,6 +147,7 @@ watch(currentTitle, (newVal, oldVal) => {
             background-color: var(--bg-color);
             color: var(--text-color);
         }
+
         .el-input__inner {
             color: var(--text-color);
         }

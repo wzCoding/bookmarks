@@ -2,7 +2,8 @@
     <transition name="fade">
         <div ref="contextMenu" class="context-menu" :style="styles" v-show="showMenu" v-click-outside="onClickOutside"
             @mouseleave="startTimer" @mouseenter="clearTimer">
-            <div class="menu-item" v-for="item in menuList" :key="item.label" :data-type="item.type" @click="onItemClick">
+            <div class="menu-item" v-for="item in menuList" :key="item.label" :class="{ disable: item.disable }"
+                :data-type="item.type" @click="onItemClick">
                 <el-icon>
                     <component :is="item.icon" />
                 </el-icon>
@@ -22,27 +23,32 @@ const itemHeight = "36px"
 const props = defineProps({
     xAxis: { type: Number, default: 0 },
     yAxis: { type: Number, default: 0 },
-    target: { type: Object, default: () => { return {} } }
+    target: { type: Object, default: () => { return {} } },
+    disable: { type: Array, default: () => { return [] } },
 });
 const emits = defineEmits(['openContextMenu', 'destroyContextMenu', 'contextMenuClick']);
 const localeStore = useLocaleStore();
 const showMenu = ref(false);
 const timer = ref(null);
+const infoItem = { label: localeStore.locale.el[page].info, icon: InfoFilled, type: "info", disable: props.disable.includes("info") }
+const createItem = { label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create", disable: props.disable.includes("create") }
+const editItem = { label: localeStore.locale.el[page].edit, icon: Management, type: "edit", disable: props.disable.includes("edit") }
+const deleteItem = { label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete", disable: props.disable.includes("delete") }
 const menuList = [
-    { label: localeStore.locale.el[page].info, icon: InfoFilled, type: "info" },
+    infoItem,
 ];
 if (!["1", "2"].includes(props.target.id)) {
-    menuList.push({ label: localeStore.locale.el[page].edit, icon: Management, type: "edit" })
+    menuList.push(editItem)
     if (props.target.children) {
-        menuList.push({ label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create" })
+        menuList.push(createItem)
         if (props.target.children.length === 0) {
-            menuList.push({ label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete" })
+            menuList.push(deleteItem)
         }
     } else {
-        menuList.push({ label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete" })
+        menuList.push(deleteItem)
     }
 } else {
-    menuList.push({ label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create" })
+    menuList.push(createItem)
 }
 const width = Number(itemWidth.replace("px", ""));
 const height = Number(itemHeight.replace("px", "")) * menuList.length;
@@ -67,7 +73,7 @@ const onClickOutside = () => {
 }
 const startTimer = () => {
     clearTimer();
-    timer.value = setTimeout(closeMenu, 2000)
+    //timer.value = setTimeout(closeMenu, 2000)
 }
 const clearTimer = () => {
     clearTimeout(timer.value)
@@ -118,12 +124,15 @@ defineExpose({ showMenu, closeMenu });
         padding: 0.5rem;
         box-sizing: border-box;
         border-radius: 0.5rem;
-
+        &.disable{
+            pointer-events: none;
+            color: #ddd;
+        }
         .menu-label {
             padding-left: 0.5rem;
         }
 
-        &:hover {
+        &:hover:not(.disable) {
             color: #409eff;
             background-color: #409eff33;
         }

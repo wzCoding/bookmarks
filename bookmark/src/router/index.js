@@ -5,7 +5,6 @@ const routes = [
   {
     path: '/',
     name: 'home',
-
     component: Home
   },
   {
@@ -31,6 +30,11 @@ const routes = [
     name: 'setting',
     component: () => import(/* webpackChunkName: "Setting" */ '../views/Setting.vue')
   },
+  {
+    path: '/recent',
+    name: 'recent',
+    component: () => import(/* webpackChunkName: "Recent" */ '../views/Recent.vue')
+  }
 ]
 
 const router = createRouter({

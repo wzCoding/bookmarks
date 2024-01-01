@@ -5,7 +5,6 @@ import { ref, computed } from 'vue'
 const cacheKey = "bookmark-locale"
 const defaultLang = "zhCn"
 export const useLocaleStore = defineStore('locale', () => {
-    console.log(getCache())
     const language = ref(getCache() ? getCache() : defaultLang);
     const locale = computed(() => locales[language.value])
     function toggle(lang) {

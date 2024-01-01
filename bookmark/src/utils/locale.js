@@ -97,6 +97,10 @@ export const locales = {
                 "dark": "Dark",
                 "zhCn": "zhCn",
                 "en": "en",
+            },
+            recent: {
+                "pageTitle": "最近使用",
+                "tips": "这里展示最多{number}条最近常用的书签",
             }
         }
     },
@@ -199,6 +203,10 @@ export const locales = {
                 "dark": "Dark",
                 "zhCn": "zhCn",
                 "en": "en",
+            },
+            recent: {
+                "pageTitle": "Recently Used",
+                "tips": "Up to {number} recently used bookmarks are displayed here.",
             }
         }
     }

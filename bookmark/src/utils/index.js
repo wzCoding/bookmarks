@@ -41,12 +41,12 @@ function getTreeByKey(list, rootId, key) {
         }
     });
     const root = nodes.filter(item => item.parentId == rootId);
-    const getTree = (item) => {
+    const getAllBookMarks = (item) => {
         const childrens = nodes.filter(child => child.parentId == item.id);
         if (childrens.length) {
             item.children = childrens;
             for (const child of childrens) {
-                getTree(child);
+                getAllBookMarks(child);
             }
         }
         if (item.parentId == rootId) {
@@ -54,7 +54,7 @@ function getTreeByKey(list, rootId, key) {
         }
     }
     for (const item of root) {
-        getTree(item);
+        getAllBookMarks(item);
     }
     return result
 }
@@ -123,8 +123,12 @@ function getCurrentTab(callback) {
     });
 }
 //获取bookmark
-async function getTree() {
+async function getAllBookMarks() {
     return await chrome.bookmarks.getTree();
+}
+//获取最近使用的bookmark
+async function getRecentBookMarks(number) {
+    return await chrome.bookmarks.getRecent(number);
 }
 //修改bookmark
 function updateBookMark(id, options, callback) {
@@ -184,7 +188,8 @@ export {
     getCurrentTab,
     getDate,
     getIconUrl,
-    getTree,
+    getAllBookMarks,
+    getRecentBookMarks,
     updateBookMark,
     createBookMark,
     removeBookMark,

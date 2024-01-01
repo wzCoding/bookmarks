@@ -1,12 +1,12 @@
 import { computed, reactive, ref } from "vue";
 import { defineStore } from "pinia";
-import { getTree, getTreeByKey, expandTree } from "@/utils";
+import { getAllBookMarks, getRecentBookMarks,getTreeByKey, expandTree } from "@/utils";
 
 //获取书签tree
-function getData() {
-  const data = require('../../public/background/data.json');
-  return expandTree(data);
-}
+// function getData() {
+//   const data = require('../../public/background/data.json');
+//   return expandTree(data);
+// }
 
 
 const defaultTitle = "我的书签";
@@ -15,15 +15,16 @@ const defaultShowTitle = "书签栏"
 const defaultShowId = "1";
 const defaultSize = 8;
 const defaultPage = 1;
-// const tree = expandTree(await getTree());
-const tree = getData();
+const tree = expandTree(await getAllBookMarks());
+const recent = await getRecentBookMarks(10);
+//const tree = getData();
 export const usebookStore = defineStore("bookmarks", () => {
     let allNodes = tree;
     //书签展示相关
     const parentId = ref(defaultId);
     const currentTitle = ref(defaultShowTitle);
     const currentNodes = ref(getFolder(defaultShowId).children);
-
+    const recentNodes = ref(recent);
     //分页相关
     const pageSize = ref(defaultSize);
     const currentPage = ref(defaultPage);
@@ -93,20 +94,20 @@ export const usebookStore = defineStore("bookmarks", () => {
     function pageChange(page) {
         currentPage.value = page < 1 ? 1 : (page > totalPage.value ? totalPage.value : page);
     }
-    ////监听添加书签事件
-    // chrome.bookmarks.onCreated.addListener((id, node) => {
-    //     console.log("onCreate", id)
-    //     chrome.bookmarks.getTree().then(result => {
-    //         initNodes(expandTree(result), node.parentId);
-    //     })
-    // })
-    ////监听删除书签事件
-    // chrome.bookmarks.onRemoved.addListener((id, removeNode) => {
-    //     console.log("onRemove", id)
-    //     chrome.bookmarks.getTree().then(result => {
-    //         initNodes(expandTree(result), removeNode.parentId);
-    //     })
-    // })
+    //监听添加书签事件
+    chrome.bookmarks.onCreated.addListener((id, node) => {
+        console.log("onCreate", id)
+        chrome.bookmarks.getTree().then(result => {
+            initNodes(expandTree(result), node.parentId);
+        })
+    })
+    //监听删除书签事件
+    chrome.bookmarks.onRemoved.addListener((id, removeNode) => {
+        console.log("onRemove", id)
+        chrome.bookmarks.getTree().then(result => {
+            initNodes(expandTree(result), removeNode.parentId);
+        })
+    })
     return {
         currentTitle,
         currentNodes,
@@ -119,6 +120,7 @@ export const usebookStore = defineStore("bookmarks", () => {
         pageNodes,
         total,
         allNodes,
+        recentNodes,
         initNodes,
         getCurrentNodes,
         getNodeById,

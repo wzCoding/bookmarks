@@ -4,8 +4,8 @@
     --card-bg-color:#f9f9f9;
     --card-text-color:#333;
     --card-info-color:#999;
-    --context-shadow-color:rgba(0,0,0,0.1);
-    --card-shadow-color:rgba(0,0,0,0.2);
+    --context-shadow-color:rgba(0,0,0,0.2);
+    --card-shadow-color:rgba(0,0,0,0.1);
 }
 html[data-theme="dark"] {
     --bg-color: #22272e;
@@ -103,10 +103,6 @@ body {
     &.el-select__popper {
         max-width: 100%;
     }
-}
-.el-popper{
-    background-color: var(--bg-color) !important;
-    color:var(--text-color) !important;
 }
 .el-form {
     width: 100%;
