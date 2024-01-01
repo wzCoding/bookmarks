@@ -1,15 +1,8 @@
 import { computed, reactive, ref } from "vue";
 import { defineStore } from "pinia";
-import { getAllBookMarks, getRecentBookMarks,getTreeByKey, expandTree } from "@/utils";
+import { getAllBookMarks, getRecentBookMarks, getTreeByKey, expandTree } from "@/utils";
 
-//获取书签tree
-// function getData() {
-//   const data = require('../../public/background/data.json');
-//   return expandTree(data);
-// }
-
-
-const defaultTitle = "我的书签";
+const defaultTitle = "";
 const defaultId = "0";
 const defaultShowTitle = "书签栏"
 const defaultShowId = "1";
@@ -17,7 +10,7 @@ const defaultSize = 8;
 const defaultPage = 1;
 const tree = expandTree(await getAllBookMarks());
 const recent = await getRecentBookMarks(10);
-//const tree = getData();
+
 export const usebookStore = defineStore("bookmarks", () => {
     let allNodes = tree;
     //书签展示相关

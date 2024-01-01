@@ -33,7 +33,7 @@
 import { computed, watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { ElPageHeader, ElLoading, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
+import { ElPageHeader, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
 import { Search, Menu, Link, Setting } from '@element-plus/icons-vue';
 import { usebookStore } from '@/store/usebookStore';
 import { useLocaleStore } from '@/store/useLocaleStore';

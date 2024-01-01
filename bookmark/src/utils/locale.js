@@ -37,7 +37,7 @@ export const locales = {
                 "recentlyVisited": "最近访问",
             },
             info: {
-                "details": "详细信息",
+                "pageTitle":"详细信息",
                 "bookmarkType": "书签类型",
                 "bookmarkNumber": "书签数量",
                 "bookmarkAddDate": "添加日期",
@@ -47,6 +47,7 @@ export const locales = {
                 "bookmarkFolder": "书签文件夹",
             },
             edit: {
+                "pageTitle":"编辑书签",
                 "bookmarkName": "书签名称",
                 "websiteLink": "网址链接",
                 "bookmarkLocation": "书签位置",
@@ -93,8 +94,8 @@ export const locales = {
                 "enLanguage": "English",
                 "submitText": "保存",
                 "resetText": "重置",
-                "default": "Default",
-                "dark": "Dark",
+                "default": "default",
+                "dark": "dark",
                 "zhCn": "zhCn",
                 "en": "en",
             },

@@ -42,11 +42,7 @@ const submitSetting = (form) => {
         if (form.language !== localeStore.language) {
             task.push({ name: "toggleLanguage", value: form.language })
         }
-        if (task.length) {
-            resolve(task)
-        } else {
-            reject()
-        }
+        task.length ? resolve(task) : reject("nothing change")
     }).then(res => {
         setTimeout(() => {
             loading.close()
@@ -56,6 +52,7 @@ const submitSetting = (form) => {
         }, 1000)
     }).catch(err => {
         console.log(err)
+        loading.close()
     })
 }
 </script>

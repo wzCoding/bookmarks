@@ -1,20 +1,22 @@
 :root {
     --bg-color: #fff;
-    --text-color:#333;
-    --card-bg-color:#f9f9f9;
-    --card-text-color:#333;
-    --card-info-color:#999;
-    --context-shadow-color:rgba(0,0,0,0.2);
-    --card-shadow-color:rgba(0,0,0,0.1);
+    --text-color: #333;
+    --card-bg-color: #f9f9f9;
+    --card-text-color: #333;
+    --card-info-color: #999;
+    --context-shadow-color: rgba(0, 0, 0, 0.2);
+    --card-shadow-color: rgba(0, 0, 0, 0.1);
 }
 html[data-theme="dark"] {
     --bg-color: #22272e;
-    --text-color:#adbac7;
-    --card-bg-color:#22272e;
-    --card-text-color:#adbac7;
-    --card-info-color:#adbad7;
-    --context-shadow-color:rgba(64,158,255,0.3);
-    --card-shadow-color:rgba(0,0,0,0.3);
+    --text-color: #adbac7;
+    --card-bg-color: #303133;
+    --card-text-color: #adbac7;
+    --card-info-color: #adbad7;
+    --context-shadow-color: rgba(64, 158, 255, 0.3);
+    --card-shadow-color: rgba(0, 0, 0, 0.5);
+    --el-button-bg-color: #606266;
+    --el-button-active-bg-color: #909399;
 }
 
 body {
@@ -99,7 +101,7 @@ body {
 //element-plus样式修改
 .el-popper[role="tooltip"] {
     max-width: 20rem;
-   
+
     &.el-select__popper {
         max-width: 100%;
     }

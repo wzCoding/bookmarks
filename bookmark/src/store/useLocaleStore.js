@@ -16,6 +16,7 @@ export const useLocaleStore = defineStore('locale', () => {
     }
     function toggleTheme(name) {
         theme.value = name
+        document.documentElement.setAttribute('data-theme', name)
         setCache(themeKey, theme.value)
     }
     function setCache(key, value) {
