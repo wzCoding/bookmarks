@@ -7,13 +7,15 @@
 ### 下载插件文件
 可以直接点击下方下载链接下载打包好的插件压缩文件   
 
-[点击下载](/bookmark.zip)
-[bookmark.zip](https://github.com/wzCoding/bookmarks/raw/main/bookmark.zip)
-
-<a href="" download="bookmark.zip">点击下载</a>
-
+[点击下载](https://github.com/wzCoding/bookmarks/raw/main/resouce/bookmark.zip)
 
 ### 添加插件
-下载好插件文件后，解压文件，然后打开浏览器，进入 `扩展程序`
+1. 下载好插件文件后，解压文件，然后打开浏览器，进入 `扩展程序`（进入 `扩展程序` 时检查是否打开了开发者模式，如果没有打开，就需要手动开启一下）
+![进入扩展程序界面](/resouce/images/resouce1.png "扩展程序界面")
+
+2. 在 `扩展程序` 界面中，点击 `加载已解压的扩展程序` 按钮，然后选择刚解压好的书签插件文件
+![加载已解压的扩展程序](/resouce/images/resouce2.png "加载已解压的扩展")
+
+3. 加载完成后，插件就安装好了，然后就可以在浏览器中使用了
 
 ## 插件展示
