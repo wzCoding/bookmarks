@@ -8,8 +8,9 @@
 可以直接点击下方下载链接下载打包好的插件压缩文件   
 
 [点击下载](/bookmark.zip)
+[bookmark.zip](https://github.com/wzCoding/bookmarks/raw/main/bookmark.zip)
 
-<a href="bookmark.zip" download="bookmark.zip">点击下载</a>
+<a href="" download="bookmark.zip">点击下载</a>
 
 
 ### 添加插件
