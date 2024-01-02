@@ -22,6 +22,27 @@
 
 ## 插件页面展示
 
-1. 首页
-![插件界面](/resouce/images/resouce3.png "插件界面")
+1. 首页      
+     
+![书签界面](/resouce/images/resouce3.png "书签界面")
+
+2. 书签信息页  
+      
+![书签界面](/resouce/images/resouce4.png "书签界面")
+
+3. 编辑书签页    
+         
+![书签界面](/resouce/images/resouce5.png "书签界面")
+
+4. 添加书签页    
+          
+![书签界面](/resouce/images/resouce6.png "书签界面")
+
+5. 删除书签页      
+       
+![书签界面](/resouce/images/resouce7.png "书签界面")
+
+6. 书签设置页    
+         
+![书签界面](/resouce/images/resouce8.png "书签界面")
 
