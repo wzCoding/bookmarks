@@ -9,7 +9,6 @@
 </template>
 <script setup>
 import { ElConfigProvider, ElPagination } from 'element-plus';
-//footer分页组件属性
 const props = defineProps({
     currentPage: { type: Number, default: 1 },
     pageSize: { type: Number, default: 8 },
@@ -19,9 +18,7 @@ const props = defineProps({
     total: { type: Number, default: 0 },
     locale: { type: Object, default: () => ({}) },
 });
-//footer分页组件事件
 const emits = defineEmits(['currentChange', 'sizeChange']);
-
 const handleCurrentChange = (currentPage) => {
     emits('currentChange', currentPage);
 }

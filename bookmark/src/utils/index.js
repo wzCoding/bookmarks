@@ -82,7 +82,6 @@ function getLocalCache(key, id) {
         return "";
     }
 }
-
 //简单的日期格式化
 function getDate(date) {
     if (!date) return
@@ -92,19 +91,6 @@ function getDate(date) {
     const day = dateObj.getDate();
     const add0 = (num) => { return num < 10 ? "0" + num : num }
     return `${year}/${add0(month)}/${add0(day)}`
-}
-
-//利用 Google Url 获取书签链接的favicon
-function getIconUrl(url, callback) {
-    const iconUrl = `https://www.google.com/s2/favicons?sz=64&domain_url=${url}`
-    const img = new Image();
-    img.src = iconUrl
-    img.onload = async function () {
-        return Promise.resolve(this).then(res => {
-            callback && callback(res)
-        });
-    }
-    return iconUrl;
 }
 //利用chrome-extension Api直接获取书签链接的favicon
 function faviconURL(u) {
@@ -133,7 +119,6 @@ async function getRecentBookMarks(number) {
 //修改bookmark
 function updateBookMark(id, options, callback) {
     if (!options) return;
-    console.log(options)
     chrome.bookmarks.update(id, options, (res) => {
         callback && callback(res);
     })
@@ -142,7 +127,6 @@ function updateBookMark(id, options, callback) {
 //创建bookmark
 function createBookMark(options, callback) {
     if (!options) return;
-    console.log(options)
     chrome.bookmarks.create(options, (res) => {
         callback && callback(res);
     })
@@ -159,7 +143,6 @@ function removeBookMark(id, callback) {
 //移动bookmark
 function moveBookMark(id, options, callback) {
     if (!options) return;
-    console.log(options)
     chrome.bookmarks.move(id, options, (res) => {
         callback && callback(res);
     })
@@ -187,7 +170,6 @@ export {
     getLocalCache,
     getCurrentTab,
     getDate,
-    getIconUrl,
     getAllBookMarks,
     getRecentBookMarks,
     updateBookMark,

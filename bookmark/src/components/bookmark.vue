@@ -63,8 +63,7 @@ const openType = ref(1);
 const createDate = getDate(props.bookmark.dateAdded);
 const modifyDate = getDate(props.bookmark.dateGroupModified);
 const visitDate = getDate(props.bookmark.dateLastUsed);
-const iconUrl = faviconURL(props.bookmark.url); //打包之前放开
-//const iconUrl = "" //本地开发使用
+const iconUrl = faviconURL(props.bookmark.url);
 const dropDownItems = [
     {
         label: props.locale.bookmarkCard.currentPage,
