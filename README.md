@@ -9,7 +9,7 @@
 
 [点击下载](/resouce/bookmark.zip)
 
-<a href="/resouce/bookmark.zip" download target="_blank">点击下载</a>
+<a href="[/resouce/bookmark.zip](https://github.com/wzCoding/bookmarks/blob/main/resouce/bookmark.zip)" download>点击下载</a>
 
 
 ### 添加插件
