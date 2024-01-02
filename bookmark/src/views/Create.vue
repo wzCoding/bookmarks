@@ -77,24 +77,28 @@ function typeChange(form) {
 }
 function submitForm(param) {
     const loading = ElLoading.service({ lock: true })
-    const options = {
-        index: param.index ? param.index : 0,
-        parentId: param.parentId ? param.parentId : "1",
-        title: param.title ? param.title : "",
-    }
-    if (param.url) {
-        options.url = param.url
-    }
-    createBookMark(options, (res) => {
-        if (res) {
-            setTimeout(() => {
-                ElMessage({
-                    type: 'success',
-                    message: localeStore.locale.el[page].successTip,
-                })
-                loading.close()
-            }, 1000)
+    new Promise((resolve, reject) => {
+        const options = {
+            index: param.index ? param.index : 0,
+            parentId: param.parentId ? param.parentId : "1",
+            title: param.title ? param.title : "",
         }
+        if (param.url) {
+            options.url = param.url
+        }
+        resolve(options)
+    }).then(result => {
+        createBookMark(result, (res) => {
+            if (res) {
+                setTimeout(() => {
+                    loading.close()
+                    ElMessage({
+                        type: 'success',
+                        message: localeStore.locale.el[page].successTip,
+                    })
+                }, 1000)
+            }
+        })
     })
 }
 </script>

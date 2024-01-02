@@ -115,11 +115,11 @@ function submitForm(param) {
             bookStore.initNodes(expandTree(result), targetNode.parentId)
         })
         setTimeout(() => {
+            loading.close()
             ElMessage({
                 type: 'success',
                 message: localeStore.locale.el[page].successTip,
             })
-            loading.close()
         }, 1000)
     })
 }
