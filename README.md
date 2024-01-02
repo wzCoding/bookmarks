@@ -9,10 +9,10 @@
 
 [点击下载](/resouce/bookmark.zip)
 
-<a href="[/resouce/bookmark.zip](https://github.com/wzCoding/bookmarks/blob/main/resouce/bookmark.zip)" download>点击下载</a>
+<a href="https://github.com/wzCoding/bookmarks/blob/main/resouce/bookmark.zip" download>点击下载</a>
 
 
 ### 添加插件
 下载好插件文件后，解压文件，然后打开浏览器，进入 `扩展程序`
 
-## 插件展示
+## 插件展示 
