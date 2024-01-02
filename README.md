@@ -7,9 +7,9 @@
 ### 下载插件文件
 可以直接点击下方下载链接下载打包好的插件压缩文件   
 
-[点击下载](/resouce/bookmark.zip)
+[点击下载](/bookmark.zip)
 
-<a href="https://github.com/wzCoding/bookmarks/blob/main/resouce/bookmark.zip" download>点击下载</a>
+<a href="/bookmark.zip" download>点击下载</a>
 
 
 ### 添加插件
