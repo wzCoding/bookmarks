@@ -133,5 +133,6 @@ function resetForm() {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    background-color: var(--el-alert-bg-theme-color) !important;
 }
 </style>

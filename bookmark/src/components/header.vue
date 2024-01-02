@@ -165,6 +165,7 @@ watch(currentTitle, (newVal, oldVal) => {
             position: relative;
             overflow: hidden;
             flex: 1;
+            height: 2rem;
             line-height: 2rem;
 
             &.active {
