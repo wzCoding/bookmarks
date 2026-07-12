@@ -7,23 +7,40 @@
         </ElConfigProvider>
     </div>
 </template>
-<script setup>
-import { ElConfigProvider, ElPagination } from 'element-plus';
-const props = defineProps({
-    currentPage: { type: Number, default: 1 },
-    pageSize: { type: Number, default: 8 },
-    pageSizes: { type: Array, default: () => [8, 16, 24, 32] },
-    pagerCount: { type: Number, default: 5 },
-    layout: { type: String, default: 'sizes, prev, pager, next, jumper' },
-    total: { type: Number, default: 0 },
-    locale: { type: Object, default: () => ({}) },
-});
-const emits = defineEmits(['currentChange', 'sizeChange']);
-const handleCurrentChange = (currentPage) => {
-    emits('currentChange', currentPage);
+<script setup lang="ts">
+import { ElConfigProvider, ElPagination } from 'element-plus'
+
+interface Props {
+  currentPage?: number
+  pageSize?: number
+  pageSizes?: number[]
+  pagerCount?: number
+  layout?: string
+  total?: number
+  // eslint-disable-next-line
+  locale?: any
 }
-const handleSizeChange = (size) => {
-    emits('sizeChange', size);
+
+const props = withDefaults(defineProps<Props>(), {
+  currentPage: 1,
+  pageSize: 8,
+  pageSizes: () => [8, 16, 24, 32],
+  pagerCount: 5,
+  layout: 'sizes, prev, pager, next, jumper',
+  total: 0,
+  locale: () => ({}),
+})
+
+const emits = defineEmits<{
+  currentChange: [currentPage: number]
+  sizeChange: [size: number]
+}>()
+
+const handleCurrentChange = (currentPage: number) => {
+  emits('currentChange', currentPage)
+}
+const handleSizeChange = (size: number) => {
+  emits('sizeChange', size)
 }
 </script>
 <style lang="scss" scoped>

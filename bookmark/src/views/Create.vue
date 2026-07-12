@@ -1,6 +1,6 @@
 <template>
     <div class="bookmark-page bookmark-create">
-        <Title :title="targetNode.title" />
+        <Title :title="targetNode?.title ?? ''" />
         <Forms :forms="forms" :locale-key="page" @submit="submitForm">
             <template #default="{ node }">
                 <div class="custom-tree-node">
@@ -13,25 +13,30 @@
         </Forms>
     </div>
 </template>
-<script setup>
-import { reactive } from 'vue';
-import { ElMessage, ElLoading, ElIcon } from 'element-plus';
-import { Folder } from '@element-plus/icons-vue';
-import { usebookStore } from '@/store/usebookStore';
-import { useLocaleStore } from '@/store/useLocaleStore';
-import { createBookMark } from '@/utils/index';
-import Forms from '@/components/forms.vue';
-import Title from '@/components/title.vue';
-const props = defineProps({
-    id: { type: String, default: "0", required: true }
-});
-const page = "create"
-const bookStore = usebookStore();
-const localeStore = useLocaleStore();
-const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
-const targetNode = bookStore.getNodeById(props.id);
-const urlIndex = 2;
-const forms = reactive([
+<script setup lang="ts">
+import { reactive } from 'vue'
+import { ElMessage, ElLoading, ElIcon } from 'element-plus'
+import { Folder } from '@element-plus/icons-vue'
+import { usebookStore } from '@/store/usebookStore'
+import { useLocaleStore } from '@/store/useLocaleStore'
+import { createBookMark } from '@/utils/index'
+import Forms from '@/components/forms.vue'
+import Title from '@/components/title.vue'
+import type { FormItem, FormData } from '@/types'
+
+interface Props {
+  id: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  id: '0',
+})
+const page = 'create'
+const bookStore = usebookStore()
+const localeStore = useLocaleStore()
+const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/
+const targetNode = bookStore.getNodeById(props.id)
+const urlIndex = 2
+const forms = reactive<FormItem[]>([
     {
         label: "bookmarkType",
         name: "type",
@@ -53,52 +58,55 @@ const forms = reactive([
         name: "id",
         type: "treeSelect",
         tree: bookStore.getTreeNodes("children"),
-        defaultValue: targetNode.id,
+        defaultValue: targetNode?.id,
         props: { label: "title" },
         show: true,
         required: true,
     }
 ])
-async function validateUrl(rule, value, callback) {
-    return new Promise((resolve, reject) => {
-        if (value) {
-            !regExp.test(value) ? reject(rule.message) : resolve()
-        } else {
-            !forms[urlIndex].required ? resolve() : reject(rule.message)
-        }
-    }).then(() => {
-        callback && callback();
-    }).catch(err => {
-        callback && callback(new Error(err));
+async function validateUrl(rule: unknown, value: unknown, callback: (error?: Error) => void) {
+  return new Promise<void>((resolve, reject) => {
+    const val = value as string
+    if (val) {
+      !regExp.test(val) ? reject(new Error((rule as { message: string }).message)) : resolve()
+    } else {
+      !forms[urlIndex].required ? resolve() : reject(new Error((rule as { message: string }).message))
+    }
+  })
+    .then(() => {
+      callback && callback()
+    })
+    .catch((err: Error) => {
+      callback && callback(err)
     })
 }
-function typeChange(form) {
-    forms[urlIndex].required = forms[urlIndex].show = form.type === "url";
+function typeChange(form: Record<string, unknown>) {
+  forms[urlIndex].required = forms[urlIndex].show = form.type === 'url'
 }
-function submitForm(param) {
-    const loading = ElLoading.service({ lock: true })
-    new Promise((resolve, reject) => {
-        const options = {
-            index: param.index ? param.index : 0,
-            parentId: param.parentId ? param.parentId : "1",
-            title: param.title ? param.title : "",
-        }
-        if (param.url) {
-            options.url = param.url
-        }
-        resolve(options)
-    }).then(result => {
-        createBookMark(result, (res) => {
-            if (res) {
-                setTimeout(() => {
-                    loading.close()
-                    ElMessage({
-                        type: 'success',
-                        message: localeStore.locale.el[page].successTip,
-                    })
-                }, 1000)
-            }
-        })
+function submitForm(param: FormData) {
+  const loading = ElLoading.service({ lock: true })
+  new Promise<{ parentId?: string; index?: number; title?: string; url?: string }>((resolve) => {
+    const options: { parentId?: string; index?: number; title?: string; url?: string } = {
+      index: param.index ? (param.index as number) : 0,
+      parentId: param.parentId ? (param.parentId as string) : '1',
+      title: param.title ? (param.title as string) : '',
+    }
+    if (param.url) {
+      options.url = param.url as string
+    }
+    resolve(options)
+  }).then((result) => {
+    createBookMark(result, (res: chrome.bookmarks.BookmarkTreeNode) => {
+      if (res) {
+        setTimeout(() => {
+          loading.close()
+          ElMessage({
+            type: 'success',
+            message: localeStore.locale.el[page].successTip,
+          })
+        }, 1000)
+      }
     })
+  })
 }
 </script>

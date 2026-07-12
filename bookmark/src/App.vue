@@ -8,8 +8,8 @@
     </router-view>
   </div>
 </template>
-<script setup>
-import BookHeader from '@/components/header.vue';
+<script setup lang="ts">
+import BookHeader from '@/components/header.vue'
 const headerHeight = "56px"
 </script>
 <style lang="scss">

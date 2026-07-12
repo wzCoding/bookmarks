@@ -29,60 +29,72 @@
         </template>
     </el-page-header>
 </template>
-<script setup>
-import { computed, watch, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { ElPageHeader, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
-import { Search, Menu, Link, Setting } from '@element-plus/icons-vue';
-import { usebookStore } from '@/store/usebookStore';
-import { useLocaleStore } from '@/store/useLocaleStore';
-import { debounce } from '@/utils/index';
-const props = defineProps({
-    height: { type: String, default: '60' },
-});
-const headerStyle = computed(() => {
-    return {
-        height: props.height.includes('px') ? props.height : `${props.height}px`
-    }
-});
-const pageHeader = ref(null);
-const searchInput = ref();
-const searchText = ref();
-const searchActive = ref(false);
-const router = useRouter();
-const bookStore = usebookStore();
-const localeStore = useLocaleStore();
-const showMenu = computed(() => { return router.currentRoute.value.fullPath == "/" })
-const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore);
-const { locale } = storeToRefs(localeStore);
-const searchTip = computed(() => { return locale.value.el.bookmarkHeader.searchTip });
-let oldTitle = currentTitle.value;
-let oldNodes = currentNodes.value;
-const menus = computed(() => [
-    {
-        label: locale.value.el.bookmarkHeader.recentlyUsed,
-        icon: Link,
-        type: "recent"
-    },
-    {
-        label: locale.value.el.bookmarkHeader.settings,
-        icon: Setting,
-        type: "setting"
-    }
-])
-const onItemChange = (command) => {
-    searchActive.value = false;
-    router.push(`/${command}`);
+<script setup lang="ts">
+import { computed, watch, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { ElPageHeader, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
+import { Search, Menu, Link, Setting } from '@element-plus/icons-vue'
+import { usebookStore } from '@/store/usebookStore'
+import { useLocaleStore } from '@/store/useLocaleStore'
+import { debounce } from '@/utils/index'
+import type { BookmarkTreeNode, SearchMenuItem } from '@/types'
+import type { BookmarkNodeWithMeta } from '@/types'
+
+interface Props {
+  height?: string
 }
-const openSearch = (el) => {
-    searchActive.value = true;
-    oldNodes = currentNodes.value;
-    setTimeout(el.focus, 200);
+const props = withDefaults(defineProps<Props>(), {
+  height: '60',
+})
+
+const headerStyle = computed(() => {
+  return {
+    height: props.height.includes('px') ? props.height : `${props.height}px`,
+  }
+})
+const pageHeader = ref<InstanceType<typeof ElPageHeader> | null>(null)
+const searchInput = ref<InstanceType<typeof ElInput> | null>(null)
+const searchText = ref<string>('')
+const searchActive = ref<boolean>(false)
+const router = useRouter()
+const bookStore = usebookStore()
+const localeStore = useLocaleStore()
+const showMenu = computed(() => {
+  return router.currentRoute.value.fullPath == '/'
+})
+const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore)
+const { locale } = storeToRefs(localeStore)
+const searchTip = computed(() => {
+  return locale.value.el.bookmarkHeader.searchTip
+})
+let oldTitle: string = currentTitle.value
+let oldNodes: BookmarkNodeWithMeta[] = currentNodes.value
+const menus = computed<SearchMenuItem[]>(() => [
+  {
+    label: locale.value.el.bookmarkHeader.recentlyUsed,
+    icon: Link,
+    type: 'recent',
+  },
+  {
+    label: locale.value.el.bookmarkHeader.settings,
+    icon: Setting,
+    type: 'setting',
+  },
+])
+const onItemChange = (command: string) => {
+  searchActive.value = false
+  router.push(`/${command}`)
+}
+const openSearch = (el: { focus: () => void } | null) => {
+  if (!el) return
+  searchActive.value = true
+  oldNodes = currentNodes.value
+  setTimeout(() => el.focus(), 200)
 }
 const searchBook = debounce(() => {
     if (searchText.value.trim()) {
-        currentNodes.value = bookStore.getNodeByTitle(searchText.value);
+        currentNodes.value = (bookStore.getNodeByTitle(searchText.value) ?? []) as BookmarkNodeWithMeta[]
     } else {
         clearBook()
     }
@@ -106,15 +118,16 @@ const goBack = () => {
 }
 const pageTitle = computed(() => {
     const path = router.currentRoute.value.fullPath;
-    if (path == '/') {
-        return currentTitle.value;
+    const routeName = router.currentRoute.value.name
+    if (!routeName || path === '/') {
+      return currentTitle.value
     }
-    return locale.value.el[router.currentRoute.value.name].pageTitle
+    return (locale.value.el as unknown as Record<string, Record<string, string>>)[String(routeName)].pageTitle
 })
 
-watch(currentTitle, (newVal, oldVal) => {
-    oldTitle = oldVal
-    searchActive.value = false;
+watch(currentTitle, (newVal: string, oldVal: string) => {
+  oldTitle = oldVal
+  searchActive.value = false
 })
 </script>
 <style lang="scss" scoped>

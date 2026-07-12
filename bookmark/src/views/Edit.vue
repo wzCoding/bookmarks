@@ -14,31 +14,36 @@
         <el-alert class="page-info" type="info" :title="tipTitle" :description="tipDesc" show-icon />
     </div>
 </template>
-<script setup>
-import { reactive, ref } from 'vue';
-import { ElMessage, ElLoading, ElIcon, ElAlert } from 'element-plus';
-import { Folder } from '@element-plus/icons-vue';
-import { usebookStore } from '@/store/usebookStore';
-import { useLocaleStore } from '@/store/useLocaleStore';
-import { updateBookMark, moveBookMark, expandTree } from '@/utils/index';
-import Forms from '@/components/forms.vue';
-import Title from '@/components/title.vue';
-const props = defineProps({
-    id: { type: String, default: "0", required: true }
-});
-const page = "edit"
-const title = ref("");
-const bookStore = usebookStore();
-const localeStore = useLocaleStore();
-const targetNode = bookStore.getNodeById(props.id);
-title.value = targetNode && targetNode.title ? targetNode.title : "--";
-const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
-const forms = reactive([]);
-const maxIndex = ref(0);
-const tipTitle = localeStore.locale.el[page].tips[0].title
-const tipDesc = localeStore.locale.el[page].tips[0].text
+<script setup lang="ts">
+import { reactive, ref } from 'vue'
+import { ElMessage, ElLoading, ElIcon, ElAlert } from 'element-plus'
+import { Folder } from '@element-plus/icons-vue'
+import { usebookStore } from '@/store/usebookStore'
+import { useLocaleStore } from '@/store/useLocaleStore'
+import { updateBookMark, moveBookMark, expandTree } from '@/utils/index'
+import Forms from '@/components/forms.vue'
+import Title from '@/components/title.vue'
+import type { FormItem, FormData, LocaleTipItem } from '@/types'
+
+interface Props {
+  id: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  id: '0',
+})
+const page = 'edit'
+const title = ref<string>('')
+const bookStore = usebookStore()
+const localeStore = useLocaleStore()
+const targetNode = bookStore.getNodeById(props.id)
+title.value = targetNode && targetNode.title ? targetNode.title : '--'
+const regExp = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?/=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/
+const forms = reactive<FormItem[]>([])
+const maxIndex = ref<number>(0)
+const tipTitle = (localeStore.locale.el[page].tips as LocaleTipItem[])[0].title
+const tipDesc = (localeStore.locale.el[page].tips as LocaleTipItem[])[0].text
 if (targetNode) {
-    updateMaxIndex(targetNode.parentId);
+    updateMaxIndex(targetNode.parentId!);
     forms.push(
         { label: "bookmarkName", name: "title", placeholder: targetNode.title, defaultValue: "", onInput: updateTitle },
         {
@@ -58,7 +63,7 @@ if (targetNode) {
             type: "number",
             defaultValue: targetNode.index,
             min: 0,
-            max: maxIndex,
+            max: maxIndex.value,
             requireMessage: "请设置有效的顺序",
             validator: validateParam
         },
@@ -77,54 +82,55 @@ if (targetNode) {
             })
     }
 }
-function updateTitle(param) {
-    title.value = param.title ? param.title : targetNode && targetNode.title;
+function updateTitle(param: unknown) {
+  const p = param as FormData
+  title.value = p.title ? (p.title as string) : (targetNode?.title ?? '--')
 }
-function updateMaxIndex(id) {
-    const node = bookStore.getNodeById(id);
-    maxIndex.value = node.children.length;
+function updateMaxIndex(id: string) {
+  const node = bookStore.getNodeById(id)
+  maxIndex.value = node?.children?.length ?? 0
 }
-async function validateParam(rule, value, callback) {
-    return new Promise((resolve, reject) => {
-        if (rule.field == 'index') {
-            value ? (value > 0 && value <= forms[forms.length - 1].max ? resolve() : reject(rule.message)) : resolve()
-        }
-        if (rule.field == 'url') {
-            value ? (regExp.test(value) ? resolve() : reject(rule.message)) : resolve()
-        }
-    }).then(() => {
-        callback && callback();
-    }).catch(err => {
-        callback && callback(new Error(err));
+async function validateParam(rule: unknown, value: unknown, callback: (error?: Error) => void) {
+  const val = value as string
+  return new Promise<void>((resolve, reject) => {
+    if ((rule as { field: string }).field == 'index') {
+      val ? (Number(val) > 0 && Number(val) <= forms[forms.length - 1].max! ? resolve() : reject(new Error((rule as { message: string }).message))) : resolve()
+    }
+    if ((rule as { field: string }).field == 'url') {
+      val ? (regExp.test(val) ? resolve() : reject(new Error((rule as { message: string }).message))) : resolve()
+    }
+  })
+    .then(() => {
+      callback && callback()
+    })
+    .catch((err: Error) => {
+      callback && callback(err)
     })
 }
-function submitForm(param) {
-    const loading = ElLoading.service({ lock: true })
-    const options = {};
-    const moveOptions = {
-        index: param.index,
-        parentId: param.parentId,
-    };
-    param.title ? options.title = param.title : null;
-    param.url ? options.url = param.url : null;
-    Promise.all([
-        updateBookMark(props.id, options),
-        moveBookMark(props.id, moveOptions)
-    ]).then(res => {
-        chrome.bookmarks.getTree().then(result => {
-            bookStore.initNodes(expandTree(result), targetNode.parentId)
-        })
-        setTimeout(() => {
-            loading.close()
-            ElMessage({
-                type: 'success',
-                message: localeStore.locale.el[page].successTip,
-            })
-        }, 1000)
+function submitForm(param: FormData) {
+  const loading = ElLoading.service({ lock: true })
+  const options: { title?: string; url?: string } = {}
+  const moveOptions = {
+    index: param.index as number,
+    parentId: param.parentId as string,
+  }
+  param.title ? (options.title = param.title as string) : null
+  param.url ? (options.url = param.url as string) : null
+  Promise.all([updateBookMark(props.id, options), moveBookMark(props.id, moveOptions)]).then(() => {
+    chrome.bookmarks.getTree().then((result) => {
+      bookStore.initNodes(expandTree(result), targetNode!.parentId!)
     })
+    setTimeout(() => {
+      loading.close()
+      ElMessage({
+        type: 'success',
+        message: localeStore.locale.el[page].successTip as string,
+      })
+    }, 1000)
+  })
 }
 function resetForm() {
-    title.value = targetNode && targetNode.title;
+  title.value = targetNode?.title ?? '--'
 }
 </script>
 <style lang="scss" scoped>

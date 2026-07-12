@@ -39,54 +39,59 @@
         </el-dropdown>
     </div>
 </template>
-<script setup>
-import { computed, onMounted, ref } from 'vue';
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
 import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
-import { setLocalCache, getLocalCache, getDate, faviconURL } from '@/utils/index';
-const props = defineProps({
-    bookmark: {
-        type: Object,
-        default: () => { return {} }
-    },
-    locale: {
-        type: Object,
-        default: () => { return {} }
-    }
-});
+import { setLocalCache, getLocalCache, getDate, faviconURL } from '@/utils/index'
+import type { BookmarkTreeNode,BookmarkNodeWithMeta, LocaleElData, DropdownItem, OpenUrlParam } from '@/types'
 
-const emit = defineEmits(['openUrl', 'openContextMenu']);
-const cacheKey = "bookmark-open";
-const noTip = ref(true);
-const tip = ref("");
-const openType = ref(1);
-const createDate = getDate(props.bookmark.dateAdded);
-const modifyDate = getDate(props.bookmark.dateGroupModified);
-const visitDate = getDate(props.bookmark.dateLastUsed);
-const iconUrl = faviconURL(props.bookmark.url);
-const dropDownItems = [
-    {
-        label: props.locale.bookmarkCard.currentPage,
-        icon: HomeFilled,
-        type: "_self",
-        id: 0
-    },
-    {
-        label: props.locale.bookmarkCard.newPage,
-        icon: ChromeFilled,
-        type: "_blank",
-        id: 1
-    },
-    {
-        label: props.locale.bookmarkCard.newWindow,
-        icon: Promotion,
-        type: "_window",
-        id: 2
-    },
+interface Props {
+  bookmark: BookmarkNodeWithMeta
+  locale: LocaleElData
+}
+const props = withDefaults(defineProps<Props>(), {
+  bookmark: () => ({} as BookmarkNodeWithMeta),
+  locale: () => ({} as LocaleElData),
+})
+
+const emit = defineEmits<{
+  openUrl: [param: OpenUrlParam]
+  openContextMenu: [e: MouseEvent, bookmark: BookmarkTreeNode]
+}>()
+
+const cacheKey = 'bookmark-open'
+const noTip = ref<boolean>(true)
+const tip = ref<HTMLElement | null>(null)
+const openType = ref<0 | 1 | 2>(1)
+const createDate = getDate(props.bookmark.dateAdded)
+const modifyDate = getDate(props.bookmark.dateGroupModified)
+const visitDate = getDate(props.bookmark.recentOpen as number)
+const iconUrl = faviconURL(props.bookmark.url ?? '')
+const dropDownItems: DropdownItem[] = [
+  {
+    label: props.locale.bookmarkCard.currentPage,
+    icon: HomeFilled,
+    type: '_self',
+    id: 0,
+  },
+  {
+    label: props.locale.bookmarkCard.newPage,
+    icon: ChromeFilled,
+    type: '_blank',
+    id: 1,
+  },
+  {
+    label: props.locale.bookmarkCard.newWindow,
+    icon: Promotion,
+    type: '_window',
+    id: 2,
+  },
 ]
 onMounted(() => {
-    const result = getLocalCache(cacheKey, props.bookmark.id);
-    openType.value = result ? result : 1;
+  const result = getLocalCache(cacheKey, props.bookmark.id)
+  const num = Number(result)
+  openType.value = (num === 0 || num === 1 || num === 2) ? num : 1
 })
 const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title.trim() : "bookmark";
@@ -95,29 +100,31 @@ const isFolder = computed(() => {
     return props.bookmark.children ? true : false;
 });
 const showTip = () => {
-    const parentWidth = tip.value ? tip.value.parentNode.offsetWidth : 'parentWidth';
-    const tipWidth = tip.value ? tip.value.offsetWidth : 0;
-    noTip.value = parentWidth < tipWidth ? false : (parentWidth - tipWidth < 10) ? false : true;
+  const parentWidth = tip.value ? (tip.value.parentNode as HTMLElement).offsetWidth : 0
+  const tipWidth = tip.value ? tip.value.offsetWidth : 0
+  noTip.value = parentWidth < tipWidth ? false : parentWidth - tipWidth < 10 ? false : true
 }
 
-const onItemChange = (command) => {
-    openType.value = (command == null || command == undefined) ? 1 : command;
+const onItemChange = (command: string | number | null | undefined) => {
+  const num = Number(command)
+  openType.value = (num === 0 || num === 1 || num === 2) ? num : 1
 }
 
 const handleClick = () => {
-    const param = {
-        id: props.bookmark.id,
-        parentId: props.bookmark.parentId ? props.bookmark.parentId : null,
-        url: props.bookmark.url ? props.bookmark.url : null,
-        type: dropDownItems[openType.value].type
-    }
-    setLocalCache(cacheKey, { [props.bookmark.id]: openType.value });
-    emit("openUrl", param);
+  const dropdownItem = dropDownItems[openType.value]
+  const param: OpenUrlParam = {
+    id: props.bookmark.id,
+    parentId: props.bookmark.parentId ?? null,
+    url: props.bookmark.url ?? null,
+    type: dropdownItem ? dropdownItem.type : '_self',
+  }
+  setLocalCache(cacheKey, { [props.bookmark.id]: openType.value })
+  emit('openUrl', param)
 }
 
-const handleContextMenu = (e) => {
-    e.preventDefault();
-    emit("openContextMenu", e, props.bookmark);
+const handleContextMenu = (e: MouseEvent) => {
+  e.preventDefault()
+  emit('openContextMenu', e, props.bookmark)
 }
 </script>
 <style lang="scss" scoped>

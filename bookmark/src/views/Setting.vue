@@ -3,13 +3,15 @@
         <Forms :forms="settings" locale-key="setting" @submit="submitSetting"></Forms>
     </div>
 </template>
-<script setup>
-import Forms from '@/components/forms.vue';
-import { useLocaleStore } from '@/store/useLocaleStore';
-import { reactive } from 'vue';
-import { ElLoading } from 'element-plus';
-const localeStore = useLocaleStore();
-const settings = reactive([
+<script setup lang="ts">
+import Forms from '@/components/forms.vue'
+import { useLocaleStore } from '@/store/useLocaleStore'
+import { reactive } from 'vue'
+import { ElLoading } from 'element-plus'
+import type { FormItem, FormData, SettingTask } from '@/types'
+
+const localeStore = useLocaleStore()
+const settings = reactive<FormItem[]>([
     {
         label: "theme",
         name: "theme",
@@ -32,18 +34,18 @@ const settings = reactive([
     }
 ])
 
-const submitSetting = (form) => {
-    const loading = ElLoading.service({ lock: true })
-    new Promise((resolve, reject) => {
-        const task = []
-        if (form.theme !== localeStore.theme) {
-            task.push({ name: "toggleTheme", value: form.theme })
-        }
-        if (form.language !== localeStore.language) {
-            task.push({ name: "toggleLanguage", value: form.language })
-        }
-        task.length ? resolve(task) : reject("nothing change")
-    }).then(res => {
+const submitSetting = (form: FormData) => {
+  const loading = ElLoading.service({ lock: true })
+  new Promise<SettingTask[]>((resolve, reject) => {
+    const task: SettingTask[] = []
+    if (form.theme !== localeStore.theme) {
+      task.push({ name: 'toggleTheme', value: form.theme as string })
+    }
+    if (form.language !== localeStore.language) {
+      task.push({ name: 'toggleLanguage', value: form.language as string })
+    }
+    task.length ? resolve(task) : reject('nothing change')
+  }).then(res => {
         setTimeout(() => {
             loading.close()
             for (const task of res) {

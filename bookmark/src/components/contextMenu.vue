@@ -12,46 +12,61 @@
         </div>
     </transition>
 </template>
-<script setup>
-import { computed, ref } from 'vue';
-import { ElIcon, ClickOutside as vClickOutside } from 'element-plus';
-import { InfoFilled, Management, DeleteFilled, CirclePlusFilled } from '@element-plus/icons-vue';
-import { useLocaleStore } from '@/store/useLocaleStore';
-const page = "context"
-const itemWidth = "112px"
-const itemHeight = "36px"
-const props = defineProps({
-    xAxis: { type: Number, default: 0 },
-    yAxis: { type: Number, default: 0 },
-    target: { type: Object, default: () => { return {} } },
-    disable: { type: Array, default: () => { return [] } },
-});
-const emits = defineEmits(['openContextMenu', 'destroyContextMenu', 'contextMenuClick']);
-const localeStore = useLocaleStore();
-const showMenu = ref(false);
-const timer = ref(null);
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { ElIcon, ClickOutside as vClickOutside } from 'element-plus'
+import { InfoFilled, Management, DeleteFilled, CirclePlusFilled } from '@element-plus/icons-vue'
+import { useLocaleStore } from '@/store/useLocaleStore'
+import type { BookmarkTreeNode, ContextMenuItem, ContextMenuItemType, ContextMenuExposed } from '@/types'
+
+const page = 'context'
+const itemWidth = '112px'
+const itemHeight = '36px'
+
+interface Props {
+  xAxis?: number
+  yAxis?: number
+  target?: BookmarkTreeNode
+  disable?: string[]
+}
+const props = withDefaults(defineProps<Props>(), {
+  xAxis: 0,
+  yAxis: 0,
+  target: () => ({} as BookmarkTreeNode),
+  disable: () => [],
+})
+
+const emits = defineEmits<{
+  openContextMenu: []
+  destroyContextMenu: []
+  contextMenuClick: [type: ContextMenuItemType, title: string, id: string]
+}>()
+
+const localeStore = useLocaleStore()
+const showMenu = ref<boolean>(false)
+const timer = ref<ReturnType<typeof setTimeout> | null>(null)
 const infoItem = { label: localeStore.locale.el[page].info, icon: InfoFilled, type: "info", disable: props.disable.includes("info") }
 const createItem = { label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create", disable: props.disable.includes("create") }
 const editItem = { label: localeStore.locale.el[page].edit, icon: Management, type: "edit", disable: props.disable.includes("edit") }
 const deleteItem = { label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete", disable: props.disable.includes("delete") }
-const menuList = [
+const menuList: ContextMenuItem[] = [
     infoItem,
-];
-if (!["1", "2"].includes(props.target.id)) {
-    menuList.push(editItem)
-    if (props.target.children) {
-        menuList.push(createItem)
-        if (props.target.children.length === 0) {
-            menuList.push(deleteItem)
-        }
-    } else {
-        menuList.push(deleteItem)
-    }
-} else {
+]
+if (!['1', '2'].includes(props.target.id)) {
+  menuList.push(editItem)
+  if (props.target.children) {
     menuList.push(createItem)
+    if (props.target.children.length === 0) {
+      menuList.push(deleteItem)
+    }
+  } else {
+    menuList.push(deleteItem)
+  }
+} else {
+  menuList.push(createItem)
 }
-const width = Number(itemWidth.replace("px", ""));
-const height = Number(itemHeight.replace("px", "")) * menuList.length;
+const width = Number(itemWidth.replace('px', ''))
+const height = Number(itemHeight.replace('px', '')) * menuList.length
 const styles = computed(() => {
     return {
         left: document.documentElement.clientWidth - props.xAxis < width ? `${props.xAxis - width}px` : `${props.xAxis}px`,
@@ -63,22 +78,22 @@ const closeMenu = () => {
     showMenu.value = false;
     emits('destroyContextMenu');
 }
-const onItemClick = (e) => {
-    const type = e.currentTarget.dataset.type;
-    emits('contextMenuClick', type, props.target.title, props.target.id)
-    closeMenu()
+const onItemClick = (e: MouseEvent) => {
+  const type = (e.currentTarget as HTMLElement).dataset.type as ContextMenuItemType
+  emits('contextMenuClick', type, props.target.title, props.target.id)
+  closeMenu()
 }
 const onClickOutside = () => {
-    closeMenu()
+  closeMenu()
 }
 const startTimer = () => {
-    clearTimer();
-    timer.value = setTimeout(closeMenu, 2000)
+  clearTimer()
+  timer.value = setTimeout(closeMenu, 2000)
 }
 const clearTimer = () => {
-    clearTimeout(timer.value)
+  if (timer.value) clearTimeout(timer.value)
 }
-defineExpose({ showMenu, closeMenu });
+defineExpose<ContextMenuExposed>({ showMenu, closeMenu })
 </script>
 <style lang="scss" scoped>
 .fade-enter-active,

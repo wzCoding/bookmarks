@@ -20,7 +20,8 @@
         "sidePanel",
         "bookmarks",
         "tabs",
-        "favicon"
+        "favicon",
+        "storage"
     ],
     "side_panel": {
         "default_path": "index.html"

@@ -42,23 +42,47 @@
         </div>
     </div>
 </template>
-<script setup>
-import { ref, reactive } from 'vue';
-import { useLocaleStore } from '@/store/useLocaleStore';
-import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElTreeSelect, ElOption, ElInputNumber, ElRadioGroup, ElRadio } from 'element-plus';
-import { storeToRefs } from 'pinia';
-const props = defineProps({
-    forms: { type: Array, default: () => [] },
-    position: { type: String, default: 'top' },
-    submit: { type: Boolean, default: true },
-    localeKey: { type: String, default: '' },
-});
-const emit = defineEmits(['submit', 'reset']);
-const FormEl = ref();
-const treeSelect = ref();
-const form = reactive({});
-const rules = reactive({});
-const formOptions = reactive([]);
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import { useLocaleStore } from '@/store/useLocaleStore'
+import {
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElButton,
+  ElSelect,
+  ElTreeSelect,
+  ElOption,
+  ElInputNumber,
+  ElRadioGroup,
+  ElRadio,
+} from 'element-plus'
+import { storeToRefs } from 'pinia'
+import type { FormItem, FormData, FormRule, ElFormInstance } from '@/types'
+import type { TreeNode } from '@/types'
+
+interface Props {
+  forms: FormItem[]
+  position?: string
+  submit?: boolean
+  localeKey: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  position: 'top',
+  submit: true,
+  localeKey: '',
+})
+
+const emit = defineEmits<{
+  submit: [form: FormData]
+  reset: [form: FormData]
+}>()
+
+const FormEl = ref<ElFormInstance | null>(null)
+const treeSelect = ref<InstanceType<typeof ElTreeSelect>[] | null>(null)
+const form = reactive<FormData>({})
+const rules = reactive<Record<string, FormRule[]>>({})
+const formOptions = reactive<FormItem[]>([])
 const localeStore = useLocaleStore();
 const { locale } = storeToRefs(localeStore);
 if (props.forms.length) {
@@ -72,32 +96,32 @@ if (props.forms.length) {
     });
 }
 
-function handleInput(el, callback) {
-    callback && callback(form)
+function handleInput(el: ElFormInstance, callback: (form: FormData) => void) {
+  callback && callback(form)
 }
-async function handleSelect(el, callback) {
-    await el.clearValidate("type")
-    callback && callback(form)
+async function handleSelect(el: ElFormInstance, callback: (form: FormData) => void) {
+  await el.clearValidate('type')
+  callback && callback(form)
 }
-function handleNode(node, callback) {
-    treeSelect.value[0].blur();
-    form.id = node.id;
-    form.index = 0;
-    callback && callback(form.id);
+function handleNode(node: TreeNode, callback?: (id: string) => void) {
+  treeSelect.value![0].blur()
+  form.id = node.id
+  form.index = 0
+  callback && callback(form.id as string)
 }
-async function submitForm(el) {
-    if (!el) return;
-    await el.validate(valid => {
-        if (valid) {
-            console.log("submit");
-            emit('submit', form);
-        }
-    })
+async function submitForm(el: ElFormInstance | null) {
+  if (!el) return
+  await el.validate((valid: boolean) => {
+    if (valid) {
+      console.log('submit')
+      emit('submit', form)
+    }
+  })
 }
-function resetForm(el) {
-    if (!el) return;
-    el.resetFields();
-    emit('reset', form);
+function resetForm(el: ElFormInstance | null) {
+  if (!el) return
+  el.resetFields()
+  emit('reset', form)
 }
 </script>
 <style lang="scss" scoped>

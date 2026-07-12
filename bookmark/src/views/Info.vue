@@ -7,49 +7,56 @@
         <div class="show-node">
             <el-timeline>
                 <el-timeline-item size="large" v-for="item in allNodes" :key="item.id"
-                    :type="item.id == info.id ? 'primary' : ''">
-                    <el-link :type="item.id == info.id ? 'primary' : 'info'" @click="nodeClick(item.id)"
+                    :type="item.id == (info?.id ?? '') ? 'primary' : 'info'">
+                    <el-link :type="item.id == (info?.id ?? '') ? 'primary' : 'info'" @click="nodeClick(item.id)"
                         class="bookmark-node">{{ item.title }}</el-link>
                 </el-timeline-item>
             </el-timeline>
         </div>
     </div>
 </template>
-<script setup>
-import { ElTimeline, ElTimelineItem, ElLink } from 'element-plus';
-import { usebookStore } from '@/store/usebookStore';
-import { useLocaleStore } from '@/store/useLocaleStore';
-import { getDate } from '@/utils/index';
-import { useRouter } from 'vue-router';
-import Forms from '@/components/forms.vue';
-import Title from '@/components/title.vue';
-const props = defineProps(({
-    id: { type: String, default: "0", required: true }
-}));
-const page = "info";
-const bookStore = usebookStore();
-const localeStore = useLocaleStore();
-const router = useRouter();
-const info = bookStore.getNodeById(props.id);
-const nodeClick = (id) => {
-    if (id !== info.id) {
-        bookStore.getCurrentNodes(id, true);
-        router.push("/");
-    } else {
-        router.back();
-    }
+<script setup lang="ts">
+import { ElTimeline, ElTimelineItem, ElLink } from 'element-plus'
+import { usebookStore } from '@/store/usebookStore'
+import { useLocaleStore } from '@/store/useLocaleStore'
+import { getDate } from '@/utils/index'
+import { useRouter } from 'vue-router'
+import Forms from '@/components/forms.vue'
+import Title from '@/components/title.vue'
+import type { BookmarkTreeNode, FormItem } from '@/types'
+
+interface Props {
+  id: string
 }
-let contents = [];
-let allNodes = [];
+const props = withDefaults(defineProps<Props>(), {
+  id: '0',
+})
+const page = 'info'
+const bookStore = usebookStore()
+const localeStore = useLocaleStore()
+const router = useRouter()
+const info: BookmarkTreeNode | undefined = bookStore.getNodeById(props.id)
+const nodeClick = (id: string) => {
+  if (id !== info!.id) {
+    bookStore.getCurrentNodes(id, true)
+    router.push('/')
+  } else {
+    router.back()
+  }
+}
+let contents: FormItem[] = []
+let allNodes: { title: string; id: string; type: string }[] = []
 if (info) {
-    allNodes = bookStore.getAllNodes(info.id, [], true).reverse();
-    contents = [
-        {
-            label: "bookmarkType",
-            name: "type",
-            defaultValue: info.children ? localeStore.locale.el[page]['bookmarkFolder'] : localeStore.locale.el[page]['websiteLink'],
-            disable: true
-        },
+  allNodes = bookStore.getAllNodes(info.id).reverse()
+  contents = [
+    {
+      label: 'bookmarkType',
+      name: 'type',
+      defaultValue: info.children
+        ? localeStore.locale.el[page]['bookmarkFolder']
+        : localeStore.locale.el[page]['websiteLink'],
+      disable: true,
+    },
         {
             label: "bookmarkAddDate",
             name: "dateAdded",
