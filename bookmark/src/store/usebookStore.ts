@@ -126,11 +126,7 @@ export const usebookStore = defineStore('bookmarks', () => {
                     openCount: meta.openCount,
                 }
             })
-        result.sort((a, b) => {
-            const aTime = a.recentOpen ?? 0
-            const bTime = b.recentOpen ?? 0
-            return bTime - aTime
-        })
+        result.sort((a, b) => b.openCount - a.openCount)
         recentOpenedNodes.value = result
     }
 

@@ -1,7 +1,7 @@
 <template>
     <div class="book-recent" @[dynamicScroll]="onScroll">
         <div class="book-content">
-            <BookMark v-for="bookmark in bookStore.recentNodes" :key="bookmark.id" :bookmark="bookmark" :locale="locale.el"
+            <BookMark v-for="bookmark in bookStore.recentOpenedNodes" :key="bookmark.id" :bookmark="bookmark" :locale="locale.el"
                 @openUrl="openBookMark" @openContextMenu="openMenu">
             </BookMark>
         </div>

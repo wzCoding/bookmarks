@@ -19,7 +19,8 @@
                 <span>{{ locale.bookmarkCard.recentlyVisited }}：{{ visitDate ? visitDate : createDate }}</span>
             </div>
         </div>
-        <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">{{ locale.bookmarkCard.openButtonText }}</el-button>
+        <el-button v-if="isFolder" type="primary" size="small" class="card-button" @click="handleClick">{{
+            locale.bookmarkCard.openButtonText }}</el-button>
         <el-dropdown v-else type="primary" size="small" trigger="click" split-button @command="onItemChange"
             @click="handleClick">
             <el-icon>
@@ -44,20 +45,20 @@ import { computed, onMounted, ref } from 'vue'
 import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
 import { setLocalCache, getLocalCache, getDate, faviconURL } from '@/utils/index'
-import type { BookmarkTreeNode,BookmarkNodeWithMeta, LocaleElData, DropdownItem, OpenUrlParam } from '@/types'
+import type { BookmarkTreeNode, BookmarkNodeWithMeta, LocaleElData, DropdownItem, OpenUrlParam } from '@/types'
 
 interface Props {
-  bookmark: BookmarkNodeWithMeta
-  locale: LocaleElData
+    bookmark: BookmarkNodeWithMeta
+    locale: LocaleElData
 }
 const props = withDefaults(defineProps<Props>(), {
-  bookmark: () => ({} as BookmarkNodeWithMeta),
-  locale: () => ({} as LocaleElData),
+    bookmark: () => ({} as BookmarkNodeWithMeta),
+    locale: () => ({} as LocaleElData),
 })
 
 const emit = defineEmits<{
-  openUrl: [param: OpenUrlParam]
-  openContextMenu: [e: MouseEvent, bookmark: BookmarkTreeNode]
+    openUrl: [param: OpenUrlParam]
+    openContextMenu: [e: MouseEvent, bookmark: BookmarkTreeNode]
 }>()
 
 const cacheKey = 'bookmark-open'
@@ -66,32 +67,32 @@ const tip = ref<HTMLElement | null>(null)
 const openType = ref<0 | 1 | 2>(1)
 const createDate = getDate(props.bookmark.dateAdded)
 const modifyDate = getDate(props.bookmark.dateGroupModified)
-const visitDate = getDate(props.bookmark.recentOpen as number)
+const visitDate = computed(() => getDate(props.bookmark.recentOpen as number))
 const iconUrl = faviconURL(props.bookmark.url ?? '')
 const dropDownItems: DropdownItem[] = [
-  {
-    label: props.locale.bookmarkCard.currentPage,
-    icon: HomeFilled,
-    type: '_self',
-    id: 0,
-  },
-  {
-    label: props.locale.bookmarkCard.newPage,
-    icon: ChromeFilled,
-    type: '_blank',
-    id: 1,
-  },
-  {
-    label: props.locale.bookmarkCard.newWindow,
-    icon: Promotion,
-    type: '_window',
-    id: 2,
-  },
+    {
+        label: props.locale.bookmarkCard.currentPage,
+        icon: HomeFilled,
+        type: '_self',
+        id: 0,
+    },
+    {
+        label: props.locale.bookmarkCard.newPage,
+        icon: ChromeFilled,
+        type: '_blank',
+        id: 1,
+    },
+    {
+        label: props.locale.bookmarkCard.newWindow,
+        icon: Promotion,
+        type: '_window',
+        id: 2,
+    },
 ]
 onMounted(() => {
-  const result = getLocalCache(cacheKey, props.bookmark.id)
-  const num = Number(result)
-  openType.value = (num === 0 || num === 1 || num === 2) ? num : 1
+    const result = getLocalCache(cacheKey, props.bookmark.id)
+    const num = Number(result)
+    openType.value = (num === 0 || num === 1 || num === 2) ? num : 1
 })
 const title = computed(() => {
     return props.bookmark.title ? props.bookmark.title.trim() : "bookmark";
@@ -100,38 +101,40 @@ const isFolder = computed(() => {
     return props.bookmark.children ? true : false;
 });
 const showTip = () => {
-  const parentWidth = tip.value ? (tip.value.parentNode as HTMLElement).offsetWidth : 0
-  const tipWidth = tip.value ? tip.value.offsetWidth : 0
-  noTip.value = parentWidth < tipWidth ? false : parentWidth - tipWidth < 10 ? false : true
+    const parentWidth = tip.value ? (tip.value.parentNode as HTMLElement).offsetWidth : 0
+    const tipWidth = tip.value ? tip.value.offsetWidth : 0
+    noTip.value = parentWidth < tipWidth ? false : parentWidth - tipWidth < 10 ? false : true
 }
 
 const onItemChange = (command: string | number | null | undefined) => {
-  const num = Number(command)
-  openType.value = (num === 0 || num === 1 || num === 2) ? num : 1
+    const num = Number(command)
+    openType.value = (num === 0 || num === 1 || num === 2) ? num : 1
+        // 手动释放焦点，避免 aria-hidden 与聚焦元素的冲突
+        ; (document.activeElement as HTMLElement)?.blur()
 }
 
 const handleClick = () => {
-  const dropdownItem = dropDownItems[openType.value]
-  const param: OpenUrlParam = {
-    id: props.bookmark.id,
-    parentId: props.bookmark.parentId ?? null,
-    url: props.bookmark.url ?? null,
-    type: dropdownItem ? dropdownItem.type : '_self',
+    const dropdownItem = dropDownItems[openType.value]
+    const param: OpenUrlParam = {
+        id: props.bookmark.id,
+        parentId: props.bookmark.parentId ?? null,
+        url: props.bookmark.url ?? null,
+        type: dropdownItem ? dropdownItem.type : '_self',
+    }
+    setLocalCache(cacheKey, { [props.bookmark.id]: openType.value })
+    emit('openUrl', param)
   }
-  setLocalCache(cacheKey, { [props.bookmark.id]: openType.value })
-  emit('openUrl', param)
-}
 
-const handleContextMenu = (e: MouseEvent) => {
-  e.preventDefault()
-  emit('openContextMenu', e, props.bookmark)
+  const handleContextMenu = (e: MouseEvent) => {
+    e.preventDefault()
+    emit('openContextMenu', e, props.bookmark)
 }
 </script>
 <style lang="scss" scoped>
 .bookmark-card {
     --icon-size: 2rem;
     background-color: var(--card-bg-color);
-    color:var(--card-text-color);
+    color: var(--card-text-color);
     border-radius: 5px;
     box-shadow: 0 2px 4px var(--card-shadow-color);
     padding: .5rem;
@@ -206,7 +209,7 @@ const handleContextMenu = (e: MouseEvent) => {
             align-items: flex-start;
             flex-direction: column;
             gap: 0.25rem;
-            color:var(--card-info-color);
+            color: var(--card-info-color);
             font-size: 0.75rem;
         }
     }
