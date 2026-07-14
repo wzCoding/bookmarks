@@ -2,7 +2,7 @@
     <div class="page-form">
         <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
             <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show"
-                :label="locale.el[localeKey][item.label]" :prop="item.name">
+                :label="(locale.el as unknown as Record<string, Record<string, string>>)[localeKey][item.label]" :prop="item.name">
                 <template v-if="item.type == 'input'">
                     <el-input v-model.lazy="form[item.name]" :placeholder="item.placeholder"
                         :disabled="item.disable ? item.disable : false" clearable
@@ -12,13 +12,13 @@
                     <el-select v-model="form[item.name]" :placeholder="item.placeholder"
                         @change="item.onChange ? handleSelect(FormEl, item.onChange) : ''">
                         <el-option v-for="option in item.options" :key="option.value"
-                            :label="locale.el[localeKey][option.label]" :value="option.value" />
+                            :label="(locale.el as unknown as Record<string, Record<string, string>>)[localeKey][option.label]" :value="option.value" />
                     </el-select>
                 </template>
                 <template v-if="item.type == 'treeSelect'">
                     <el-tree-select ref="treeSelect" v-model="form[item.name]" :props="item.props" node-key="id"
                         :data="item.tree" :default-expand-all="true" :expand-on-click-node="false"
-                        :render-after-expand="false" @node-click="(node) => { handleNode(node, item.nodeClick) }">
+                        :render-after-expand="false" @node-click="(node: Record<string, unknown>) => { handleNode(node as unknown as TreeNode, item.nodeClick) }">
                         <!-- 动态插槽 -->
                         <template v-for="(value, name) in $slots" #[name]="{ node }">
                             <slot :name="name" v-bind="{ node }"></slot>
@@ -26,7 +26,7 @@
                     </el-tree-select>
                 </template>
                 <template v-if="item.type == 'number'">
-                    <el-input-number v-model="form[item.name]" :min="item.min" :max="item.max" />
+                    <el-input-number :model-value="form[item.name] as number" :min="item.min" :max="item.max" @update:model-value="(val) => form[item.name] = val as number" />
                 </template>
                 <template v-if="item.type == 'radio'">
                     <el-radio-group v-model="form[item.name]">
@@ -37,8 +37,8 @@
             </el-form-item>
         </el-form>
         <div v-if="submit" class="form-button">
-            <el-button round type="primary" @click="submitForm(FormEl)">{{ locale.el[localeKey]["submitText"] }}</el-button>
-            <el-button round @click="resetForm(FormEl)">{{ locale.el[localeKey]["resetText"] }}</el-button>
+            <el-button round type="primary" @click="submitForm(FormEl)">{{ (locale.el as unknown as Record<string, Record<string, string>>)[localeKey]['submitText'] }}</el-button>
+            <el-button round @click="resetForm(FormEl)">{{ (locale.el as unknown as Record<string, Record<string, string>>)[localeKey]['resetText'] }}</el-button>
         </div>
     </div>
 </template>
@@ -63,7 +63,7 @@ import type { TreeNode } from '@/types'
 
 interface Props {
   forms: FormItem[]
-  position?: string
+  position?: 'top' | 'right' | 'left'
   submit?: boolean
   localeKey: string
 }
@@ -96,10 +96,12 @@ if (props.forms.length) {
     });
 }
 
-function handleInput(el: ElFormInstance, callback: (form: FormData) => void) {
+function handleInput(el: ElFormInstance | null, callback: (form: FormData) => void) {
+  if (!el) return
   callback && callback(form)
 }
-async function handleSelect(el: ElFormInstance, callback: (form: FormData) => void) {
+async function handleSelect(el: ElFormInstance | null, callback: (form: FormData) => void) {
+  if (!el) return
   await el.clearValidate('type')
   callback && callback(form)
 }

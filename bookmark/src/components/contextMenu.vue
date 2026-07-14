@@ -45,10 +45,10 @@ const emits = defineEmits<{
 const localeStore = useLocaleStore()
 const showMenu = ref<boolean>(false)
 const timer = ref<ReturnType<typeof setTimeout> | null>(null)
-const infoItem = { label: localeStore.locale.el[page].info, icon: InfoFilled, type: "info", disable: props.disable.includes("info") }
-const createItem = { label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create", disable: props.disable.includes("create") }
-const editItem = { label: localeStore.locale.el[page].edit, icon: Management, type: "edit", disable: props.disable.includes("edit") }
-const deleteItem = { label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete", disable: props.disable.includes("delete") }
+const infoItem: ContextMenuItem = { label: localeStore.locale.el[page].info, icon: InfoFilled, type: "info", disable: props.disable.includes("info") }
+const createItem: ContextMenuItem = { label: localeStore.locale.el[page].create, icon: CirclePlusFilled, type: "create", disable: props.disable.includes("create") }
+const editItem: ContextMenuItem = { label: localeStore.locale.el[page].edit, icon: Management, type: "edit", disable: props.disable.includes("edit") }
+const deleteItem: ContextMenuItem = { label: localeStore.locale.el[page].delete, icon: DeleteFilled, type: "delete", disable: props.disable.includes("delete") }
 const menuList: ContextMenuItem[] = [
     infoItem,
 ]

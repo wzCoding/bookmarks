@@ -11,19 +11,7 @@
                 <div class="header-menu" v-show="showMenu">
                     <el-button :icon="Search" circle v-show="!searchActive" class="header-button search-button"
                         @click="openSearch(searchInput)" />
-                    <el-dropdown trigger="click" @command="onItemChange">
-                        <el-button :icon="Menu" circle class="header-button setting-button" />
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item v-for="item in menus" :key="item.type" :command="item.type">
-                                    <el-icon>
-                                        <component :is="item.icon"></component>
-                                    </el-icon>
-                                    <span>{{ item.label }}</span>
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    
                 </div>
             </div>
         </template>
@@ -33,25 +21,24 @@
 import { computed, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { ElPageHeader, ElButton, ElInput, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
-import { Search, Menu, Link, Setting } from '@element-plus/icons-vue'
+import { ElPageHeader, ElButton, ElInput, ElIcon } from 'element-plus'
+import { Search, Menu, Link, Setting, Timer } from '@element-plus/icons-vue'
 import { usebookStore } from '@/store/usebookStore'
 import { useLocaleStore } from '@/store/useLocaleStore'
 import { debounce } from '@/utils/index'
-import type { BookmarkTreeNode, SearchMenuItem } from '@/types'
-import type { BookmarkNodeWithMeta } from '@/types'
+import type { BookmarkNodeWithMeta, SearchMenuItem } from '@/types'
 
 interface Props {
-  height?: string
+    height?: string
 }
 const props = withDefaults(defineProps<Props>(), {
-  height: '60',
+    height: '60',
 })
 
 const headerStyle = computed(() => {
-  return {
-    height: props.height.includes('px') ? props.height : `${props.height}px`,
-  }
+    return {
+        height: props.height.includes('px') ? props.height : `${props.height}px`,
+    }
 })
 const pageHeader = ref<InstanceType<typeof ElPageHeader> | null>(null)
 const searchInput = ref<InstanceType<typeof ElInput> | null>(null)
@@ -61,36 +48,36 @@ const router = useRouter()
 const bookStore = usebookStore()
 const localeStore = useLocaleStore()
 const showMenu = computed(() => {
-  return router.currentRoute.value.fullPath == '/'
+    return router.currentRoute.value.fullPath == '/'
 })
 const { currentTitle, currentNodes, parentId } = storeToRefs(bookStore)
 const { locale } = storeToRefs(localeStore)
 const searchTip = computed(() => {
-  return locale.value.el.bookmarkHeader.searchTip
+    return locale.value.el.bookmarkHeader.searchTip
 })
 let oldTitle: string = currentTitle.value
 let oldNodes: BookmarkNodeWithMeta[] = currentNodes.value
 const menus = computed<SearchMenuItem[]>(() => [
-  {
-    label: locale.value.el.bookmarkHeader.recentlyUsed,
-    icon: Link,
-    type: 'recent',
-  },
-  {
-    label: locale.value.el.bookmarkHeader.settings,
-    icon: Setting,
-    type: 'setting',
-  },
+    {
+        label: locale.value.el.bookmarkHeader.recentlyUsed,
+        icon: Link,
+        type: 'recent',
+    },
+    {
+        label: locale.value.el.bookmarkHeader.settings,
+        icon: Setting,
+        type: 'setting',
+    },
 ])
 const onItemChange = (command: string) => {
-  searchActive.value = false
-  router.push(`/${command}`)
+    searchActive.value = false
+    router.push(`/${command}`)
 }
 const openSearch = (el: { focus: () => void } | null) => {
-  if (!el) return
-  searchActive.value = true
-  oldNodes = currentNodes.value
-  setTimeout(() => el.focus(), 200)
+    if (!el) return
+    searchActive.value = true
+    oldNodes = currentNodes.value
+    setTimeout(() => el.focus(), 200)
 }
 const searchBook = debounce(() => {
     if (searchText.value.trim()) {
@@ -120,14 +107,14 @@ const pageTitle = computed(() => {
     const path = router.currentRoute.value.fullPath;
     const routeName = router.currentRoute.value.name
     if (!routeName || path === '/') {
-      return currentTitle.value
+        return currentTitle.value
     }
     return (locale.value.el as unknown as Record<string, Record<string, string>>)[String(routeName)].pageTitle
 })
 
 watch(currentTitle, (newVal: string, oldVal: string) => {
-  oldTitle = oldVal
-  searchActive.value = false
+    oldTitle = oldVal
+    searchActive.value = false
 })
 </script>
 <style lang="scss" scoped>

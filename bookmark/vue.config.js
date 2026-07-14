@@ -5,6 +5,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   productionSourceMap: false,
   configureWebpack: {
+    devtool: false,
     performance: {
       hints: false,
     },
