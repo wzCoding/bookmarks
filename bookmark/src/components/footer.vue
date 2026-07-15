@@ -8,8 +8,6 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ElConfigProvider, ElPagination } from 'element-plus'
-
 interface Props {
   currentPage?: number
   pageSize?: number

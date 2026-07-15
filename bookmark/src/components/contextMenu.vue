@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { ElIcon, ClickOutside as vClickOutside } from 'element-plus'
+import { ClickOutside as vClickOutside } from 'element-plus/es/directives/index.mjs'
 import { InfoFilled, Management, DeleteFilled, CirclePlusFilled } from '@element-plus/icons-vue'
 import { useLocaleStore } from '@/store/useLocaleStore'
 import type { BookmarkTreeNode, ContextMenuItem, ContextMenuItemType, ContextMenuExposed } from '@/types'

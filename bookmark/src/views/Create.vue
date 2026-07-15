@@ -15,7 +15,8 @@
 </template>
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { ElMessage, ElLoading, ElIcon } from 'element-plus'
+import ElMessage from 'element-plus/es/components/message/index.mjs'
+import ElLoading from 'element-plus/es/components/loading/index.mjs'
 import { Folder } from '@element-plus/icons-vue'
 import { usebookStore } from '@/store/usebookStore'
 import { useLocaleStore } from '@/store/useLocaleStore'

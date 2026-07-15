@@ -26,9 +26,9 @@
                     </el-tree-select>
                 </template>
                 <template v-if="item.type == 'number'">
-                    <el-input-number :model-value="form[item.name] as number" :min="item.min" :max="item.max" @update:model-value="(val) => form[item.name] = val as number" />
+                    <el-input-number :model-value="form[item.name] as number" :min="item.min" :max="item.max" @update:model-value="(val: number | undefined) => form[item.name] = val as number" />
                 </template>
-                <template v-if="item.type == 'radio'">
+                <template v-if="item.type ==`radio`">
                     <el-radio-group v-model="form[item.name]">
                         <el-radio v-for="radio in item.options" :key="radio.value" :label="radio.label" size="large">{{
                             radio.label }}</el-radio>
@@ -45,19 +45,8 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useLocaleStore } from '@/store/useLocaleStore'
-import {
-  ElForm,
-  ElFormItem,
-  ElInput,
-  ElButton,
-  ElSelect,
-  ElTreeSelect,
-  ElOption,
-  ElInputNumber,
-  ElRadioGroup,
-  ElRadio,
-} from 'element-plus'
 import { storeToRefs } from 'pinia'
+import type { ElTreeSelect } from 'element-plus'
 import type { FormItem, FormData, FormRule, ElFormInstance } from '@/types'
 import type { TreeNode } from '@/types'
 
@@ -106,6 +95,8 @@ async function handleSelect(el: ElFormInstance | null, callback: (form: FormData
   callback && callback(form)
 }
 function handleNode(node: TreeNode, callback?: (id: string) => void) {
+  // blur 在运行时可用但未在 ElTreeSelect 公开类型中暴露
+  // @ts-expect-error blur is available at runtime
   treeSelect.value![0].blur()
   form.id = node.id
   form.index = 0

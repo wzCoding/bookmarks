@@ -16,7 +16,6 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ElTimeline, ElTimelineItem, ElLink } from 'element-plus'
 import { usebookStore } from '@/store/usebookStore'
 import { useLocaleStore } from '@/store/useLocaleStore'
 import { getDate } from '@/utils/index'

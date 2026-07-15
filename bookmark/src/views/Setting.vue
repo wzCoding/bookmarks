@@ -7,7 +7,7 @@
 import Forms from '@/components/forms.vue'
 import { useLocaleStore } from '@/store/useLocaleStore'
 import { reactive } from 'vue'
-import { ElLoading } from 'element-plus'
+import ElLoading from 'element-plus/es/components/loading/index.mjs'
 import type { FormItem, FormData, SettingTask } from '@/types'
 
 const localeStore = useLocaleStore()

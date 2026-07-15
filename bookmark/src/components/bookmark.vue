@@ -42,7 +42,6 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { ElTooltip, ElButton, ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
 import { setLocalCache, getLocalCache, getDate, faviconURL } from '@/utils/index'
 import type { BookmarkTreeNode, BookmarkNodeWithMeta, LocaleElData, DropdownItem, OpenUrlParam } from '@/types'
