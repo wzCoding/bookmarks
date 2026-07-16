@@ -9,45 +9,45 @@
 </template>
 <script setup lang="ts">
 interface Props {
-  currentPage?: number
-  pageSize?: number
-  pageSizes?: number[]
-  pagerCount?: number
-  layout?: string
-  total?: number
-  // eslint-disable-next-line
-  locale?: any
+    currentPage?: number
+    pageSize?: number
+    pageSizes?: number[]
+    pagerCount?: number
+    layout?: string
+    total?: number
+    // eslint-disable-next-line
+    locale?: any
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  currentPage: 1,
-  pageSize: 8,
-  pageSizes: () => [8, 16, 24, 32],
-  pagerCount: 5,
-  layout: 'sizes, prev, pager, next, jumper',
-  total: 0,
-  locale: () => ({}),
+    currentPage: 1,
+    pageSize: 8,
+    pageSizes: () => [8, 16, 24, 32],
+    pagerCount: 5,
+    layout: 'sizes, prev, pager, next, jumper',
+    total: 0,
+    locale: () => ({}),
 })
 
 const emits = defineEmits<{
-  currentChange: [currentPage: number]
-  sizeChange: [size: number]
+    currentChange: [currentPage: number]
+    sizeChange: [size: number]
 }>()
 
 const handleCurrentChange = (currentPage: number) => {
-  emits('currentChange', currentPage)
+    emits('currentChange', currentPage)
 }
 const handleSizeChange = (size: number) => {
-  emits('sizeChange', size)
+    emits('sizeChange', size)
 }
 </script>
 <style lang="scss" scoped>
 .book-footer {
-    padding-bottom: var(--content-padding);
+    padding-bottom: var(--padding-secondary);
     position: relative;
     left: 0;
     bottom: 0;
-    width: calc(100% - var(--content-padding) * 2);
+    width: calc(100% - var(--padding-secondary) * 2);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,20 +56,25 @@ const handleSizeChange = (size: number) => {
 
         .el-pagination__sizes .el-input__wrapper,
         .el-pagination__jump .el-input__wrapper {
-            background-color: var(--bg-color);
+            background-color: var(--bg-page);
         }
 
         .el-input__inner {
-            color: var(--text-color);
+            color: var(--text-primary);
+        }
+
+        .btn-prev,
+        .btn-next {
+            background-color: var(--bg-card) !important;
         }
 
         .btn-prev:disabled,
         .btn-next:disabled {
-            background-color: var(--el-pagination-disabled-color) !important;
+            background-color: var(--bg-card-disabled) !important;
         }
 
         .el-pager li.number {
-            background-color: var(--el-pagination-btn-bg-color);
+            background-color: var(--bg-card);
         }
 
         .el-pager li.number.is-active {

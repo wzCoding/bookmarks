@@ -15,40 +15,20 @@
                 </div>
             </div>
         </template>
-        <el-dialog v-model="dialogTableVisible" :append-to-body="true" title="书签设置" width="min(80%,400px)"
-            @close="closeSettingMenu" body-class="bookmark-setting-dialog">
-            <div class="bookmark-setting-list">
-                <div class="setting-list-item">
-                    <div class="list-item-title">
-                        <svg-icon name="language" color="#000" size="18"></svg-icon>
-                        <span>语言设置</span>
-                    </div>
-                    <div class="list-item-content"></div>
-
-                </div>
-                <div class="setting-list-item">
-                    <div class="list-item-title">
-                        <svg-icon name="theme" color="#000" size="18"></svg-icon>
-                        <span>主题设置</span>
-                    </div>
-                    <div class="list-item-content"></div>
-
-                </div>
-            </div>
-        </el-dialog>
+        <book-mark-menu :menu-visible="showSettingMenu" @close-menu="closeSettingMenu" />
     </el-page-header>
 </template>
 <script setup lang="ts">
 import { computed, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { Search, Menu, Link, Setting, Timer } from '@element-plus/icons-vue'
+import { Search, Menu } from '@element-plus/icons-vue'
 import { usebookStore } from '@/store/usebookStore'
 import { useLocaleStore } from '@/store/useLocaleStore'
 import { debounce } from '@/utils/index'
-import type { BookmarkNodeWithMeta, SearchMenuItem } from '@/types'
-import type { ElPageHeader, ElInput } from 'element-plus'
-import SvgIcon from '@/components/svgIcon.vue'
+import type { BookmarkNodeWithMeta } from '@/types'
+import type { ElInput } from 'element-plus'
+import BookMarkMenu from '@/components/menu.vue'
 interface Props {
     height?: string
 }
@@ -61,14 +41,12 @@ const headerStyle = computed(() => {
         height: props.height.includes('px') ? props.height : `${props.height}px`,
     }
 })
-const pageHeader = ref<InstanceType<typeof ElPageHeader> | null>(null)
 const searchInput = ref<InstanceType<typeof ElInput> | null>(null)
 const searchText = ref<string>('')
 const searchActive = ref<boolean>(false)
 const router = useRouter()
 const bookStore = usebookStore()
 const localeStore = useLocaleStore()
-const dialogTableVisible = ref<boolean>(false)
 const showMenu = computed(() => {
     return router.currentRoute.value.fullPath == '/'
 })
@@ -79,19 +57,7 @@ const searchTip = computed(() => {
 })
 let oldTitle: string = currentTitle.value
 let oldNodes: BookmarkNodeWithMeta[] = currentNodes.value
-const menus = computed<SearchMenuItem[]>(() => [
-    {
-        label: locale.value.el.bookmarkHeader.recentlyUsed,
-        icon: Link,
-        type: 'recent',
-    },
-    {
-        label: locale.value.el.bookmarkHeader.settings,
-        icon: Setting,
-        type: 'setting',
-    },
-])
-
+const showSettingMenu = ref<boolean>(false)
 const openSearch = (el: { focus: () => void } | null) => {
     if (!el) return
     searchActive.value = true
@@ -124,21 +90,15 @@ const goBack = () => {
     }
 }
 
-const gotoHistory = () => {
-    console.log('history')
-    searchActive.value = false;
-    clearBook();
-}
-
 const openSettingMenu = () => {
     console.log('setting')
     searchActive.value = false;
     clearBook();
 
-    dialogTableVisible.value = true
+    showSettingMenu.value = true
 }
 const closeSettingMenu = () => {
-    dialogTableVisible.value = false
+    showSettingMenu.value = false
 }
 const pageTitle = computed(() => {
     const path = router.currentRoute.value.fullPath;
@@ -156,14 +116,13 @@ watch(currentTitle, (_: string, oldVal: string) => {
 </script>
 <style lang="scss" scoped>
 .book-header {
-    --padding: 0.75rem;
     z-index: 3;
     position: fixed;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: var(--bg-sidebar);
+    color: var(--text-sidebar);
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
-    padding: 0 var(--padding);
-    width: calc(100% - var(--padding) * 2);
+    padding: 0 var(--padding-secondary);
+    width: calc(100% - var(--padding-secondary) * 2);
     --back-button-width: 5.5rem;
 
     :deep(.el-page-header__header) {
@@ -181,13 +140,17 @@ watch(currentTitle, (_: string, oldVal: string) => {
         }
 
         .el-input__wrapper {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-page);
+            color: var(--text-primary);
         }
 
         .el-input__inner {
-            color: var(--text-color);
+            color: var(--text-primary);
         }
+    }
+
+    :deep(.el-page-header__main) {
+        display: none;
     }
 
     .header-extra {
@@ -243,36 +206,12 @@ watch(currentTitle, (_: string, oldVal: string) => {
 
             .header-button {
                 border: none !important;
-                margin-left: 0 !important;
-                color: var(--text-color);
+                color: var(--text-primary);
+                &:hover{
+                    background-color: var(--el-color-primary-hover);
+                }
             }
         }
     }
 }
-
-
-.el-dialog__body.bookmark-setting-dialog {
-
-    .bookmark-setting-list {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-
-        .setting-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            .list-item-title {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 4px;
-            }
-
-            .list-item-content {}
-        }
-    }
-}
-
 </style>

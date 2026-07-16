@@ -88,7 +88,7 @@ if (info) {
 </script>
 <style lang="scss" scoped>
 .bookmark-info {
-    color: var(--text-color);
+    color: var(--text-primary);
     overflow-y: auto;
     overflow-x: hidden;
     align-items: stretch;

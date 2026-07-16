@@ -114,42 +114,42 @@ defineExpose<ContextMenuExposed>({ showMenu, closeMenu })
 .context-menu {
     position: absolute;
     z-index: 1000;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    box-shadow: 0 2px 12px 0 var(--context-shadow-color);
-    border-radius: 1rem;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: 0 2px 12px 0 var(--shadow-active-color);
+    border-radius: var(--border-radius);
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
     box-sizing: border-box;
-    padding: 0.5rem;
+    padding: var(--padding-tertiary);
 
     .menu-item {
         width: v-bind(itemWidth);
         height: v-bind(itemHeight);
         font-size: 0.85rem;
-        color: #999;
+        color: var(--text-muted);
         cursor: pointer;
         display: flex;
         justify-content: center;
         align-items: center;
         transition: all 0.1s;
         width: 100%;
-        padding: 0.5rem;
+        padding: var(--padding-tertiary);
         box-sizing: border-box;
-        border-radius: 0.5rem;
+        border-radius: var(--border-radius);
         &.disable{
             pointer-events: none;
-            color: #ddd;
+            color: var(--text-muted);
         }
         .menu-label {
-            padding-left: 0.5rem;
+            padding-left: var(--padding-tertiary);
         }
 
         &:hover:not(.disable) {
-            color: #409eff;
-            background-color: #409eff33;
+            color: var(--el-color-primary);
+            background-color: var(--el-color-primary-hover);
         }
     }
 }

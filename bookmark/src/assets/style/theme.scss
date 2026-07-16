@@ -1,0 +1,124 @@
+:root {
+    --el-color-primary: #409eff;
+    --el-color-primary-hover: #409eff33;
+
+    --border-radius: 4px;
+    --gap: 4px;
+    --card-icon-size: 2rem;
+    --padding-primary: 1rem;
+    --padding-secondary: 0.75rem;
+    --padding-tertiary: 0.5rem;
+
+    --bg-sidebar: lab(97.0913% -.307769 -1.47733);
+    --bg-hover: lab(91.8523% -0.891835 -4.41418);
+
+    --bg-page: #fff;
+    
+    --bg-page-secondary: lab(94.1868% -0.457764 -2.21365);
+
+    --bg-card: lab(100% 0 0);
+    --bg-card-disabled:#eee;
+
+    --text-primary: #172029;
+    --text-active-primary: var(--color-primary);
+    --text-muted-secondary: lab(16.4313% -0.972167 -5.78371);
+    --text-muted: lab(60.5313% -0.87291 -4.40395);
+    --text-sidebar: lab(36.1604% -1.02216 -5.4705);
+    --text-sidebar-hover: var(--text-primary);
+
+    --border-color: lab(88.3821% -0.604183 -2.94807);
+
+    --shadow-color: rgba(0, 0, 0, 0.1);
+
+    --shadow-active-color: rgba(0, 0, 0, 0.2);
+
+
+    --card-text-color: #333;
+    --card-info-color: #999;
+
+    --el-input-bg-color: #fff;
+    //info
+    --el-disabled-bg-color: #f5f7fa;
+    --el-disabled-text-color: #a8abb2;
+    --el-disabled-border-color: #e4e7ed;
+
+    //pagination
+    --el-pagination-btn-bg-color: #f0f2f5;
+    --el-pagination-disabled-color: #f0f2f5;
+
+    //el-input
+    --el-input-bg-theme-color: #fff;
+
+    //el-number
+    --el-input-number-bg-color: #f5f7fa;
+
+    //el-popper
+    --el-popper-bg-color: #fff;
+    --el-dropdown-menuItem-hover-bg-color: #ecf5ff;
+    --el-dropdown-menuItem-hover-text-color: #409eff;
+
+    //el-tree
+    --el-tree-bg-color: #fff;
+    --el-tree-text-color: #333;
+    --el-tree-hover-color: #f5f7fa;
+
+    //el-alert
+    --el-alert-bg-theme-color: #f4f4f5;
+}
+html[data-theme="dark"] {
+    --text-primary: #adbac7;
+
+    --bg-sidebar: #0b0f14;
+    --bg-hover: lab(18.7359% -1.15503 -7.2063);
+
+    --bg-page: lab(6.15655% -0.647351 -4.75174);
+
+    --bg-page-secondary: lab(16.4313% -0.972167 -5.78371);
+
+    --bg-card: lab(11.2127% -0.879765 -5.40984);
+
+    --text-primary: #eceff2;
+    --text-active-primary: var(--color-primary);
+    --text-muted-secondary: lab(16.4313% -0.972167 -5.78371);
+    --text-muted: lab(60.5313% -0.87291 -4.40395);
+    --text-sidebar: lab(65.1715% -0.876606 -4.40595);
+    --text-sidebar-hover: lab(94.1891% -0.3829 -1.84566);
+
+    --border-color: lab(100% 0 0 / 0.08);
+
+    --card-bg-color: #303133;
+    --card-text-color: #adbac7;
+    --card-info-color: #adbad7;
+    --shadow-active-color: rgba(64, 158, 255, 0.3);
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --el-button-bg-color: #606266;
+    --el-button-active-bg-color: #909399;
+    --el-input-bg-color: #22272e;
+    //info
+    --el-disabled-bg-color: #303133;
+    --el-disabled-text-color: #fff;
+    --el-disabled-border-color: #a8abb2;
+
+    //pagination
+    --el-pagination-btn-bg-color: #d4d7de;
+    --el-pagination-disabled-color: #d4d7de;
+
+    //el-input
+    --el-input-bg-theme-color: #303133;
+
+    //el-number
+    --el-input-number-bg-color: #303133;
+
+    //el-popper
+    --el-popper-bg-color: #303133;
+    --el-dropdown-menuItem-hover-bg-color: #606266;
+    --el-dropdown-menuItem-hover-text-color: #dcdfe6;
+
+    //el-tree
+    --el-tree-bg-color: #22272e;
+    --el-tree-text-color: #adbac7;
+    --el-tree-hover-color: #303133;
+
+    //el-alert
+    --el-alert-bg-theme-color: #303133;
+}

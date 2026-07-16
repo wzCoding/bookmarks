@@ -18,12 +18,12 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver({ importStyle: 'css' })],
     }),
-    visualizer({
-      open: true,
-      filename: 'stats.html',
-      gzipSize: true,
-      brotliSize: true,
-    }),
+    // visualizer({
+    //   open: true,
+    //   filename: 'stats.html',
+    //   gzipSize: true,
+    //   brotliSize: true,
+    // }),
   ],
   resolve: {
     alias: {

@@ -7,13 +7,12 @@ defineEmits<{ 'update:title': [value: string] }>()
 </script>
 <style lang="scss" scoped>
 .page-title {
-    --padding:1rem;
-    width: calc(100% - var(--padding) * 2);
-    padding: var(--padding);
+    width: calc(100% - var(--padding-primary) * 2);
+    padding: var(--padding-primary);
     font-size: 1.25rem;
-    background-color: #EBEDF0;
+    background-color: var(--bg-page-secondary);
     border-radius: 5px;
-    color: #333;
+    color: var(--text-primary);
     word-break: break-word;
 }
 </style>

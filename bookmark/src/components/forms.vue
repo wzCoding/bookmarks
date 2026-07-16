@@ -4,7 +4,7 @@
             <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show"
                 :label="(locale.el as unknown as Record<string, Record<string, string>>)[localeKey][item.label]" :prop="item.name">
                 <template v-if="item.type == 'input'">
-                    <el-input v-model.lazy="form[item.name]" :placeholder="item.placeholder"
+                    <el-input v-model="form[item.name]" :placeholder="item.placeholder"
                         :disabled="item.disable ? item.disable : false" clearable
                         @input="item.onInput ? handleInput(FormEl, item.onInput) : ''" />
                 </template>
@@ -128,10 +128,12 @@ function resetForm(el: ElFormInstance | null) {
     }
 
     :deep(.el-form.el-form--default) {
+        color: var(--text-primary);
+
         .el-form-item__content {
             .el-input:not(.is-disabled) {
                 .el-input__wrapper {
-                    background-color: var(--el-input-bg-theme-color);
+                    background-color: var(--bg-card);
                 }
             }
 
@@ -139,12 +141,12 @@ function resetForm(el: ElFormInstance | null) {
 
                 .el-input-number__decrease,
                 .el-input-number__increase {
-                    background-color: var(--el-input-number-bg-color);
+                    background-color: var(--bg-card);
                 }
             }
 
             .el-input__inner {
-                color: var(--text-color);
+                color: var(--text-primary);
             }
 
         }

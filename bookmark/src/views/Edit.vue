@@ -122,13 +122,12 @@ function submitForm(param: FormData) {
       bookStore.initNodes(expandTree(result), targetNode!.parentId!)
     })
     setTimeout(() => {
-      loading.close()
       ElMessage({
         type: 'success',
         message: localeStore.locale.el[page].successTip as string,
       })
     }, 1000)
-  })
+  }).finally(() => loading.close())
 }
 function resetForm() {
   title.value = targetNode?.title ?? '--'

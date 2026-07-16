@@ -131,19 +131,18 @@ const handleClick = () => {
 </script>
 <style lang="scss" scoped>
 .bookmark-card {
-    --icon-size: 2rem;
-    background-color: var(--card-bg-color);
-    color: var(--card-text-color);
-    border-radius: 5px;
-    box-shadow: 0 2px 4px var(--card-shadow-color);
-    padding: .5rem;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px var(--shadow-color);
+    padding: var(--padding-tertiary);
     width: calc(var(--rest-space) / var(--card-columns) - var(--extra-space));
     transition: all 0.3s ease;
     cursor: pointer;
 
     &:hover,
     &.active {
-        box-shadow: 0 0 6px 2px var(--context-shadow-color);
+        box-shadow: 0 0 6px 2px var(--shadow-active-color);
     }
 
     .fade-enter-active,
@@ -153,12 +152,12 @@ const handleClick = () => {
 
     .fade-enter-from {
         opacity: 0;
-        transform: translateX(-var(--icon-size));
+        transform: translateX(-var(--card-icon-size));
     }
 
     .fade-leave-to {
         opacity: 0;
-        transform: translateX(var(--icon-size));
+        transform: translateX(var(--card-icon-size));
     }
 
     .bookmark-header {
@@ -171,30 +170,30 @@ const handleClick = () => {
         margin-bottom: 1rem;
 
         .bookmark-icon {
-            width: var(--icon-size);
-            height: var(--icon-size);
+            width: var(--card-icon-size);
+            height: var(--card-icon-size);
             position: relative;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 8px 2px var(--context-shadow-color) inset;
-            border-radius: 50%;
+            box-shadow: 0 0 8px 2px var(--shadow-active-color) inset;
+            border-radius: var(--border-radius);
 
             img {
-                width: calc(var(--icon-size) / 2);
-                border-radius: 3px;
+                width: calc(var(--card-icon-size) * 0.5);
+                border-radius: var(--border-radius);
             }
         }
 
         .bookmark-title {
-            width: calc(100% - var(--icon-size) - 10px);
+            width: calc(100% - var(--card-icon-size) - 10px);
             text-align: center;
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: inherit;
             white-space: nowrap;
-            padding-left: 5px;
+            padding-left: var(--padding-tertiary);
             text-align: left;
         }
     }
@@ -207,8 +206,8 @@ const handleClick = () => {
             justify-content: flex-start;
             align-items: flex-start;
             flex-direction: column;
-            gap: 0.25rem;
-            color: var(--card-info-color);
+            gap: var(--gap);
+            color: var(--text-muted);
             font-size: 0.75rem;
         }
     }

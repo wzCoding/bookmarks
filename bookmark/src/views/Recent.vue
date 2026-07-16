@@ -126,7 +126,7 @@ const onScroll = () => {
 .book-recent {
     position: relative;
     height: 100%;
-    background-color: var(--bg-color);
+    background-color: var(--bg-page);
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -139,7 +139,7 @@ const onScroll = () => {
         align-items: flex-start;
         flex-wrap: wrap;
         position: relative;
-        padding: var(--content-padding);
+        padding: var(--padding-secondary);
         gap: var(--content-gap);
 
         .bookmark-card {
