@@ -31,7 +31,8 @@
 </template>
 <script setup lang="ts">
 import SvgIcon from '@/components/svgIcon.vue'
-import { ref, reactive, shallowReactive, computed } from 'vue';
+import { ref, reactive, computed, watch } from 'vue';
+import { useLocaleStore } from '@/store/useLocaleStore'
 
 interface SettingProps {
     menuVisible: boolean
@@ -52,6 +53,18 @@ const props = withDefaults(defineProps<SettingProps>(), {
 const emits = defineEmits<{ closeMenu: [menuVisible: boolean] }>()
 const settingDialogVisible = computed(() => props.menuVisible)
 
+const localeStore = useLocaleStore()
+
+// 从 store 初始化当前值，确保刷新后保持用户之前的选择
+const menuModel = reactive<Record<string, string>>({
+    language: localeStore.language,
+    theme: localeStore.theme
+})
+
+// 双向同步：store 被外部修改时，menuModel 同步更新
+watch(() => localeStore.language, (val) => { menuModel.language = val })
+watch(() => localeStore.theme, (val) => { menuModel.theme = val })
+
 const menuConfig: MenuProps[] = [
     {
         id: 'language',
@@ -59,11 +72,11 @@ const menuConfig: MenuProps[] = [
         title: '语言设置',
         type: 'select',
         options: [
-            { label: "中文", value: "zh" },
+            { label: "中文", value: "zhCn" },
             { label: "英文", value: "en" }
         ],
         callback: (val: string) => {
-            console.log(val)
+            localeStore.toggleLanguage(val)
         }
     },
     {
@@ -72,19 +85,15 @@ const menuConfig: MenuProps[] = [
         title: '主题设置',
         type: 'segmented',
         options: [
-            { label: "浅色", value: "light", icon: "sun" },
+            { label: "浅色", value: "default", icon: "sun" },
             { label: "深色", value: "dark", icon: "moon" }
         ],
         callback: (val: string) => {
-            console.log(val)
+            localeStore.toggleTheme(val)
         }
     },
 ]
 
-const menuModel = reactive<Record<string, string>>({
-    language: 'zh',
-    theme: 'light'
-})
 const closeDialog = () => {
     emits('closeMenu', false)
 }

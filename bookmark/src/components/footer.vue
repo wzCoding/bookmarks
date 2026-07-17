@@ -66,6 +66,7 @@ const handleSizeChange = (size: number) => {
         .btn-prev,
         .btn-next {
             background-color: var(--bg-card) !important;
+            color: var(--text-primary);
         }
 
         .btn-prev:disabled,
@@ -75,10 +76,12 @@ const handleSizeChange = (size: number) => {
 
         .el-pager li.number {
             background-color: var(--bg-card);
+            color: var(--text-primary);
         }
 
         .el-pager li.number.is-active {
             background-color: var(--el-color-primary);
+            color: var(--text-secondary);
         }
     }
 }

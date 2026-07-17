@@ -23,8 +23,8 @@ import { storeToRefs } from 'pinia'
 import { usebookStore } from '@/store/usebookStore'
 import { useLocaleStore } from '@/store/useLocaleStore'
 import { VueDraggable } from 'vue-draggable-plus'
-import ElMessageBox from 'element-plus/es/components/message-box/index.mjs'
-import ElMessage from 'element-plus/es/components/message/index.mjs'
+import { MessageBoxService } from '@/components/messageBox/messageBox'
+import { MessageService } from '@/components/message/message'
 import { removeBookMark, moveBookMark, openTabs, expandTree } from '@/utils/index'
 import BookMark from '@/components/bookmark.vue'
 import BookFooter from '@/components/footer.vue'
@@ -124,7 +124,7 @@ const onContextMenuClick = (type: ContextMenuItemType, title: string, id: string
     const node = bookStore.getNodeById(id)
     if (!node?.parentId) return
     const parentId = node.parentId
-    ElMessageBox.confirm(tip, deleteLocale.pageTitle, {
+    MessageBoxService.confirm(tip, deleteLocale.pageTitle, {
       confirmButtonText: deleteLocale.confirmText,
       cancelButtonText: deleteLocale.cancelText,
       type: 'warning',
@@ -134,7 +134,7 @@ const onContextMenuClick = (type: ContextMenuItemType, title: string, id: string
           chrome.bookmarks.getTree().then((result) => {
             bookStore.initNodes(expandTree(result), parentId)
           })
-          ElMessage({
+          MessageService({
             type: 'success',
             message: deleteLocale.successTip,
           })

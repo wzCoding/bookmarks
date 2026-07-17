@@ -15,8 +15,8 @@
 </template>
 <script setup lang="ts">
 import { reactive } from 'vue'
-import ElMessage from 'element-plus/es/components/message/index.mjs'
-import ElLoading from 'element-plus/es/components/loading/index.mjs'
+import { MessageService } from '@/components/message/message'
+import { LoadingService } from '@/components/loading/loading'
 import { Folder } from '@element-plus/icons-vue'
 import { usebookStore } from '@/store/usebookStore'
 import { useLocaleStore } from '@/store/useLocaleStore'
@@ -85,7 +85,7 @@ function typeChange(form: Record<string, unknown>) {
   forms[urlIndex].required = forms[urlIndex].show = form.type === 'url'
 }
 function submitForm(param: FormData) {
-  const loading = ElLoading.service({ lock: true })
+  const loading = LoadingService({ lock: true })
   new Promise<{ parentId?: string; index?: number; title?: string; url?: string }>((resolve) => {
     const options: { parentId?: string; index?: number; title?: string; url?: string } = {
       index: param.index ? (param.index as number) : 0,
@@ -101,7 +101,7 @@ function submitForm(param: FormData) {
       if (res) {
         setTimeout(() => {
           loading.close()
-          ElMessage({
+          MessageService({
             type: 'success',
             message: localeStore.locale.el[page].successTip,
           })

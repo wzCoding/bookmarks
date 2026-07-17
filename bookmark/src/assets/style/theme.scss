@@ -9,17 +9,18 @@
     --padding-secondary: 0.75rem;
     --padding-tertiary: 0.5rem;
 
-    --bg-sidebar: lab(97.0913% -.307769 -1.47733);
+    --bg-sidebar: lab(97.0913% -0.307769 -1.47733);
     --bg-hover: lab(91.8523% -0.891835 -4.41418);
 
     --bg-page: #fff;
-    
+
     --bg-page-secondary: lab(94.1868% -0.457764 -2.21365);
 
     --bg-card: lab(100% 0 0);
-    --bg-card-disabled:#eee;
+    --bg-card-disabled: #eee;
 
     --text-primary: #172029;
+    --text-secondary:#fff;
     --text-active-primary: var(--color-primary);
     --text-muted-secondary: lab(16.4313% -0.972167 -5.78371);
     --text-muted: lab(60.5313% -0.87291 -4.40395);
@@ -28,10 +29,9 @@
 
     --border-color: lab(88.3821% -0.604183 -2.94807);
 
-    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.2);
 
-    --shadow-active-color: rgba(0, 0, 0, 0.2);
-
+    --shadow-active-color: rgba(0, 0, 0, 0.3);
 
     --card-text-color: #333;
     --card-info-color: #999;
@@ -68,16 +68,18 @@
 html[data-theme="dark"] {
     --text-primary: #adbac7;
 
-    --bg-sidebar: #0b0f14;
+    --bg-sidebar: #1f2223f0;
     --bg-hover: lab(18.7359% -1.15503 -7.2063);
 
-    --bg-page: lab(6.15655% -0.647351 -4.75174);
+    --bg-page: #0B0F14;
 
-    --bg-page-secondary: lab(16.4313% -0.972167 -5.78371);
+    --bg-page-secondary: #111827;
 
-    --bg-card: lab(11.2127% -0.879765 -5.40984);
+    --bg-card: #161B22;
+    --bg-card-disabled:#303133;
 
     --text-primary: #eceff2;
+    --text-secondary:#fff;
     --text-active-primary: var(--color-primary);
     --text-muted-secondary: lab(16.4313% -0.972167 -5.78371);
     --text-muted: lab(60.5313% -0.87291 -4.40395);
@@ -86,11 +88,13 @@ html[data-theme="dark"] {
 
     --border-color: lab(100% 0 0 / 0.08);
 
+    --shadow-color: rgba(0,0,0, 0.3);
+    --shadow-active-color: rgba(64, 158, 255, 0.75);
+
     --card-bg-color: #303133;
     --card-text-color: #adbac7;
     --card-info-color: #adbad7;
-    --shadow-active-color: rgba(64, 158, 255, 0.3);
-    --shadow-color: rgba(0, 0, 0, 0.5);
+
     --el-button-bg-color: #606266;
     --el-button-active-bg-color: #909399;
     --el-input-bg-color: #22272e;

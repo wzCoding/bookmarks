@@ -14,5 +14,6 @@ defineEmits<{ 'update:title': [value: string] }>()
     border-radius: 5px;
     color: var(--text-primary);
     word-break: break-word;
+    box-shadow: 0 0 2px var(--shadow-active-color);
 }
 </style>

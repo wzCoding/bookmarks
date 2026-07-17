@@ -1,23 +1,23 @@
 <template>
-    <div class="bookmark-page bookmark-edit">
-        <Title :title="title" @update:title="updateTitle" />
-        <Forms :forms="forms" :locale-key="page" @submit="submitForm" @reset="resetForm">
-            <template #default="{ node }">
-                <div class="custom-tree-node">
-                    <el-icon>
-                        <Folder />
-                    </el-icon>
-                    <span class="tree-node-label">{{ node.label }}</span>
-                </div>
-            </template>
-        </Forms>
-        <el-alert class="page-info" type="info" :title="tipTitle" :description="tipDesc" show-icon />
-    </div>
+  <div class="bookmark-page bookmark-edit">
+    <Title :title="title" @update:title="updateTitle" />
+    <Forms :forms="forms" :locale-key="page" @submit="submitForm" @reset="resetForm">
+      <template #default="{ node }">
+        <div class="custom-tree-node">
+          <el-icon>
+            <Folder />
+          </el-icon>
+          <span class="tree-node-label">{{ node.label }}</span>
+        </div>
+      </template>
+    </Forms>
+    <el-alert class="page-info" type="info" :title="tipTitle" :description="tipDesc" show-icon />
+  </div>
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import ElMessage from 'element-plus/es/components/message/index.mjs'
-import ElLoading from 'element-plus/es/components/loading/index.mjs'
+import { MessageService } from '@/components/message/message'
+import { LoadingService } from '@/components/loading/loading'
 import { Folder } from '@element-plus/icons-vue'
 import { usebookStore } from '@/store/usebookStore'
 import { useLocaleStore } from '@/store/useLocaleStore'
@@ -44,44 +44,44 @@ const maxIndex = ref<number>(0)
 const tipTitle = (localeStore.locale.el[page].tips as LocaleTipItem[])[0].title
 const tipDesc = (localeStore.locale.el[page].tips as LocaleTipItem[])[0].text
 if (targetNode) {
-    updateMaxIndex(targetNode.parentId!);
-    forms.push(
-        { label: "bookmarkName", name: "title", placeholder: targetNode.title, defaultValue: "", onInput: updateTitle },
-        {
-            label: "bookmarkLocation",
-            name: "parentId",
-            placeholder: "请选择书签位置",
-            type: "treeSelect",
-            tree: bookStore.getTreeNodes("children"),
-            defaultValue: targetNode.parentId,
-            props: { label: "title" },
-            nodeClick: updateMaxIndex
-        },
-        {
-            label: "bookmarkOrder",
-            name: "index",
-            placeholder: "",
-            type: "number",
-            defaultValue: targetNode.index,
-            min: 0,
-            max: maxIndex.value,
-            requireMessage: "请设置有效的顺序",
-            validator: validateParam
-        },
-    )
-    if (!targetNode.children) {
-        forms.splice(
-            1,
-            0,
-            {
-                label: "websiteLink",
-                name: "url",
-                placeholder: targetNode.url,
-                defaultValue: "",
-                requireMessage: "请输入有效的网址链接",
-                validator: validateParam
-            })
-    }
+  updateMaxIndex(targetNode.parentId!);
+  forms.push(
+    { label: "bookmarkName", name: "title", placeholder: targetNode.title, defaultValue: "", onInput: updateTitle },
+    {
+      label: "bookmarkLocation",
+      name: "parentId",
+      placeholder: "请选择书签位置",
+      type: "treeSelect",
+      tree: bookStore.getTreeNodes("children"),
+      defaultValue: targetNode.parentId,
+      props: { label: "title" },
+      nodeClick: updateMaxIndex
+    },
+    {
+      label: "bookmarkOrder",
+      name: "index",
+      placeholder: "",
+      type: "number",
+      defaultValue: targetNode.index,
+      min: 0,
+      max: maxIndex.value,
+      requireMessage: "请设置有效的顺序",
+      validator: validateParam
+    },
+  )
+  if (!targetNode.children) {
+    forms.splice(
+      1,
+      0,
+      {
+        label: "websiteLink",
+        name: "url",
+        placeholder: targetNode.url,
+        defaultValue: "",
+        requireMessage: "请输入有效的网址链接",
+        validator: validateParam
+      })
+  }
 }
 function updateTitle(param: unknown) {
   const p = param as FormData
@@ -109,7 +109,7 @@ async function validateParam(rule: unknown, value: unknown, callback: (error?: E
     })
 }
 function submitForm(param: FormData) {
-  const loading = ElLoading.service({ lock: true })
+  const loading = LoadingService({ lock: true })
   const options: { title?: string; url?: string } = {}
   const moveOptions = {
     index: param.index as number,
@@ -122,12 +122,16 @@ function submitForm(param: FormData) {
       bookStore.initNodes(expandTree(result), targetNode!.parentId!)
     })
     setTimeout(() => {
-      ElMessage({
+      loading.close()
+      MessageService({
         type: 'success',
         message: localeStore.locale.el[page].successTip as string,
       })
     }, 1000)
-  }).finally(() => loading.close())
+  }).catch(error => {
+    loading.close()
+    console.log(error)
+  })
 }
 function resetForm() {
   title.value = targetNode?.title ?? '--'
@@ -135,10 +139,10 @@ function resetForm() {
 </script>
 <style lang="scss" scoped>
 .page-info {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--el-alert-bg-theme-color) !important;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--el-alert-bg-theme-color) !important;
 }
 </style>

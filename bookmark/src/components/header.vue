@@ -119,8 +119,8 @@ watch(currentTitle, (_: string, oldVal: string) => {
     z-index: 3;
     position: fixed;
     background-color: var(--bg-sidebar);
-    color: var(--text-sidebar);
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
+    box-shadow: 0 0 4px 0 var(--shadow-color);
     padding: 0 var(--padding-secondary);
     width: calc(100% - var(--padding-secondary) * 2);
     --back-button-width: 5.5rem;
@@ -207,6 +207,7 @@ watch(currentTitle, (_: string, oldVal: string) => {
             .header-button {
                 border: none !important;
                 color: var(--text-primary);
+                background-color: var(--bg-card);
                 &:hover{
                     background-color: var(--el-color-primary-hover);
                 }

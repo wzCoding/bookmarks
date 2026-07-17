@@ -7,7 +7,7 @@
 import Forms from '@/components/forms.vue'
 import { useLocaleStore } from '@/store/useLocaleStore'
 import { reactive } from 'vue'
-import ElLoading from 'element-plus/es/components/loading/index.mjs'
+import { LoadingService } from '@/components/loading/loading'
 import type { FormItem, FormData, SettingTask } from '@/types'
 
 const localeStore = useLocaleStore()
@@ -35,7 +35,7 @@ const settings = reactive<FormItem[]>([
 ])
 
 const submitSetting = (form: FormData) => {
-  const loading = ElLoading.service({ lock: true })
+  const loading = LoadingService({ lock: true })
   new Promise<SettingTask[]>((resolve, reject) => {
     const task: SettingTask[] = []
     if (form.theme !== localeStore.theme) {
