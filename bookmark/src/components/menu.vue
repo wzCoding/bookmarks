@@ -1,6 +1,6 @@
 <template>
-    <el-dialog v-model="settingDialogVisible" :append-to-body="true" title="书签设置" width="min(80%,400px)"
-        @close="closeDialog">
+    <el-dialog v-model="settingDialogVisible" class="book-mark-menu" :append-to-body="true" title="书签设置"
+        width="min(80%,400px)" @close="closeDialog">
         <div class="bookmark-setting-list">
             <div v-for="menu in menuConfig" :key="menu.id" class="setting-list-item">
                 <div class="list-item-title">
@@ -98,41 +98,79 @@ const closeDialog = () => {
     emits('closeMenu', false)
 }
 </script>
-<style lang="scss" scoped>
-.bookmark-setting-list {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--gap) * 3);
+<style lang="scss">
+.el-dialog.book-mark-menu {
+    background-color: var(--bg-sidebar);
+    color: var(--text-primary);
 
-    .setting-list-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .el-dialog__header {
 
-        .list-item-title {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            gap: var(--gap);
-            color: var(--text-primary);
-            font-size: 14px;
+        .el-dialog__title,
+        .el-dialog__headerbtn svg {
+            color: var(--text-primary) !important;
         }
 
-        .list-item-content {
-            width: 140px;
+    }
+    .el-dialog__body{
+        padding-top:var(--padding-primary);
+        border-top: 1px dashed var(--border-color);
+    }
 
-            .el-segmented {
-                --el-border-radius-base: calc(var(--border-radius) * 1.5);
+    .bookmark-setting-list {
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--gap) * 3);
 
-                .el-segmented__item.is-selected {
-                    color: var(--text-muted);
+        .setting-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .list-item-title {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: var(--gap);
+                color: var(--text-muted);
+                font-size: 14px;
+            }
+
+            .list-item-content {
+                width: 140px;
+
+                .el-select {
+                    .el-select__wrapper {
+                        background-color: var(--bg-card);
+                        box-shadow: 0 0 1px var(--shadow-active-color);
+
+                        .el-select__selected-item.el-select__placeholder,
+                        .el-icon.el-select__caret.el-select__icon {
+                            color: var(--text-primary);
+                        }
+                    }
                 }
 
-                .segmented-option {
-                    display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
-                    gap: var(--gap);
+
+                .el-segmented {
+                    --el-border-radius-base: calc(var(--border-radius) * 1.5);
+                    background-color: var(--bg-card);
+                    color: var(--text-primary);
+
+                    .el-segmented__item.is-selected {
+                        color: var(--text-secondary);
+                    }
+
+                    .segmented-option {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                        gap: var(--gap);
+                    }
+
+                    .el-segmented__item:not(.is-disabled):not(.is-selected):hover {
+                        color: var(--el-color-primary);
+                        background: var(--el-color-primary-hover);
+                    }
                 }
             }
         }

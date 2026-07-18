@@ -209,7 +209,8 @@ export const usebookStore = defineStore('bookmarks', () => {
 
     function getNodeByTitle(title: string): BookmarkTreeNode[] | undefined {
         if (!title) return undefined
-        return allNodes.filter((item) => item.title.includes(title))
+        const lowerTitle = title.toLowerCase()
+        return allNodes.filter((item) => item.title.toLowerCase().includes(lowerTitle))
     }
 
     // 获取当前展示书签列表

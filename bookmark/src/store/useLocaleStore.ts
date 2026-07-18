@@ -21,8 +21,8 @@ export const useLocaleStore = defineStore('locale', () => {
 
   if (firstFlag) {
     firstFlag = false
-    if (theme.value !== defaultTheme) toggleTheme(theme.value)
-    if (language.value !== defaultLang) toggleLanguage(language.value)
+    toggleTheme(theme.value)
+    toggleLanguage(language.value)
   }
 
   function toggleLanguage(lang: string): void {
@@ -32,7 +32,11 @@ export const useLocaleStore = defineStore('locale', () => {
 
   function toggleTheme(name: string): void {
     theme.value = name
-    document.documentElement.setAttribute('data-theme', name)
+    document.documentElement.removeAttribute('data-theme')
+    if (name !== 'default') {
+      document.documentElement.setAttribute('data-theme', name)
+    }
+
     setCache(themeKey, theme.value)
   }
 

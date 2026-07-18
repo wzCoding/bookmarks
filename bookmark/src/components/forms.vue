@@ -2,7 +2,8 @@
     <div class="page-form">
         <el-form ref="FormEl" :model="form" :rules="rules" :label-position="position" status-icon>
             <el-form-item v-for="item in formOptions" :key="item.name" v-show="item.show"
-                :label="(locale.el as unknown as Record<string, Record<string, string>>)[localeKey][item.label]" :prop="item.name">
+                :label="(locale.el as unknown as Record<string, Record<string, string>>)[localeKey][item.label]"
+                :prop="item.name">
                 <template v-if="item.type == 'input'">
                     <el-input v-model="form[item.name]" :placeholder="item.placeholder"
                         :disabled="item.disable ? item.disable : false" clearable
@@ -12,13 +13,15 @@
                     <el-select v-model="form[item.name]" :placeholder="item.placeholder"
                         @change="item.onChange ? handleSelect(FormEl, item.onChange) : ''">
                         <el-option v-for="option in item.options" :key="option.value"
-                            :label="(locale.el as unknown as Record<string, Record<string, string>>)[localeKey][option.label]" :value="option.value" />
+                            :label="(locale.el as unknown as Record<string, Record<string, string>>)[localeKey][option.label]"
+                            :value="option.value" />
                     </el-select>
                 </template>
                 <template v-if="item.type == 'treeSelect'">
                     <el-tree-select ref="treeSelect" v-model="form[item.name]" :props="item.props" node-key="id"
                         :data="item.tree" :default-expand-all="true" :expand-on-click-node="false"
-                        :render-after-expand="false" @node-click="(node: Record<string, unknown>) => { handleNode(node as unknown as TreeNode, item.nodeClick) }">
+                        :render-after-expand="false"
+                        @node-click="(node: Record<string, unknown>) => { handleNode(node as unknown as TreeNode, item.nodeClick) }">
                         <!-- 动态插槽 -->
                         <template v-for="(value, name) in $slots" #[name]="{ node }">
                             <slot :name="name" v-bind="{ node }"></slot>
@@ -26,9 +29,10 @@
                     </el-tree-select>
                 </template>
                 <template v-if="item.type == 'number'">
-                    <el-input-number :model-value="form[item.name] as number" :min="item.min" :max="item.max" @update:model-value="(val: number | undefined) => form[item.name] = val as number" />
+                    <el-input-number :model-value="form[item.name] as number" :min="item.min" :max="item.max"
+                        @update:model-value="(val: number | undefined) => form[item.name] = val as number" />
                 </template>
-                <template v-if="item.type ==`radio`">
+                <template v-if="item.type == `radio`">
                     <el-radio-group v-model="form[item.name]">
                         <el-radio v-for="radio in item.options" :key="radio.value" :label="radio.label" size="large">{{
                             radio.label }}</el-radio>
@@ -37,8 +41,11 @@
             </el-form-item>
         </el-form>
         <div v-if="submit" class="form-button">
-            <el-button round type="primary" @click="submitForm(FormEl)">{{ (locale.el as unknown as Record<string, Record<string, string>>)[localeKey]['submitText'] }}</el-button>
-            <el-button round @click="resetForm(FormEl)">{{ (locale.el as unknown as Record<string, Record<string, string>>)[localeKey]['resetText'] }}</el-button>
+            <el-button round type="primary" @click="submitForm(FormEl)">{{ (locale.el as unknown as Record<string,
+                Record<string, string>>)[localeKey]['submitText'] }}</el-button>
+            <el-button class="reset-button" round @click="resetForm(FormEl)">{{ (locale.el as unknown as Record<string,
+                Record<string, string>
+            >)[localeKey]['resetText'] }}</el-button>
         </div>
     </div>
 </template>
@@ -51,20 +58,20 @@ import type { FormItem, FormData, FormRule, ElFormInstance } from '@/types'
 import type { TreeNode } from '@/types'
 
 interface Props {
-  forms: FormItem[]
-  position?: 'top' | 'right' | 'left'
-  submit?: boolean
-  localeKey: string
+    forms: FormItem[]
+    position?: 'top' | 'right' | 'left'
+    submit?: boolean
+    localeKey: string
 }
 const props = withDefaults(defineProps<Props>(), {
-  position: 'top',
-  submit: true,
-  localeKey: '',
+    position: 'top',
+    submit: true,
+    localeKey: '',
 })
 
 const emit = defineEmits<{
-  submit: [form: FormData]
-  reset: [form: FormData]
+    submit: [form: FormData]
+    reset: [form: FormData]
 }>()
 
 const FormEl = ref<ElFormInstance | null>(null)
@@ -86,35 +93,35 @@ if (props.forms.length) {
 }
 
 function handleInput(el: ElFormInstance | null, callback: (form: FormData) => void) {
-  if (!el) return
-  callback && callback(form)
+    if (!el) return
+    callback && callback(form)
 }
 async function handleSelect(el: ElFormInstance | null, callback: (form: FormData) => void) {
-  if (!el) return
-  await el.clearValidate('type')
-  callback && callback(form)
+    if (!el) return
+    await el.clearValidate('type')
+    callback && callback(form)
 }
 function handleNode(node: TreeNode, callback?: (id: string) => void) {
-  // blur 在运行时可用但未在 ElTreeSelect 公开类型中暴露
-  // @ts-expect-error blur is available at runtime
-  treeSelect.value![0].blur()
-  form.id = node.id
-  form.index = 0
-  callback && callback(form.id as string)
+    // blur 在运行时可用但未在 ElTreeSelect 公开类型中暴露
+    // @ts-expect-error blur is available at runtime
+    treeSelect.value![0].blur()
+    form.id = node.id
+    form.index = 0
+    callback && callback(form.id as string)
 }
 async function submitForm(el: ElFormInstance | null) {
-  if (!el) return
-  await el.validate((valid: boolean) => {
-    if (valid) {
-      console.log('submit')
-      emit('submit', form)
-    }
-  })
+    if (!el) return
+    await el.validate((valid: boolean) => {
+        if (valid) {
+            console.log('submit')
+            emit('submit', form)
+        }
+    })
 }
 function resetForm(el: ElFormInstance | null) {
-  if (!el) return
-  el.resetFields()
-  emit('reset', form)
+    if (!el) return
+    el.resetFields()
+    emit('reset', form)
 }
 </script>
 <style lang="scss" scoped>
@@ -125,15 +132,31 @@ function resetForm(el: ElFormInstance | null) {
         display: flex;
         justify-content: flex-end;
         align-items: center;
+
+        .el-button {
+            &.reset-button {
+                background-color: var(--bg-card);
+                border: 1px solid var(--el-color-primary);
+                color: var(--el-color-primary);
+
+                &:hover {
+                    background-color: var(--el-color-primary-hover);
+                    color: var(--text-primary);
+                }
+            }
+
+
+        }
+
     }
 
     :deep(.el-form.el-form--default) {
         color: var(--text-primary);
 
         .el-form-item__content {
-            .el-input:not(.is-disabled) {
+            .el-input.is-disabled {
                 .el-input__wrapper {
-                    background-color: var(--bg-card);
+                    background-color: var(--input-bg-disabled);
                 }
             }
 
@@ -141,7 +164,8 @@ function resetForm(el: ElFormInstance | null) {
 
                 .el-input-number__decrease,
                 .el-input-number__increase {
-                    background-color: var(--bg-card);
+                    background-color: var(--input-bg-form);
+                    border-color: var(--input-shadow-form);
                 }
             }
 
@@ -149,6 +173,15 @@ function resetForm(el: ElFormInstance | null) {
                 color: var(--text-primary);
             }
 
+            .el-input__wrapper,
+            .el-select__wrapper {
+                background-color: var(--input-bg-form);
+                box-shadow: 0 0 0 1px var(--input-shadow-form) inset;
+
+                &:focus-within {
+                    box-shadow: 0 0 0 1px var(--el-color-primary) inset;
+                }
+            }
         }
     }
 }

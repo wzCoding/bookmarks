@@ -20,7 +20,7 @@
     --bg-card-disabled: #eee;
 
     --text-primary: #172029;
-    --text-secondary:#fff;
+    --text-secondary: #fff;
     --text-active-primary: var(--color-primary);
     --text-muted-secondary: lab(16.4313% -0.972167 -5.78371);
     --text-muted: lab(60.5313% -0.87291 -4.40395);
@@ -33,37 +33,9 @@
 
     --shadow-active-color: rgba(0, 0, 0, 0.3);
 
-    --card-text-color: #333;
-    --card-info-color: #999;
-
-    --el-input-bg-color: #fff;
-    //info
-    --el-disabled-bg-color: #f5f7fa;
-    --el-disabled-text-color: #a8abb2;
-    --el-disabled-border-color: #e4e7ed;
-
-    //pagination
-    --el-pagination-btn-bg-color: #f0f2f5;
-    --el-pagination-disabled-color: #f0f2f5;
-
-    //el-input
-    --el-input-bg-theme-color: #fff;
-
-    //el-number
-    --el-input-number-bg-color: #f5f7fa;
-
-    //el-popper
-    --el-popper-bg-color: #fff;
-    --el-dropdown-menuItem-hover-bg-color: #ecf5ff;
-    --el-dropdown-menuItem-hover-text-color: #409eff;
-
-    //el-tree
-    --el-tree-bg-color: #fff;
-    --el-tree-text-color: #333;
-    --el-tree-hover-color: #f5f7fa;
-
-    //el-alert
-    --el-alert-bg-theme-color: #f4f4f5;
+    --input-shadow-form: rgba(0, 0, 0, 0.15);
+    --input-bg-form:var(--bg-card);
+    --input-bg-disabled:var(--bg-page-secondary);
 }
 html[data-theme="dark"] {
     --text-primary: #adbac7;
@@ -71,15 +43,15 @@ html[data-theme="dark"] {
     --bg-sidebar: #1f2223f0;
     --bg-hover: lab(18.7359% -1.15503 -7.2063);
 
-    --bg-page: #0B0F14;
+    --bg-page: #0b0f14;
 
     --bg-page-secondary: #111827;
 
-    --bg-card: #161B22;
-    --bg-card-disabled:#303133;
+    --bg-card: #161b22;
+    --bg-card-disabled: #303133;
 
     --text-primary: #eceff2;
-    --text-secondary:#fff;
+    --text-secondary: #fff;
     --text-active-primary: var(--color-primary);
     --text-muted-secondary: lab(16.4313% -0.972167 -5.78371);
     --text-muted: lab(60.5313% -0.87291 -4.40395);
@@ -88,41 +60,10 @@ html[data-theme="dark"] {
 
     --border-color: lab(100% 0 0 / 0.08);
 
-    --shadow-color: rgba(0,0,0, 0.3);
+    --shadow-color: rgba(0, 0, 0, 0.3);
     --shadow-active-color: rgba(64, 158, 255, 0.75);
 
-    --card-bg-color: #303133;
-    --card-text-color: #adbac7;
-    --card-info-color: #adbad7;
-
-    --el-button-bg-color: #606266;
-    --el-button-active-bg-color: #909399;
-    --el-input-bg-color: #22272e;
-    //info
-    --el-disabled-bg-color: #303133;
-    --el-disabled-text-color: #fff;
-    --el-disabled-border-color: #a8abb2;
-
-    //pagination
-    --el-pagination-btn-bg-color: #d4d7de;
-    --el-pagination-disabled-color: #d4d7de;
-
-    //el-input
-    --el-input-bg-theme-color: #303133;
-
-    //el-number
-    --el-input-number-bg-color: #303133;
-
-    //el-popper
-    --el-popper-bg-color: #303133;
-    --el-dropdown-menuItem-hover-bg-color: #606266;
-    --el-dropdown-menuItem-hover-text-color: #dcdfe6;
-
-    //el-tree
-    --el-tree-bg-color: #22272e;
-    --el-tree-text-color: #adbac7;
-    --el-tree-hover-color: #303133;
-
-    //el-alert
-    --el-alert-bg-theme-color: #303133;
+    --input-shadow-form: rgba(64, 158, 255, 0.5);
+    --input-bg-form:var(--bg-card);
+    --input-bg-disabled:var(--bg-page-secondary);
 }

@@ -5,8 +5,8 @@
             <div class="header-extra" :class="{ active: searchActive }">
                 <div class="header-search" :class="{ active: searchActive }">
                     <span class="header-title">{{ pageTitle }}</span>
-                    <el-input ref="searchInput" v-model.lazy="searchText" :placeholder="searchTip" class="search-input"
-                        :suffix-icon="Search" clearable @input="searchBook" @clear="clearBook" />
+                    <el-input ref="searchInput" v-model="searchText" :placeholder="searchTip" class="search-input"
+                        :suffix-icon="Search" clearable @input="searchBookMark" @clear="clearBook" />
                 </div>
                 <div class="header-menu" v-show="showMenu">
                     <el-button :icon="Search" circle v-show="!searchActive" class="header-button search-button"
@@ -64,11 +64,10 @@ const openSearch = (el: { focus: () => void } | null) => {
     oldNodes = currentNodes.value
     setTimeout(() => el.focus(), 200)
 }
-const searchBook = debounce(() => {
+const searchBookMark = debounce(() => {
+    console.log(searchText.value)
     if (searchText.value.trim()) {
         currentNodes.value = (bookStore.getNodeByTitle(searchText.value) ?? []) as BookmarkNodeWithMeta[]
-    } else {
-        clearBook()
     }
 }, 300)
 
@@ -92,9 +91,6 @@ const goBack = () => {
 
 const openSettingMenu = () => {
     console.log('setting')
-    searchActive.value = false;
-    clearBook();
-
     showSettingMenu.value = true
 }
 const closeSettingMenu = () => {

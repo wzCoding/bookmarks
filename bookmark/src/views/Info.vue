@@ -104,10 +104,6 @@ if (info) {
         :deep(.el-form) {
             .el-input.is-disabled {
                 cursor: text;
-                &.el-input__wrapper{
-                    background-color:var(--el-disabled-bg-color);
-                    box-shadow:0 0 0 1px var(--el-disabled-border-color) inset;
-                }
                 .el-input__inner {
                     cursor: text;
                 }
