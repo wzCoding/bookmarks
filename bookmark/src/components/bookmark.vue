@@ -1,9 +1,17 @@
 <template>
     <div class="bookmark-card" :id="bookmark.id" @contextmenu="handleContextMenu">
         <div class="bookmark-header">
-            <div class="bookmark-icon">
-                <img v-if="isFolder" src="../assets/icon/folder.png" alt="bookmark-icon">
-                <img v-else :src="iconUrl" alt="bookmark-icon">
+            <div v-if="isFolder" class="bookmark-icon">
+                <img src="../assets/icon/folder.png" alt="bookmark-icon">
+            </div>
+            <div
+                v-else
+                ref="iconRef"
+                class="bookmark-icon preview-trigger"
+                @mouseenter="onIconEnter"
+                @mouseleave="onIconLeave"
+            >
+                <img :src="iconUrl" alt="bookmark-icon">
             </div>
             <el-tooltip placement="top" :disabled="noTip" :content="title">
                 <div class="bookmark-title" @mouseover="showTip">
@@ -38,12 +46,24 @@
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
+        <!-- 书签页面预览 -->
+        <BookmarkPreview
+            v-if="!isFolder"
+            :url="bookmark.url ?? ''"
+            :title="bookmark.title"
+            :visible="previewVisible"
+            :trigger-el="triggerEl"
+            @close="closePreview"
+            @open-in-tab="openPreviewInTab"
+        />
     </div>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { Promotion, HomeFilled, ChromeFilled } from '@element-plus/icons-vue'
-import { setLocalCache, getLocalCache, getDate, faviconURL } from '@/utils/index'
+import { setLocalCache, getLocalCache, getDate, faviconURL, openTabs } from '@/utils/index'
+import { isSafePreviewUrl } from '@/utils/preview'
+import BookmarkPreview from '@/components/BookmarkPreview.vue'
 import type { BookmarkTreeNode, BookmarkNodeWithMeta, LocaleElData, DropdownItem, OpenUrlParam } from '@/types'
 
 interface Props {
@@ -122,12 +142,57 @@ const handleClick = () => {
     }
     setLocalCache(cacheKey, { [props.bookmark.id]: openType.value })
     emit('openUrl', param)
-  }
+}
 
-  const handleContextMenu = (e: MouseEvent) => {
+// ==================== 书签预览 ====================
+
+const iconRef = ref<HTMLElement | null>(null)
+const previewVisible = ref(false)
+const triggerEl = ref<HTMLElement | null>(null)
+
+/** 鼠标进入图标：延迟显示预览（防误触） */
+let previewTimer: ReturnType<typeof setTimeout> | null = null
+
+function onIconEnter(): void {
+  // 仅对非文件夹、安全的 URL 启用预览
+  if (isFolder.value || !isSafePreviewUrl(props.bookmark.url ?? '')) return
+  clearPreviewTimer()
+  previewTimer = setTimeout(() => {
+    triggerEl.value = iconRef.value
+    previewVisible.value = true
+  }, 400)
+}
+
+function onIconLeave(): void {
+  clearPreviewTimer()
+}
+
+function closePreview(): void {
+  clearPreviewTimer()
+  previewVisible.value = false
+  triggerEl.value = null
+}
+
+function openPreviewInTab(url: string): void {
+  closePreview()
+  openTabs({ type: '_blank', url, id: props.bookmark.id })
+}
+
+function clearPreviewTimer(): void {
+  if (previewTimer !== null) {
+    clearTimeout(previewTimer)
+    previewTimer = null
+  }
+}
+
+const handleContextMenu = (e: MouseEvent) => {
     e.preventDefault()
     emit('openContextMenu', e, props.bookmark)
 }
+
+onUnmounted(() => {
+  clearPreviewTimer()
+})
 </script>
 <style lang="scss" scoped>
 .bookmark-card {
@@ -183,6 +248,17 @@ const handleClick = () => {
             img {
                 width: calc(var(--card-icon-size) * 0.5);
                 border-radius: var(--border-radius);
+            }
+
+            // 预览触发器：hover 时放大 + 边框高亮
+            &.preview-trigger {
+                cursor: zoom-in;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+                &:hover {
+                    transform: scale(1.15);
+                    box-shadow: 0 0 0 2px var(--el-color-primary, #409eff), 0 0 8px 2px var(--shadow-active-color) inset;
+                }
             }
         }
 

@@ -1,13 +1,15 @@
 <template>
     <div class="book-footer">
-        <ElConfigProvider :locale="locale">
-            <el-pagination :hide-on-single-page="false" :small="true" :background="true" :current-page="currentPage"
+        <ElConfigProvider :locale="elPlusLocale">
+            <el-pagination :hide-on-single-page="false" size="small" :background="true" :current-page="currentPage"
                 :page-size="pageSize" :pager-count="pagerCount" :page-sizes="pageSizes" :layout="layout" :total="total"
                 @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </ElConfigProvider>
     </div>
 </template>
 <script setup lang="ts">
+import { computed } from 'vue'
+
 interface Props {
     currentPage?: number
     pageSize?: number
@@ -15,8 +17,7 @@ interface Props {
     pagerCount?: number
     layout?: string
     total?: number
-    // eslint-disable-next-line
-    locale?: any
+    locale?: Record<string, unknown>
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -29,7 +30,18 @@ const props = withDefaults(defineProps<Props>(), {
     locale: () => ({}),
 })
 
+/**
+ * Element Plus 的 ElConfigProvider 要求 locale 格式为 { name: string, el: { ... } }
+ * 而父组件传入的 locale 是自定义的 el 子对象（不含外层 name/el 包装），
+ * 因此需要用 computed 包装为 Element Plus 期望的格式。
+ */
+const elPlusLocale = computed(() => ({
+    name: 'zhCn',
+    el: props.locale as Record<string, unknown>,
+}))
+
 const emits = defineEmits<{
+
     currentChange: [currentPage: number]
     sizeChange: [size: number]
 }>()

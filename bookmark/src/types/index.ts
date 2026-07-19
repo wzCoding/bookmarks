@@ -125,6 +125,7 @@ export interface LocaleElData {
   create: Record<string, string>
   delete: Record<string, string>
   setting: Record<string, string>
+  preview: Record<string, string>
   recent: Record<string, string>
 }
 
@@ -222,5 +223,27 @@ export interface SearchMenuItem {
   label: string
   icon: unknown
   type: string
+}
+
+// ==================== 书签预览相关（BookmarkPreview.vue） ====================
+
+/** 预览组件 Props */
+export interface BookmarkPreviewProps {
+  url: string
+  title: string
+  favicon: string
+  visible: boolean
+  triggerEl: HTMLElement | null
+}
+
+/** 预览组件 Emits */
+export interface BookmarkPreviewEmits {
+  (e: 'close'): void
+}
+
+/** 预览组件暴露的方法 */
+export interface BookmarkPreviewExposed {
+  show: (el: HTMLElement) => void
+  hide: () => void
 }
 

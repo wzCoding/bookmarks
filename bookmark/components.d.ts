@@ -12,6 +12,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Bookmark: typeof import('./src/components/bookmark.vue')['default']
+    BookmarkPreview: typeof import('./src/components/BookmarkPreview.vue')['default']
     ContextMenu: typeof import('./src/components/contextMenu.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElButton: typeof import('element-plus/es')['ElButton']

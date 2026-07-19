@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="settingDialogVisible" class="book-mark-menu" :append-to-body="true" title="书签设置"
+    <el-dialog v-model="settingDialogVisible" class="book-mark-menu" :append-to-body="true" :title="localeStore.locale.el.setting.pageTitle"
         width="min(80%,400px)" @close="closeDialog">
         <div class="bookmark-setting-list">
             <div v-for="menu in menuConfig" :key="menu.id" class="setting-list-item">
@@ -65,15 +65,15 @@ const menuModel = reactive<Record<string, string>>({
 watch(() => localeStore.language, (val) => { menuModel.language = val })
 watch(() => localeStore.theme, (val) => { menuModel.theme = val })
 
-const menuConfig: MenuProps[] = [
+const menuConfig = computed<MenuProps[]>(() => [
     {
         id: 'language',
         icon: 'language',
-        title: '语言设置',
+        title: localeStore.locale.el.setting.languageSetting,
         type: 'select',
         options: [
-            { label: "中文", value: "zhCn" },
-            { label: "英文", value: "en" }
+            { label: localeStore.locale.el.setting.chineseLanguage, value: "zhCn" },
+            { label: localeStore.locale.el.setting.englishLanguage, value: "en" }
         ],
         callback: (val: string) => {
             localeStore.toggleLanguage(val)
@@ -82,17 +82,17 @@ const menuConfig: MenuProps[] = [
     {
         id: 'theme',
         icon: 'theme',
-        title: '主题设置',
+        title: localeStore.locale.el.setting.themeSetting,
         type: 'segmented',
         options: [
-            { label: "浅色", value: "default", icon: "sun" },
-            { label: "深色", value: "dark", icon: "moon" }
+            { label: localeStore.locale.el.setting.lightTheme, value: "default", icon: "sun" },
+            { label: localeStore.locale.el.setting.darkThemeLabel, value: "dark", icon: "moon" }
         ],
         callback: (val: string) => {
             localeStore.toggleTheme(val)
         }
     },
-]
+])
 
 const closeDialog = () => {
     emits('closeMenu', false)
