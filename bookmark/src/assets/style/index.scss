@@ -65,7 +65,7 @@ body {
 }
 @media screen and (max-width: 1094px) and (min-width: 836px) {
     :root {
-        --preview-width:840px;
+        --preview-width:720px;
         --preview-height:540px;
     }
     #app {
@@ -75,7 +75,7 @@ body {
 }
 @media screen and (max-width: 1352px) and (min-width: 1094px) {
     :root {
-        --preview-width:1320px;
+        --preview-width:1180px;
         --preview-height:780px;
     }
     #app {
@@ -85,7 +85,7 @@ body {
 }
 @media screen and (min-width: 1353px) {
     :root {
-        --preview-width:1320px;
+        --preview-width:1180px;
         --preview-height:780px;
     }
     #app {
