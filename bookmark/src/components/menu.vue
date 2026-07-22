@@ -1,109 +1,78 @@
 <template>
-    <el-dialog v-model="settingDialogVisible" class="book-mark-menu" :append-to-body="true"
-        :title="localeStore.locale.el.setting.pageTitle"
-        width="min(90%, 680px)" @close="closeDialog">
+    <el-dialog v-model="settingDialogVisible" class="book-mark-menu" :append-to-body="true" width="min(80%, 680px)"
+        @close="closeDialog">
         <div class="menu-container">
-            <!-- 左侧垂直菜单栏 -->
-            <div class="menu-sidebar" :class="{ collapsed: isCollapsed }">
-                <el-menu
-                    :default-active="activeMenu"
-                    :collapse="isCollapsed"
-                    :collapse-transition="false"
-                    class="sidebar-menu"
-                    @select="handleMenuSelect"
-                >
-                    <el-menu-item index="basic">
-                        <svg-icon name="theme" size="18" />
-                        <template #title>{{ localeStore.locale.el.setting.basicSettings }}</template>
-                    </el-menu-item>
-                    <el-menu-item index="feature">
-                        <svg-icon name="enhance" size="18" />
-                        <template #title>{{ localeStore.locale.el.setting.featureEnhance }}</template>
-                    </el-menu-item>
-                </el-menu>
-                <!-- 折叠/展开按钮 -->
-                <div class="collapse-btn" @click="toggleCollapse">
-                    <el-icon :size="16">
-                        <DArrowLeft v-if="!isCollapsed" />
-                        <DArrowRight v-else />
-                    </el-icon>
+            <div class="menu-aside">
+                <div class="aside-item" v-for="item in menuTitle" :key="item.id" @click="changeMenuContent(item.id)">
+                    <svg-icon :name="item.icon" size="20" />
+                    <span>{{ item.title }}</span>
                 </div>
             </div>
-            <!-- 右侧内容面板 -->
             <div class="menu-content">
-                <!-- 基础设置面板 -->
-                <div v-show="activeMenu === 'basic'" class="setting-panel">
-                    <div class="bookmark-setting-list">
-                        <div v-for="menu in menuConfig" :key="menu.id" class="setting-list-item">
-                            <div class="list-item-title">
-                                <svg-icon :name="menu.icon" size="18"></svg-icon>
-                                <span>{{ menu.title }}</span>
+                <template v-for="item in menuTitle" :key="item.id">
+                    <div class="content-box" v-if="item.showContent">
+                        <div class="bookmark-setting-title">{{ item.title }}</div>
+                        <div class="bookmark-setting-list" v-if="item.id === 'setting'">
+                            <div v-for="menu in menuContent.filter(i => i.menuType === 'basic')" :key="menu.id"
+                                class="setting-list-item">
+                                <div class="list-item-title">
+                                    <span>{{ menu.title }}</span>
+                                </div>
+                                <div class="list-item-content">
+                                    <el-select :model-value="menuModel[menu.id]"
+                                        @update:model-value="(val: string) => { menuModel[menu.id] = val }"
+                                        @change="menu.callback">
+                                        <el-option v-for="option in menu.options" :key="option.value"
+                                            :value="option.value" :label="option.label" />
+                                    </el-select>
+                                </div>
                             </div>
-                            <div class="list-item-content">
-                                <el-select v-if="menu.type === 'select'" :model-value="menuModel[menu.id]"
-                                    @update:model-value="(val: string) => { menuModel[menu.id] = val }" @change="menu.callback">
-                                    <el-option v-for="option in menu.options" :key="option.value" :value="option.value"
-                                        :label="option.label" />
-                                </el-select>
-                                <el-segmented v-if="menu.type === 'segmented'" :model-value="menuModel[menu.id]"
-                                    @update:model-value="(val: string) => { menuModel[menu.id] = val }" :options="menu.options"
-                                    @change="menu.callback">
-                                    <template #default="scope">
-                                        <div class="segmented-option">
-                                            <svg-icon :name="scope.item.icon" size="14"></svg-icon>
-                                            <span>{{ scope.item.label }}</span>
-                                        </div>
-                                    </template>
-                                </el-segmented>
+                        </div>
+                        <div class="bookmark-setting-list" v-if="item.id === 'enhance'">
+                            <div v-for="menu in menuContent.filter(i => i.menuType === 'basic')" :key="menu.id"
+                                class="setting-list-item">
+                                <div class="list-item-title">
+                                    <span>{{ menu.title }}</span>
+                                </div>
+                                <div class="list-item-content">
+                                    <el-select :model-value="menuModel[menu.id]"
+                                        @update:model-value="(val: string) => { menuModel[menu.id] = val }"
+                                        @change="menu.callback">
+                                        <el-option v-for="option in menu.options" :key="option.value"
+                                            :value="option.value" :label="option.label" />
+                                    </el-select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- 功能增强面板 -->
-                <div v-show="activeMenu === 'feature'" class="feature-panel">
-                    <div class="feature-list">
-                        <div v-for="feature in featureConfig" :key="feature.id" class="feature-list-item">
-                            <div class="feature-item-title">
-                                <svg-icon :name="feature.icon" size="18"></svg-icon>
-                                <span>{{ feature.title }}</span>
-                            </div>
-                            <div class="feature-item-switch">
-                                <el-switch
-                                    v-model="featureModel[feature.id]"
-                                    @change="(val: boolean) => feature.callback(val)"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </template>
             </div>
         </div>
     </el-dialog>
 </template>
 <script setup lang="ts">
 import SvgIcon from '@/components/svgIcon.vue'
-import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
 import { ref, reactive, computed, watch } from 'vue';
 import { useLocaleStore } from '@/store/useLocaleStore'
 
 interface SettingProps {
     menuVisible: boolean
 }
-
-interface MenuProps {
+interface MenuTitle {
     id: string,
     icon: string,
     title: string,
-    type: string,
-    options?: { [key: string]: string }[],
-    callback: (param: string) => void
+    showContent: boolean
 }
-
-interface FeatureProps {
-    id: string
-    icon: string
-    title: string
-    callback: (val: boolean) => void
+interface MenuProps {
+    id: string,
+    icon?: string,
+    title: string,
+    menuType: string,
+    contentType: string,
+    options?: { [key: string]: string }[],
+    values?: string | boolean | number,
+    callback(param: string | boolean | number): void
 }
 
 const props = withDefaults(defineProps<SettingProps>(), {
@@ -113,11 +82,6 @@ const emits = defineEmits<{ closeMenu: [menuVisible: boolean] }>()
 const settingDialogVisible = computed(() => props.menuVisible)
 
 const localeStore = useLocaleStore()
-
-// 当前激活的菜单项
-const activeMenu = ref<string>('basic')
-// 菜单折叠状态
-const isCollapsed = ref<boolean>(false)
 
 // 从 store 初始化当前值，确保刷新后保持用户之前的选择
 const menuModel = reactive<Record<string, string>>({
@@ -129,17 +93,27 @@ const menuModel = reactive<Record<string, string>>({
 watch(() => localeStore.language, (val) => { menuModel.language = val })
 watch(() => localeStore.theme, (val) => { menuModel.theme = val })
 
-// 功能开关状态
-const featureModel = reactive<Record<string, boolean>>({
-    bookmarkPreview: false
-})
+const menuTitle = reactive<MenuTitle[]>([
+    {
+        title: localeStore.locale.el.setting.basicSettings,
+        icon: 'setting',
+        showContent: true,
+        id: 'setting',
+    },
+    {
+        title: localeStore.locale.el.setting.featureEnhance,
+        icon: 'enhance',
+        showContent: false,
+        id: 'enhance'
+    },
+])
 
-const menuConfig = computed<MenuProps[]>(() => [
+const menuContent = computed<MenuProps[]>(() => [
     {
         id: 'language',
-        icon: 'language',
         title: localeStore.locale.el.setting.languageSetting,
-        type: 'select',
+        menuType: 'basic',
+        contentType: 'select',
         options: [
             { label: localeStore.locale.el.setting.chineseLanguage, value: "zhCn" },
             { label: localeStore.locale.el.setting.englishLanguage, value: "en" }
@@ -150,40 +124,33 @@ const menuConfig = computed<MenuProps[]>(() => [
     },
     {
         id: 'theme',
-        icon: 'theme',
         title: localeStore.locale.el.setting.themeSetting,
-        type: 'segmented',
+        menuType: 'basic',
+        contentType: 'select',
         options: [
-            { label: localeStore.locale.el.setting.lightTheme, value: "default", icon: "sun" },
-            { label: localeStore.locale.el.setting.darkThemeLabel, value: "dark", icon: "moon" }
+            { label: localeStore.locale.el.setting.lightTheme, value: "default" },
+            { label: localeStore.locale.el.setting.darkThemeLabel, value: "dark" }
         ],
         callback: (val: string) => {
             localeStore.toggleTheme(val)
         }
     },
-])
-
-// 功能增强配置列表
-const featureConfig = computed<FeatureProps[]>(() => [
     {
-        id: 'bookmarkPreview',
-        icon: 'enhance',
+        id: 'preview',
         title: localeStore.locale.el.setting.bookmarkPreview,
+        menuType: 'enhance',
+        contentType: 'switch',
+        values: false,
         callback: (val: boolean) => {
-            // TODO: 实现书签页预览功能开关
             console.log('书签页预览:', val ? '开启' : '关闭')
         }
-    }
+    },
 ])
 
-// 菜单选择切换
-const handleMenuSelect = (index: string) => {
-    activeMenu.value = index
-}
-
-// 折叠/展开切换
-const toggleCollapse = () => {
-    isCollapsed.value = !isCollapsed.value
+const changeMenuContent = (id: string) => {
+    menuTitle.forEach((item: MenuTitle) => {
+        item.showContent = item.id === id
+    })
 }
 
 const closeDialog = () => {
@@ -192,135 +159,100 @@ const closeDialog = () => {
 </script>
 <style lang="scss">
 .el-dialog.book-mark-menu {
-    background-color: var(--bg-sidebar);
+    background-color: var(--bg-page);
     color: var(--text-primary);
     padding: 0;
+
     .el-dialog__header {
-        .el-dialog__title,
-        .el-dialog__headerbtn svg {
-            color: var(--text-primary) !important;
-        }
+        padding: 0;
     }
 
     .el-dialog__body {
         padding: 0;
-        border-top: 1px dashed var(--border-color);
     }
 
     .menu-container {
         display: flex;
-        height: 360px;
-    }
+        height: 240px;
+        color: var(--text-primary);
+        font-size: 13px;
 
-    // ========== 左侧菜单栏 ==========
-    .menu-sidebar {
-        display: flex;
-        flex-direction: column;
-        flex-shrink: 0;
-        width: 160px;
-        border-right: 1px solid var(--border-color);
-        background-color: var(--bg-card);
-        transition: width 0.3s ease;
-        overflow: hidden;
+        .menu-aside {
+            height: 100%;
+            box-sizing: border-box;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: var(--gap);
+            padding: var(--padding-tertiary);
 
-        &.collapsed {
-            width: 64px;
-
-            .sidebar-menu {
-                .el-menu-item {
-                    justify-content: center;
-                    padding: 0 !important;
-                }
-            }
-        }
-
-        .sidebar-menu {
-            flex: 1;
-            border-right: none;
-            background-color: transparent;
-
-            // 使用 theme.scss 变量覆盖 el-menu 默认样式
-            --el-menu-bg-color: transparent;
-            --el-menu-text-color: var(--text-sidebar);
-            --el-menu-hover-bg-color: var(--bg-hover);
-            --el-menu-active-color: var(--el-color-primary);
-            --el-menu-item-height: 48px;
-            --el-menu-item-font-size: 14px;
-
-            .el-menu-item {
+            .aside-item {
                 display: flex;
-                align-items: center;
-                gap: 8px;
-                border-radius: 0;
-                margin: 2px 4px;
-                transition: background-color 0.2s, color 0.2s;
+                justify-content: flex-start;
+                align-items: flex-start;
+                gap: var(--gap);
+                padding: var(--padding-tertiary);
+                border-radius: var(--border-radius);
+                cursor: pointer;
+                width: 100%;
+                box-sizing: border-box;
 
                 &:hover {
-                    color: var(--text-sidebar-hover);
-                    background-color: var(--bg-hover);
-                }
-
-                &.is-active {
-                    color: var(--el-color-primary);
                     background-color: var(--el-color-primary-hover);
-                    border-right: 2px solid var(--el-color-primary);
                 }
             }
         }
 
-        .collapse-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 40px;
-            border-top: 1px solid var(--border-color);
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: color 0.2s, background-color 0.2s;
-            flex-shrink: 0;
+        .menu-content {
+            flex: 1;
+            height: 100%;
 
-            &:hover {
-                color: var(--text-primary);
-                background-color: var(--bg-hover);
+            .content-box {
+                padding: var(--padding-primary);
             }
-        }
-    }
 
-    // ========== 右侧内容区 ==========
-    .menu-content {
-        flex: 1;
-        overflow-y: auto;
-        padding: var(--padding-primary);
-        background-color: var(--bg-sidebar);
+            .bookmark-setting-title {
 
-        // --- 基础设置面板 ---
-        .setting-panel {
+                padding-bottom: var(--padding-secondary);
+                border-bottom: 1px solid var(--border-color);
+                font-size: 14px;
+            }
+
             .bookmark-setting-list {
                 display: flex;
                 flex-direction: column;
                 gap: calc(var(--gap) * 3);
+                padding-top: var(--padding-secondary);
+                padding-top: var(--padding-secondary);
 
                 .setting-list-item {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    border-bottom: 1px solid var(--border-color);
+                    padding-bottom: var(--padding-tertiary);
 
                     .list-item-title {
                         display: flex;
                         justify-content: flex-start;
                         align-items: center;
                         gap: var(--gap);
-                        color: var(--text-muted);
-                        font-size: 14px;
                     }
 
                     .list-item-content {
-                        width: 140px;
+                        width: 68%;
 
                         .el-select {
                             .el-select__wrapper {
-                                background-color: var(--bg-card);
-                                box-shadow: 0 0 1px var(--shadow-active-color);
+                                background-color: var(--bg-page);
+                                box-shadow: none;
+
+                                .el-select__selection,
+                                .el-select__selected-item.el-select__input-wrapper {
+                                    text-align: right;
+                                }
 
                                 .el-select__selected-item.el-select__placeholder,
                                 .el-icon.el-select__caret.el-select__icon {
@@ -350,35 +282,6 @@ const closeDialog = () => {
                                 background: var(--el-color-primary-hover);
                             }
                         }
-                    }
-                }
-            }
-        }
-
-        // --- 功能增强面板 ---
-        .feature-panel {
-            .feature-list {
-                display: flex;
-                flex-direction: column;
-                gap: calc(var(--gap) * 3);
-
-                .feature-list-item {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 8px 0;
-
-                    .feature-item-title {
-                        display: flex;
-                        justify-content: flex-start;
-                        align-items: center;
-                        gap: var(--gap);
-                        color: var(--text-primary);
-                        font-size: 14px;
-                    }
-
-                    .feature-item-switch {
-                        flex-shrink: 0;
                     }
                 }
             }
