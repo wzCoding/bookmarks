@@ -43,9 +43,13 @@ body {
         --preview-width: 320px;
         --preview-height: 210px;
     }
-    .section-title {
-        display: none !important;
+    .book-mark-menu {
+        .section-title,
+        .title-desc {
+            display: none !important;
+        }
     }
+
     #app {
         --card-columns: 2; // 卡片列数
         --extra-space: 0.625rem; // 额外空间

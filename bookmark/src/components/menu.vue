@@ -20,7 +20,10 @@
                     <div class="bookmark-setting-list">
                         <div v-for="item in activeSection.items" :key="item.id" class="setting-list-item">
                             <div class="list-item-title">
-                                <span>{{ item.title }}</span>
+                                <div class="title-row">
+                                    <span>{{ item.title }}</span>
+                                </div>
+                                <div class="title-desc" v-if="item.desc">{{ item.desc }}</div>
                             </div>
                             <div class="list-item-content">
                                 <!-- select 类型配置项 -->
@@ -57,6 +60,8 @@ interface MenuItem {
     id: string
     title: string
     type: 'select' | 'switch'
+    /** 功能描述文本 */
+    desc?: string
     /** select 类型的选项列表 */
     options?: { label: string; value: string }[]
     /** switch 类型的默认值 */
@@ -133,6 +138,7 @@ const menuSections = computed<MenuSection[]>(() => [
             {
                 id: 'preview',
                 title: localeStore.locale.el.setting.bookmarkPreview,
+                desc: localeStore.locale.el.setting.bookmarkPreviewDesc,
                 type: 'switch',
                 values: false,
                 callback: (val) => {
@@ -142,6 +148,7 @@ const menuSections = computed<MenuSection[]>(() => [
             {
                 id: 'aiTranslate',
                 title: localeStore.locale.el.setting.aiTranslate,
+                desc: localeStore.locale.el.setting.aiTranslateDesc,
                 type: 'switch',
                 values: false,
                 callback: (val) => {
@@ -151,6 +158,7 @@ const menuSections = computed<MenuSection[]>(() => [
             {
                 id: 'bookmarkStatus',
                 title: localeStore.locale.el.setting.bookmarkStatus,
+                desc: localeStore.locale.el.setting.bookmarkStatusDesc,
                 type: 'switch',
                 values: false,
                 callback: (val) => {
@@ -160,6 +168,7 @@ const menuSections = computed<MenuSection[]>(() => [
             {
                 id: 'browsingHistory',
                 title: localeStore.locale.el.setting.browsingHistory,
+                desc: localeStore.locale.el.setting.browsingHistoryDesc,
                 type: 'switch',
                 values: false,
                 callback: (val) => {
@@ -283,9 +292,22 @@ const handleMouseLeave = (sectionId: string) => {
 
                     .list-item-title {
                         display: flex;
+                        flex-direction: column;
                         justify-content: flex-start;
-                        align-items: center;
+                        align-items: flex-start;
                         gap: var(--gap);
+
+                        .title-row {
+                            display: flex;
+                            align-items: center;
+                            gap: var(--gap);
+                        }
+
+                        .title-desc {
+                            font-size: 11px;
+                            color: var(--text-muted);
+                            white-space: nowrap;
+                        }
                     }
 
                     .list-item-content {
