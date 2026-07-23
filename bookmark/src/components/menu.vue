@@ -25,7 +25,7 @@
                             <div class="list-item-content">
                                 <!-- select 类型配置项 -->
                                 <el-select v-if="item.type === 'select'" popper-class="list-item-popper"
-                                    :show-arrow="false" :model-value="settingValues[item.id]"
+                                    :show-arrow="false" placement="bottom-end" :model-value="settingValues[item.id]"
                                     @update:model-value="(val: string) => { settingValues[item.id] = val }"
                                     @change="item.callback">
                                     <el-option v-for="option in item.options" :key="option.value" :value="option.value"
@@ -84,6 +84,9 @@ const settingValues = reactive<Record<string, string | boolean>>({
     language: localeStore.language,
     theme: localeStore.theme,
     preview: false,
+    aiTranslate: false,
+    bookmarkStatus: false,
+    browsingHistory: false,
 })
 
 // 双向同步：store 被外部修改时，settingValues 同步更新
@@ -136,6 +139,33 @@ const menuSections = computed<MenuSection[]>(() => [
                     console.log('书签页预览:', val ? '开启' : '关闭')
                 },
             },
+            {
+                id: 'aiTranslate',
+                title: localeStore.locale.el.setting.aiTranslate,
+                type: 'switch',
+                values: false,
+                callback: (val) => {
+                    console.log('AI翻译:', val ? '开启' : '关闭')
+                },
+            },
+            {
+                id: 'bookmarkStatus',
+                title: localeStore.locale.el.setting.bookmarkStatus,
+                type: 'switch',
+                values: false,
+                callback: (val) => {
+                    console.log('书签状态:', val ? '开启' : '关闭')
+                },
+            },
+            {
+                id: 'browsingHistory',
+                title: localeStore.locale.el.setting.browsingHistory,
+                type: 'switch',
+                values: false,
+                callback: (val) => {
+                    console.log('浏览记录:', val ? '开启' : '关闭')
+                },
+            }
         ],
     },
 ])
@@ -172,7 +202,7 @@ const handleMouseLeave = (sectionId: string) => {
     background-color: var(--bg-page);
     color: var(--text-primary);
     padding: 0;
-
+    box-shadow: 0 0 12px var(--shadow-active-color);
     .el-dialog__header {
         padding: 0;
     }
@@ -183,12 +213,14 @@ const handleMouseLeave = (sectionId: string) => {
 
     .menu-container {
         display: flex;
-        height: 240px;
+        height: auto;
         color: var(--text-primary);
         font-size: 13px;
+        max-height: 320px;
+        overflow-y: auto;
+        overflow-x: hidden;
 
         .menu-aside {
-            height: 100%;
             box-sizing: border-box;
             border-right: 1px solid var(--border-color);
             display: flex;
@@ -257,7 +289,7 @@ const handleMouseLeave = (sectionId: string) => {
                     }
 
                     .list-item-content {
-                        width: 68%;
+                        width: 48%;
                         display: flex;
                         justify-content: flex-end;
                         align-items: center;
@@ -266,6 +298,7 @@ const handleMouseLeave = (sectionId: string) => {
                             .el-select__wrapper {
                                 background-color: var(--bg-page);
                                 box-shadow: none;
+                                transition: none;
 
                                 .el-select__selection,
                                 .el-select__selected-item.el-select__input-wrapper {
@@ -280,9 +313,12 @@ const handleMouseLeave = (sectionId: string) => {
                         }
 
                         .el-switch {
-                            .el-switch__core {
-                                background-color: var(--bg-sidebar) !important;
+                            &:not(.is-checked) {
+                                .el-switch__core {
+                                    background-color: var(--bg-sidebar) !important;
+                                }
                             }
+
                         }
 
                     }
@@ -294,5 +330,10 @@ const handleMouseLeave = (sectionId: string) => {
 
 .list-item-popper.el-popper.el-select__popper {
     max-width: 120px !important;
+
+    .el-select-dropdown.list-item-popper {
+        max-width: 120px !important;
+        min-width: 120px !important;
+    }
 }
 </style>
