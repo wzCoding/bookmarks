@@ -37,20 +37,19 @@ body {
     background-color: var(--bg-page);
 }
 
-
-
 // 响应式样式
 @media screen and (max-width: 578px) and (min-width: 320px) {
     :root {
-        --preview-width:320px;
-        --preview-height:210px;
+        --preview-width: 320px;
+        --preview-height: 210px;
+    }
+    .section-title {
+        display: none !important;
     }
     #app {
         --card-columns: 2; // 卡片列数
         --extra-space: 0.625rem; // 额外空间
-        .section-title{
-            display: none !important;
-        }
+
         .book-footer {
             .el-pagination__sizes,
             .el-pagination__jump {
@@ -61,8 +60,8 @@ body {
 }
 @media screen and (max-width: 836px) and (min-width: 578px) {
     :root {
-        --preview-width:520px;
-        --preview-height:340px;
+        --preview-width: 520px;
+        --preview-height: 340px;
     }
     #app {
         --card-columns: 3;
@@ -71,8 +70,8 @@ body {
 }
 @media screen and (max-width: 1094px) and (min-width: 836px) {
     :root {
-        --preview-width:720px;
-        --preview-height:540px;
+        --preview-width: 720px;
+        --preview-height: 540px;
     }
     #app {
         --card-columns: 4;
@@ -81,8 +80,8 @@ body {
 }
 @media screen and (max-width: 1352px) and (min-width: 1094px) {
     :root {
-        --preview-width:1180px;
-        --preview-height:780px;
+        --preview-width: 1180px;
+        --preview-height: 780px;
     }
     #app {
         --card-columns: 5;
@@ -91,8 +90,8 @@ body {
 }
 @media screen and (min-width: 1353px) {
     :root {
-        --preview-width:1180px;
-        --preview-height:780px;
+        --preview-width: 1180px;
+        --preview-height: 780px;
     }
     #app {
         --card-columns: 6;
@@ -169,7 +168,7 @@ body {
             &.is-hovering {
                 background-color: var(--el-color-primary-hover);
             }
-            &.is-selected{
+            &.is-selected {
                 color: var(--el-color-primary);
             }
         }

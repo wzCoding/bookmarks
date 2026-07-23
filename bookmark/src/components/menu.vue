@@ -3,15 +3,11 @@
         @close="closeDialog">
         <div class="menu-container">
             <div class="menu-aside">
-                <!-- <div class="aside-item" v-for="section in menuSections" :key="section.id"
-                    :class="{ 'is-active': activeSectionId === section.id }" @click="changeMenuContent(section.id)">
-                    <svg-icon :name="section.icon" size="20" />
-                    <span>{{ section.title }}</span>
-                </div> -->
                 <template v-for="section in menuSections" :key="section.id">
-                    <el-tooltip :visible="tipVisible" effect="dark" :content="section.title" placement="right">
+                    <el-tooltip :visible="tipVisible[section.id]" :content="section.title" placement="right">
                         <div class="aside-item" :class="{ 'is-active': activeSectionId === section.id }"
-                            @click="changeMenuContent(section.id)">
+                            @click="changeMenuContent(section.id)" @mouseenter="handleMouseEnter($event, section.id)"
+                            @mouseleave="handleMouseLeave(section.id)">
                             <svg-icon :name="section.icon" size="20" />
                             <span class="section-title">{{ section.title }}</span>
                         </div>
@@ -28,7 +24,8 @@
                             </div>
                             <div class="list-item-content">
                                 <!-- select 类型配置项 -->
-                                <el-select v-if="item.type === 'select'" :model-value="settingValues[item.id]"
+                                <el-select v-if="item.type === 'select'" popper-class="list-item-popper"
+                                    :show-arrow="false" :model-value="settingValues[item.id]"
                                     @update:model-value="(val: string) => { settingValues[item.id] = val }"
                                     @change="item.callback">
                                     <el-option v-for="option in item.options" :key="option.value" :value="option.value"
@@ -79,7 +76,7 @@ const props = withDefaults(defineProps<SettingProps>(), {
 })
 const emits = defineEmits<{ closeMenu: [menuVisible: boolean] }>()
 const settingDialogVisible = computed(() => props.menuVisible)
-const tipVisible = ref<boolean>(false)
+const tipVisible = reactive<Record<string, boolean>>({})
 const localeStore = useLocaleStore()
 
 // 统一管理所有配置项的当前值
@@ -143,7 +140,6 @@ const menuSections = computed<MenuSection[]>(() => [
     },
 ])
 
-// 当前激活的菜单分组（从 menuSections 中查找）
 const activeSection = computed(() =>
     menuSections.value.find(s => s.id === activeSectionId.value)
 )
@@ -154,6 +150,21 @@ const changeMenuContent = (id: string) => {
 
 const closeDialog = () => {
     emits('closeMenu', false)
+}
+
+/** 鼠标进入 aside-item：若 section-title 被隐藏则展示 tooltip */
+const handleMouseEnter = (event: MouseEvent, sectionId: string) => {
+    const target = event.currentTarget as HTMLElement
+    const titleEl = target.querySelector<HTMLElement>('.section-title')
+    if (titleEl) {
+        const display = window.getComputedStyle(titleEl).display
+        tipVisible[sectionId] = display === 'none'
+    }
+}
+
+/** 鼠标离开 aside-item：隐藏对应 tooltip */
+const handleMouseLeave = (sectionId: string) => {
+    tipVisible[sectionId] = false
 }
 </script>
 <style lang="scss">
@@ -199,7 +210,7 @@ const closeDialog = () => {
                 box-sizing: border-box;
 
                 &:hover {
-                    background-color: var(--el-color-primary-hover);
+                    background-color: var(--bg-hover);
                 }
 
                 &.is-active {
@@ -247,6 +258,9 @@ const closeDialog = () => {
 
                     .list-item-content {
                         width: 68%;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
 
                         .el-select {
                             .el-select__wrapper {
@@ -265,31 +279,20 @@ const closeDialog = () => {
                             }
                         }
 
-                        .el-segmented {
-                            --el-border-radius-base: calc(var(--border-radius) * 1.5);
-                            background-color: var(--bg-card);
-                            color: var(--text-primary);
-
-                            .el-segmented__item.is-selected {
-                                color: var(--text-secondary);
-                            }
-
-                            .segmented-option {
-                                display: flex;
-                                justify-content: flex-start;
-                                align-items: center;
-                                gap: var(--gap);
-                            }
-
-                            .el-segmented__item:not(.is-disabled):not(.is-selected):hover {
-                                color: var(--el-color-primary);
-                                background: var(--el-color-primary-hover);
+                        .el-switch {
+                            .el-switch__core {
+                                background-color: var(--bg-sidebar) !important;
                             }
                         }
+
                     }
                 }
             }
         }
     }
+}
+
+.list-item-popper.el-popper.el-select__popper {
+    max-width: 120px !important;
 }
 </style>
