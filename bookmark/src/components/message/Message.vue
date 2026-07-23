@@ -84,9 +84,9 @@ defineExpose({ close })
   padding: 10px 16px;
   min-width: 200px;
   max-width: 300px;
-  background: var(--bg-page);
+  background: var(--bg-page-secondary);
   border-radius: 6px;
-  box-shadow: 0 2px 12px var(--shadow-color);
+  box-shadow: 0 2px 12px var(--shadow-active-color);
   font-size: 14px;
   line-height: 1.5;
   pointer-events: all;

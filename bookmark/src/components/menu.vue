@@ -211,7 +211,7 @@ const handleMouseLeave = (sectionId: string) => {
     background-color: var(--bg-page);
     color: var(--text-primary);
     padding: 0;
-    box-shadow: 0 0 12px var(--shadow-active-color);
+    box-shadow:  0 0 6px 3px var(--shadow-active-color);
     .el-dialog__header {
         padding: 0;
     }
@@ -337,7 +337,7 @@ const handleMouseLeave = (sectionId: string) => {
                         .el-switch {
                             &:not(.is-checked) {
                                 .el-switch__core {
-                                    background-color: var(--bg-sidebar) !important;
+                                    background-color: var(--bg-page-secondary) !important;
                                 }
                             }
 

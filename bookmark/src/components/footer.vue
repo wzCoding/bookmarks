@@ -79,7 +79,7 @@ const handleSizeChange = (size: number) => {
         }
 
         .el-pager li.number {
-            background-color: var(--bg-card);
+            background-color: var(--bg-page-secondary);
             color: var(--text-primary);
         }
 

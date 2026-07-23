@@ -132,7 +132,7 @@ defineExpose<ContextMenuExposed>({ showMenu, closeMenu })
         color: var(--text-muted);
         cursor: pointer;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         transition: all 0.1s;
         width: 100%;

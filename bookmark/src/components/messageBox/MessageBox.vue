@@ -130,7 +130,7 @@ defineExpose({ handleConfirm, handleCancel })
 .m-message-box {
   width: 400px;
   max-width: calc(100vw - 40px);
-  background: var(--bg-page);
+  background: var(--bg-page-secondary);
   border-radius: 8px;
   box-shadow: 0 8px 32px var(--shadow-color);
   overflow: hidden;

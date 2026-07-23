@@ -28,7 +28,7 @@ withDefaults(defineProps<{
   background?: string
 }>(), {
   fullscreen: false,
-  background: 'rgba(255, 255, 255, 0.6)',
+  background: 'var(--shadow-color)',
 })
 </script>
 
