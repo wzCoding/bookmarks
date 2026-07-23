@@ -3,49 +3,45 @@
         @close="closeDialog">
         <div class="menu-container">
             <div class="menu-aside">
-                <div class="aside-item" v-for="item in menuTitle" :key="item.id" @click="changeMenuContent(item.id)">
-                    <svg-icon :name="item.icon" size="20" />
-                    <span>{{ item.title }}</span>
-                </div>
+                <!-- <div class="aside-item" v-for="section in menuSections" :key="section.id"
+                    :class="{ 'is-active': activeSectionId === section.id }" @click="changeMenuContent(section.id)">
+                    <svg-icon :name="section.icon" size="20" />
+                    <span>{{ section.title }}</span>
+                </div> -->
+                <template v-for="section in menuSections" :key="section.id">
+                    <el-tooltip :visible="tipVisible" effect="dark" :content="section.title" placement="right">
+                        <div class="aside-item" :class="{ 'is-active': activeSectionId === section.id }"
+                            @click="changeMenuContent(section.id)">
+                            <svg-icon :name="section.icon" size="20" />
+                            <span class="section-title">{{ section.title }}</span>
+                        </div>
+                    </el-tooltip>
+                </template>
             </div>
             <div class="menu-content">
-                <template v-for="item in menuTitle" :key="item.id">
-                    <div class="content-box" v-if="item.showContent">
-                        <div class="bookmark-setting-title">{{ item.title }}</div>
-                        <div class="bookmark-setting-list" v-if="item.id === 'setting'">
-                            <div v-for="menu in menuContent.filter(i => i.menuType === 'basic')" :key="menu.id"
-                                class="setting-list-item">
-                                <div class="list-item-title">
-                                    <span>{{ menu.title }}</span>
-                                </div>
-                                <div class="list-item-content">
-                                    <el-select :model-value="menuModel[menu.id]"
-                                        @update:model-value="(val: string) => { menuModel[menu.id] = val }"
-                                        @change="menu.callback">
-                                        <el-option v-for="option in menu.options" :key="option.value"
-                                            :value="option.value" :label="option.label" />
-                                    </el-select>
-                                </div>
+                <div class="content-box" v-if="activeSection">
+                    <div class="bookmark-setting-title">{{ activeSection.title }}</div>
+                    <div class="bookmark-setting-list">
+                        <div v-for="item in activeSection.items" :key="item.id" class="setting-list-item">
+                            <div class="list-item-title">
+                                <span>{{ item.title }}</span>
                             </div>
-                        </div>
-                        <div class="bookmark-setting-list" v-if="item.id === 'enhance'">
-                            <div v-for="menu in menuContent.filter(i => i.menuType === 'basic')" :key="menu.id"
-                                class="setting-list-item">
-                                <div class="list-item-title">
-                                    <span>{{ menu.title }}</span>
-                                </div>
-                                <div class="list-item-content">
-                                    <el-select :model-value="menuModel[menu.id]"
-                                        @update:model-value="(val: string) => { menuModel[menu.id] = val }"
-                                        @change="menu.callback">
-                                        <el-option v-for="option in menu.options" :key="option.value"
-                                            :value="option.value" :label="option.label" />
-                                    </el-select>
-                                </div>
+                            <div class="list-item-content">
+                                <!-- select 类型配置项 -->
+                                <el-select v-if="item.type === 'select'" :model-value="settingValues[item.id]"
+                                    @update:model-value="(val: string) => { settingValues[item.id] = val }"
+                                    @change="item.callback">
+                                    <el-option v-for="option in item.options" :key="option.value" :value="option.value"
+                                        :label="option.label" />
+                                </el-select>
+                                <!-- switch 类型配置项 -->
+                                <el-switch v-else-if="item.type === 'switch'" :model-value="settingValues[item.id]"
+                                    @update:model-value="(val: boolean) => { settingValues[item.id] = val }"
+                                    @change="item.callback" />
                             </div>
                         </div>
                     </div>
-                </template>
+                </div>
             </div>
         </div>
     </el-dialog>
@@ -58,21 +54,24 @@ import { useLocaleStore } from '@/store/useLocaleStore'
 interface SettingProps {
     menuVisible: boolean
 }
-interface MenuTitle {
-    id: string,
-    icon: string,
-    title: string,
-    showContent: boolean
+
+/** 单个菜单配置项（如语言选择、开关等） */
+interface MenuItem {
+    id: string
+    title: string
+    type: 'select' | 'switch'
+    /** select 类型的选项列表 */
+    options?: { label: string; value: string }[]
+    /** switch 类型的默认值 */
+    values?: boolean
+    callback?: (val: string | boolean) => void
 }
-interface MenuProps {
-    id: string,
-    icon?: string,
-    title: string,
-    menuType: string,
-    contentType: string,
-    options?: { [key: string]: string }[],
-    values?: string | boolean | number,
-    callback(param: string | boolean | number): void
+
+interface MenuSection {
+    id: string
+    icon: string
+    title: string
+    items: MenuItem[]
 }
 
 const props = withDefaults(defineProps<SettingProps>(), {
@@ -80,77 +79,77 @@ const props = withDefaults(defineProps<SettingProps>(), {
 })
 const emits = defineEmits<{ closeMenu: [menuVisible: boolean] }>()
 const settingDialogVisible = computed(() => props.menuVisible)
-
+const tipVisible = ref<boolean>(false)
 const localeStore = useLocaleStore()
 
-// 从 store 初始化当前值，确保刷新后保持用户之前的选择
-const menuModel = reactive<Record<string, string>>({
+// 统一管理所有配置项的当前值
+const settingValues = reactive<Record<string, string | boolean>>({
     language: localeStore.language,
-    theme: localeStore.theme
+    theme: localeStore.theme,
+    preview: false,
 })
 
-// 双向同步：store 被外部修改时，menuModel 同步更新
-watch(() => localeStore.language, (val) => { menuModel.language = val })
-watch(() => localeStore.theme, (val) => { menuModel.theme = val })
+// 双向同步：store 被外部修改时，settingValues 同步更新
+watch(() => localeStore.language, (val) => { settingValues.language = val })
+watch(() => localeStore.theme, (val) => { settingValues.theme = val })
 
-const menuTitle = reactive<MenuTitle[]>([
+// 当前激活的菜单分组 ID
+const activeSectionId = ref('setting')
+
+// 菜单分组配置（数据源）
+const menuSections = computed<MenuSection[]>(() => [
     {
-        title: localeStore.locale.el.setting.basicSettings,
-        icon: 'setting',
-        showContent: true,
         id: 'setting',
+        icon: 'setting',
+        title: localeStore.locale.el.setting.basicSettings,
+        items: [
+            {
+                id: 'language',
+                title: localeStore.locale.el.setting.languageSetting,
+                type: 'select',
+                options: [
+                    { label: localeStore.locale.el.setting.chineseLanguage, value: 'zhCn' },
+                    { label: localeStore.locale.el.setting.englishLanguage, value: 'en' },
+                ],
+                callback: (val) => localeStore.toggleLanguage(val as string),
+            },
+            {
+                id: 'theme',
+                title: localeStore.locale.el.setting.themeSetting,
+                type: 'select',
+                options: [
+                    { label: localeStore.locale.el.setting.lightTheme, value: 'default' },
+                    { label: localeStore.locale.el.setting.darkThemeLabel, value: 'dark' },
+                ],
+                callback: (val) => localeStore.toggleTheme(val as string),
+            },
+        ],
     },
     {
-        title: localeStore.locale.el.setting.featureEnhance,
+        id: 'enhance',
         icon: 'enhance',
-        showContent: false,
-        id: 'enhance'
+        title: localeStore.locale.el.setting.featureEnhance,
+        items: [
+            {
+                id: 'preview',
+                title: localeStore.locale.el.setting.bookmarkPreview,
+                type: 'switch',
+                values: false,
+                callback: (val) => {
+                    console.log('书签页预览:', val ? '开启' : '关闭')
+                },
+            },
+        ],
     },
 ])
 
-const menuContent = computed<MenuProps[]>(() => [
-    {
-        id: 'language',
-        title: localeStore.locale.el.setting.languageSetting,
-        menuType: 'basic',
-        contentType: 'select',
-        options: [
-            { label: localeStore.locale.el.setting.chineseLanguage, value: "zhCn" },
-            { label: localeStore.locale.el.setting.englishLanguage, value: "en" }
-        ],
-        callback: (val: string) => {
-            localeStore.toggleLanguage(val)
-        }
-    },
-    {
-        id: 'theme',
-        title: localeStore.locale.el.setting.themeSetting,
-        menuType: 'basic',
-        contentType: 'select',
-        options: [
-            { label: localeStore.locale.el.setting.lightTheme, value: "default" },
-            { label: localeStore.locale.el.setting.darkThemeLabel, value: "dark" }
-        ],
-        callback: (val: string) => {
-            localeStore.toggleTheme(val)
-        }
-    },
-    {
-        id: 'preview',
-        title: localeStore.locale.el.setting.bookmarkPreview,
-        menuType: 'enhance',
-        contentType: 'switch',
-        values: false,
-        callback: (val: boolean) => {
-            console.log('书签页预览:', val ? '开启' : '关闭')
-        }
-    },
-])
+// 当前激活的菜单分组（从 menuSections 中查找）
+const activeSection = computed(() =>
+    menuSections.value.find(s => s.id === activeSectionId.value)
+)
 
 const changeMenuContent = (id: string) => {
-    menuTitle.forEach((item: MenuTitle) => {
-        item.showContent = item.id === id
-    })
+    activeSectionId.value = id
 }
 
 const closeDialog = () => {
@@ -201,6 +200,11 @@ const closeDialog = () => {
 
                 &:hover {
                     background-color: var(--el-color-primary-hover);
+                }
+
+                &.is-active {
+                    background-color: var(--el-color-primary-hover);
+                    color: var(--el-color-primary);
                 }
             }
         }

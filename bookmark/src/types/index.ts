@@ -12,6 +12,8 @@ export interface BookmarkTreeNode {
   dateLastUsed?: number
   dateLastModified?: number
   children?: BookmarkTreeNode[]
+  syncing?: boolean
+  folderType?: string
 }
 
 /** 书签元数据（打开时间追踪） */

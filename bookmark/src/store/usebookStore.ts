@@ -2,7 +2,6 @@ import { computed, reactive, ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import {
     getAllBookMarks,
-    getRecentBookMarks,
     getTreeByKey,
     expandTree,
     getAllBookmarksMeta,
@@ -20,39 +19,58 @@ interface AllNodeItem {
     id: string
     type: string
 }
-
 const defaultTitle = ''
 const defaultId = '0'
 const defaultShowTitle = '书签栏'
-const defaultShowId = '1'
+const defaultShowType = 'bookmarks-bar'
 const defaultSize = 8
 const defaultPage = 1
-
-const tree = expandTree(await getAllBookMarks())
-const recent = await getRecentBookMarks(10)
-
-// 预加载全部书签元数据（打开时间等）
-let initialMeta: BookmarkMetaMap = {}
-try {
-    initialMeta = await getAllBookmarksMeta()
-} catch (e) {
-    console.error('预加载书签元数据失败:', e)
-}
+let defaultShowId = ''
 
 export const usebookStore = defineStore('bookmarks', () => {
-    let allNodes: BookmarkTreeNode[] = tree
+    // ==================== 加载状态 ====================
+    const loading = ref(true)
+
+    let allNodes: BookmarkTreeNode[] = []
 
     // 书签展示相关
     const parentId: Ref<string> = ref(defaultId)
     const currentTitle: Ref<string> = ref(defaultShowTitle)
 
     // ==================== 元数据（打开时间）相关 ====================
-    const bookmarkMetaMap: Ref<BookmarkMetaMap> = ref(initialMeta)
+    const bookmarkMetaMap: Ref<BookmarkMetaMap> = ref({})
 
-    const currentNodes: Ref<BookmarkNodeWithMeta[]> = ref(
-        mergeMetaToNodes(getFolder(defaultShowId)?.children ?? [])
-    )
-    const recentNodes: Ref<BookmarkNodeWithMeta[]> = ref(mergeMetaToNodes(recent))
+    const currentNodes: Ref<BookmarkNodeWithMeta[]> = ref([])
+    // ==================== 初始化 ====================
+   
+    async function initBookmarks(): Promise<void> {
+        try {
+            loading.value = true
+
+            // 并行获取书签树、元数据
+            const [rawTree, meta] = await Promise.all([
+                getAllBookMarks(),
+                getAllBookmarksMeta().catch(() => ({})),
+            ])
+
+            allNodes = expandTree(rawTree)
+            bookmarkMetaMap.value = meta as BookmarkMetaMap
+            console.log(rawTree)
+            console.log(allNodes)
+
+            // 初始化当前展示节点：直接展示书签栏下的书签
+            const defaultFolder = getFolder('folderType', defaultShowType) || getFolder('index', 0)
+            console.log(defaultFolder)
+            defaultShowId = defaultFolder?.id || ''
+            currentNodes.value = mergeMetaToNodes(defaultFolder?.children ?? [])
+
+            refreshRecentOpened()
+        } catch (e) {
+            console.error('初始化书签数据失败:', e)
+        } finally {
+            loading.value = false
+        }
+    }
 
     /**
      * 将 bookmarkMetaMap 中的 lastOpened 合并到节点数组，添加 recentOpen 字段
@@ -154,9 +172,6 @@ export const usebookStore = defineStore('bookmarks', () => {
         refreshRecentOpened()
     }
 
-    // 初始化时构建"最近打开"列表
-    refreshRecentOpened()
-
     // 分页相关
     const pageSize: Ref<number> = ref(defaultSize)
     const currentPage: Ref<number> = ref(defaultPage)
@@ -188,14 +203,17 @@ export const usebookStore = defineStore('bookmarks', () => {
 
     function initNodes(nodes: BookmarkTreeNode[], id: string): void {
         allNodes = nodes
-        currentNodes.value = mergeMetaToNodes(getFolder(id)?.children ?? [])
+        currentNodes.value = mergeMetaToNodes(getFolder('id', id)?.children ?? [])
         // 书签数据变更后刷新"最近打开"列表
         refreshRecentOpened()
     }
 
-    function getFolder(id: string): BookmarkTreeNode | undefined {
-        if (!id) return undefined
-        return allNodes.filter((item) => item.id === id)[0]
+    function getFolder<K extends keyof BookmarkTreeNode>(
+        key: K,
+        value?: BookmarkTreeNode[K]
+    ): BookmarkTreeNode | undefined {
+        if (!key) return undefined
+        return allNodes.filter((item) => item[key] === value)[0]
     }
 
     function getTreeNodes(key: string): TreeNode[] {
@@ -217,7 +235,7 @@ export const usebookStore = defineStore('bookmarks', () => {
     function getCurrentNodes(id: string, initPage?: boolean): void {
         if (!id) return
 
-        const folder = getFolder(id)
+        const folder = getFolder('id', id)
         currentNodes.value = mergeMetaToNodes(folder?.children ?? [])
         currentTitle.value =
             !folder?.title && folder?.id === '0' ? defaultTitle : (folder?.title ?? defaultTitle)
@@ -274,6 +292,8 @@ export const usebookStore = defineStore('bookmarks', () => {
     })
 
     return {
+        loading,
+        initBookmarks,
         currentTitle,
         currentNodes,
         currentTotal,
@@ -285,7 +305,6 @@ export const usebookStore = defineStore('bookmarks', () => {
         pageNodes,
         total,
         allNodes,
-        recentNodes,
         // 元数据相关
         bookmarkMetaMap,
         recentOpenedNodes,

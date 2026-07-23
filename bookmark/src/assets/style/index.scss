@@ -36,6 +36,9 @@ body {
     height: calc(100% - var(--padding) * 2);
     background-color: var(--bg-page);
 }
+
+
+
 // 响应式样式
 @media screen and (max-width: 578px) and (min-width: 320px) {
     :root {
@@ -45,6 +48,9 @@ body {
     #app {
         --card-columns: 2; // 卡片列数
         --extra-space: 0.625rem; // 额外空间
+        .section-title{
+            display: none !important;
+        }
         .book-footer {
             .el-pagination__sizes,
             .el-pagination__jump {

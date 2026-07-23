@@ -1,6 +1,9 @@
 <template>
     <div class="book-home" @[dynamicScroll]="onScroll">
-        <div v-show="currentNodes.length" class="book-content">
+        <div v-if="loading" class="book-loading">
+            <el-skeleton :rows="4" animated />
+        </div>
+        <div v-show="!loading && currentNodes.length" class="book-content">
             <VueDraggable ref="drag" v-model="currentNodes" @end="onDragEnd" target=".book-transition"
                 class="book-draggable">
                 <TransitionGroup tag="div" name="fade" class="book-transition">
@@ -9,15 +12,15 @@
                     </BookMark>
                 </TransitionGroup>
             </VueDraggable>
-            <BookFooter :page-size="pageSize" :current-page="currentPage" :total="currentTotal" :locale="locale.el"
+            <BookFooter :page-size="pageSize" :current-page="currentPage" :total="currentTotal" :locale="locale"
                 @currentChange="pageChange" @sizeChange="sizeChange"></BookFooter>
         </div>
-        <el-empty v-show="!currentNodes.length" class="book-empty" :description="locale.el.emptyText" />
+        <el-empty v-show="!loading && !currentNodes.length" class="book-empty" :description="locale.el.emptyText" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { createVNode, ref, render } from 'vue'
+import { createVNode, ref, render, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { usebookStore } from '@/store/usebookStore'
@@ -42,8 +45,13 @@ const localeStore = useLocaleStore()
 const router = useRouter()
 const dynamicScroll = ref<string | null>(null)
 const drag = ref<InstanceType<typeof VueDraggable> | null>(null)
-const { currentNodes, currentPage, currentTotal, pageSize, pageNodes } = storeToRefs(bookStore)
+const { currentNodes, currentPage, currentTotal, pageSize, pageNodes, loading } = storeToRefs(bookStore)
 const { locale } = storeToRefs(localeStore)
+
+// 组件挂载后异步初始化书签数据（避免顶层 await 依赖 Chrome 模块加载时序）
+onMounted(() => {
+    bookStore.initBookmarks()
+})
 
 const pageChange = (page: number) => {
   bookStore.pageChange(page)
@@ -191,6 +199,9 @@ const onScroll = () => {
     position: relative;
     height: 100%;
     background-color: var(--bg-page);
+    .book-loading {
+        padding: var(--padding-secondary);
+    }
     .book-content {
         position: relative;
         height: 100%;

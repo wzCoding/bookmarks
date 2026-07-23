@@ -17,7 +17,7 @@ interface Props {
     pagerCount?: number
     layout?: string
     total?: number
-    locale?: Record<string, unknown>
+    locale?: { name: string, el: {} }
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -27,18 +27,10 @@ const props = withDefaults(defineProps<Props>(), {
     pagerCount: 5,
     layout: 'sizes, prev, pager, next, jumper',
     total: 0,
-    locale: () => ({}),
+    locale: () => ({ name: 'zhCn', el: {} }),
 })
 
-/**
- * Element Plus 的 ElConfigProvider 要求 locale 格式为 { name: string, el: { ... } }
- * 而父组件传入的 locale 是自定义的 el 子对象（不含外层 name/el 包装），
- * 因此需要用 computed 包装为 Element Plus 期望的格式。
- */
-const elPlusLocale = computed(() => ({
-    name: 'zhCn',
-    el: props.locale as Record<string, unknown>,
-}))
+const elPlusLocale = computed(() => props.locale)
 
 const emits = defineEmits<{
 
